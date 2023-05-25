@@ -21,4 +21,30 @@
       <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Assets\plane_normal.png" />
+      <Resource Include="Assets\plane_normal.png" />
+      <None Remove="Assets\back_hard.png" />
+      <Resource Include="Assets\back_hard.png" />
+      <None Remove="Assets\back_normal.png" />
+      <Resource Include="Assets\back_normal.png" />
+      <None Remove="Assets\brain_hard.png" />
+      <Resource Include="Assets\brain_hard.png" />
+      <None Remove="Assets\brain_normal.png" />
+      <Resource Include="Assets\brain_normal.png" />
+      <None Remove="Assets\brick_hard.png" />
+      <Resource Include="Assets\brick_hard.png" />
+      <None Remove="Assets\plane_hard.png" />
+      <Resource Include="Assets\plane_hard.png" />
+      <None Remove="Assets\tornado_normal.png" />
+      <Resource Include="Assets\tornado_normal.png" />
+      <None Remove="Assets\tornado_hard.png" />
+      <Resource Include="Assets\tornado_hard.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Assets\brick_normal.png" />
+      <Resource Include="Assets\brick_normal.png" />
+    </ItemGroup>
+
 </Project>
