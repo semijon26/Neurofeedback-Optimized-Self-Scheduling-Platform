@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ClientApplication.Utils;
@@ -16,11 +17,28 @@ namespace ClientApplication.ViewModels
             { GameType.TextGame, new TextGameView() },
             { GameType.BricketBraker, new BricketBreakerGame() },
             { GameType.PathPilot, new PathPilotView() },
-            { GameType.MemoMaster, new MemoMasterView()}
+            { GameType.MemoMaster, new MemoMasterView() }
         };
+        
+        protected readonly Dictionary<GameType, AbstractGameViewModel> gameViewModels = new()
+        {
+            { GameType.TextGame, new TextGameViewModel(Utils.NavigationService.GetInstance()) },
+            { GameType.BricketBraker, new BricketBreakerViewModel(Utils.NavigationService.GetInstance()) },
+            { GameType.PathPilot, new PathPilotViewModel(Utils.NavigationService.GetInstance()) },
+            { GameType.MemoMaster, new MemoMasterViewModel(Utils.NavigationService.GetInstance()) }
+        };
+
+        public List<KeyValuePair<GameType, AbstractGameViewModel>> ActiveGameViewModels
+        {
+            get
+            {
+                return gameViewModels.Where(vm => vm.Value.IsGameRunning).ToList();
+            }
+        }
+
         public event EventHandler<GameType>? AddTaskToUiEvent;
         public event EventHandler<GameType>? RemoveTaskFromUiEvent;
-        
+
         public GamesOverviewViewModel(INavigationService navigationService) : base(
             navigationService)
         {
@@ -28,8 +46,10 @@ namespace ClientApplication.ViewModels
             var bricketBreakerViewModel = (BricketBreakerViewModel)GameDictionary[GameType.BricketBraker].DataContext;
             var pathPilotViewModel = (PathPilotViewModel)GameDictionary[GameType.PathPilot].DataContext;
             var memoMasterViewModel = (MemoMasterViewModel)GameDictionary[GameType.MemoMaster].DataContext;
+            
             ClientManagementSocket.OnStartGamesMessageReceived += (_, _) =>
             {
+                
                 foreach (var activeGame in ClientObject.GetInstance().ActiveGames)
                 {
                     switch (activeGame.Value.GameType)
@@ -41,6 +61,7 @@ namespace ClientApplication.ViewModels
                                 Application.Current.Dispatcher.Invoke(textGameViewModel.StartGame);
                                 textGameViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
+
                             break;
                         case GameType.BricketBraker:
                             if (!bricketBreakerViewModel.IsGameRunning)
@@ -49,6 +70,7 @@ namespace ClientApplication.ViewModels
                                 Application.Current.Dispatcher.Invoke(bricketBreakerViewModel.StartGame);
                                 bricketBreakerViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
+
                             break;
                         case GameType.PathPilot:
                             if (!pathPilotViewModel.IsGameRunning)
@@ -57,6 +79,7 @@ namespace ClientApplication.ViewModels
                                 Application.Current.Dispatcher.Invoke(pathPilotViewModel.StartGame);
                                 pathPilotViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
+
                             break;
                         case GameType.MemoMaster:
                             if (!memoMasterViewModel.IsGameRunning)
@@ -65,7 +88,61 @@ namespace ClientApplication.ViewModels
                                 Application.Current.Dispatcher.Invoke(memoMasterViewModel.StartGame);
                                 memoMasterViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
+
                             break;
+                    }
+                }
+                
+            };
+
+            ClientManagementSocket.MessageReceived += (_, _) =>
+            {
+                Logging.LogInformation("Message Received Event ausgeführt");
+                var clientGames = ClientObject.GetInstance().ActiveGames.Values.Select(game => game.GameType).ToList();
+                List<GameType> types = new List<GameType>
+                    { GameType.BricketBraker, GameType.PathPilot, GameType.MemoMaster, GameType.TextGame };
+                
+                Logging.LogWarning("clientGames:");
+                foreach (var gameType in clientGames)
+                {
+                    Logging.LogWarning($"{gameType}");
+                }
+                
+                
+                foreach (var activeGame in types)
+                {
+                    if (!clientGames.Contains(activeGame))
+                    {
+                        Logging.LogInformation($"{activeGame} not active - delete");
+                        if (activeGame == GameType.TextGame)
+                        {
+                            textGameViewModel.StopGame();
+                            RemoveTaskFromUiEvent?.Invoke(null, activeGame);
+                            textGameViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
+                        }
+                        if (activeGame == GameType.BricketBraker)
+                        {
+                            bricketBreakerViewModel.StopGame();
+                            RemoveTaskFromUiEvent?.Invoke(null, activeGame);
+                            bricketBreakerViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
+                        }
+                        if (activeGame == GameType.MemoMaster)
+                        {
+                            memoMasterViewModel.StopGame();
+                            RemoveTaskFromUiEvent?.Invoke(null, activeGame);
+                            memoMasterViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
+                        }
+                        if (activeGame == GameType.PathPilot)
+                        {
+                            Logging.LogInformation("Stopping ------------------------------------- Path Pilot");
+                            pathPilotViewModel.StopGame();
+                            RemoveTaskFromUiEvent?.Invoke(null, activeGame);
+                            pathPilotViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
+                        }
+                    }
+                    else
+                    {
+                        Logging.LogInformation($"{activeGame} active...");
                     }
                 }
             };

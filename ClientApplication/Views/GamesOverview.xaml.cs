@@ -33,7 +33,7 @@ namespace ClientApplication.Views
                     }
                 });
             };
-            }
+        }
 
         private void AddRightGameViewToUi(GamesOverviewViewModel viewModel,GameType gameType, int row, int column)
         {

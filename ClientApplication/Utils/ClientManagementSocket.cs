@@ -70,11 +70,11 @@ public abstract class ClientManagementSocket
             }
             else clientManagementData.OtherClients.Add(clientObject);
         }
-        OnMessageReceived();
         if (clientList.Count >= currentClient.MinClientsToStartGames)
         {
             OnStartGamesMessageReceived?.Invoke(null, EventArgs.Empty);
         }
+        MessageReceived?.Invoke(null, EventArgs.Empty);
     }
 
     public Uri? GetWsUri()

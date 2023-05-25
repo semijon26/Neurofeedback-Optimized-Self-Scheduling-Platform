@@ -27,7 +27,7 @@ public abstract class AbstractGameViewModel : ViewModelBase
 
     public abstract void StartGame();
 
-    protected abstract void StopGame();
+    public abstract void StopGame();
 
     protected void RemoveActiveTask()
     {

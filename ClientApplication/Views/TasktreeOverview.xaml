@@ -9,7 +9,7 @@
              d:DesignHeight="180" d:DesignWidth="1480"
              Background="White"
              Loaded="MyView_Loaded">
-    <UserControl.Resources>
+        <UserControl.Resources>
         <converter:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converter:VariableToImagePathConverter x:Key="VariableToImagePathConverter"/>
@@ -114,24 +114,42 @@
                                                         <TextBlock Text="{Binding Id}" Visibility="Hidden"/>
                                                     </Button.Content>
                                                 </Button>
-                                                <Grid Grid.Row="1">
-                                                    <Ellipse Width="25" Height="25" Fill="LawnGreen" Stroke="LightGray" Margin="0,5,0,0">
-                                                        <Ellipse.Visibility>
-                                                            <MultiBinding Converter="{StaticResource TwoVariableToVisibilityConverter}">
-                                                                <Binding Path="Worker" />
-                                                                <Binding Path="IsDone" />
-                                                            </MultiBinding>
-                                                        </Ellipse.Visibility>
-                                                    </Ellipse>
-                                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" Text="{Binding Worker.Label, Converter={StaticResource FirstLetterConverter}}" Margin="0,5,0,0">
-                                                        <TextBlock.Visibility>
-                                                            <MultiBinding Converter="{StaticResource TwoVariableToVisibilityConverter}">
-                                                                <Binding Path="Worker" />
-                                                                <Binding Path="IsDone" />
-                                                            </MultiBinding>
-                                                        </TextBlock.Visibility>
-                                                    </TextBlock>
-                                                </Grid>
+                                                <Button Grid.Row="1" Width="25" Height="25"
+                                                        Command="{Binding DataContext.ChangeCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=2}}"
+                                                        CommandParameter="{Binding Id}">
+                                                    <Button.Visibility>
+                                                        <MultiBinding Converter="{StaticResource TwoVariableToVisibilityConverter}">
+                                                            <Binding Path="Worker" />
+                                                            <Binding Path="IsDone" />
+                                                        </MultiBinding>
+                                                    </Button.Visibility>
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Grid x:Name="ButtonGrid">
+                                                                <Ellipse Width="25" Height="25">
+                                                                    <Ellipse.Stroke>
+                                                                        DarkGray
+                                                                    </Ellipse.Stroke>
+                                                                    <Ellipse.Fill>
+                                                                        GreenYellow
+                                                                    </Ellipse.Fill>
+                                                                </Ellipse>
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Grid>
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                    <Button.Content>
+                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" Text="{Binding Worker.Label, Converter={StaticResource FirstLetterConverter}}">
+                                                            <TextBlock.Visibility>
+                                                                <MultiBinding Converter="{StaticResource TwoVariableToVisibilityConverter}">
+                                                                    <Binding Path="Worker" />
+                                                                    <Binding Path="IsDone" />
+                                                                </MultiBinding>
+                                                            </TextBlock.Visibility>
+                                                        </TextBlock>
+                                                    </Button.Content>
+                                                </Button>
+
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>

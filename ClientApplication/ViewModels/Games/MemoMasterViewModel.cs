@@ -15,7 +15,7 @@ public class MemoMasterViewModel: AbstractGameViewModel
         IsGameRunning = true;
     }
 
-    protected override void StopGame()
+    public override void StopGame()
     {
         IsGameRunning = false;
     }

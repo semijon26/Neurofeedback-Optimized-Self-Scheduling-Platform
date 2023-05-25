@@ -60,7 +60,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel
         IsGameRunning = true;
     }
 
-    protected override void StopGame()
+    public override void StopGame()
     {
         IsGameRunning = false;
         InputText = "";

@@ -19,12 +19,12 @@ namespace ClientApplication.ViewModels
             TaskPointsDictionary = new Dictionary<TaskGroup, TaskPoint>();
             LineList = new List<Line>();
             RelayCommand = new RelayCommand(this);
+            ChangeCommand = new ChangeCommand(this);
         }
         
         private void SetOrUpdateTaskGraph(TaskGraph taskGraph)
         {
             Dictionary<int, List<TaskGroup>> layers = GraphUtils.GetGraphLayers(taskGraph);
-            GraphUtils.LogCalculatedLayers(layers);
             TaskGraphProvider.GetInstance().TaskGraph.GetAvailableTaskGroups();
             TaskLayers = new Dictionary<int, List<TaskGroup>>(layers);
             _drawingPoints = new Dictionary<TaskGroup, TaskPoint>();
@@ -44,6 +44,7 @@ namespace ClientApplication.ViewModels
         
         //Commmands
         public RelayCommand RelayCommand { get; set; }
+        public ChangeCommand ChangeCommand { get; set; }
         
 
         //Variables and Objects
@@ -166,14 +167,10 @@ namespace ClientApplication.ViewModels
                     int NumberOfTasks = group.Tasks.Count;
                     circleDistance = CanvasWidth / (NumberOfNodes+1);
                     int step = circleDistance;
-
-                    Logging.LogInformation($"Circle Distance = {step}");
-                    
                     int y_value = initialYValue;
                     int x_value =  counter * step;
                     TaskPoint point = new TaskPoint { X = x_value, Y = y_value, Width = NumberOfTasks*initialWidth};
                     current_[group] = point;
-                    Logging.LogInformation($"X = {x_value}; Y={y_value}");
                     counter++;
                 }
                 initialYValue += 90;
@@ -217,8 +214,6 @@ namespace ClientApplication.ViewModels
                         int y2 = TaskPointsDictionary[getTaskGroup(destNode.Id)].Y;
                         int width2 = TaskPointsDictionary[getTaskGroup(destNode.Id)].Width;
                         _current.Add(new Line {X1 = x1+width1/2, X2 = x2+width2/2, Y1 = y1+height/2, Y2 = y2+height/2, SourceGroup = group, DestGroup = destNode});
-                        
-                        Logging.LogWarning($"Die Kante von ({x1}:{y1})({TaskPointsDictionary[getTaskGroup(group.Id)].X}:{TaskPointsDictionary[getTaskGroup(group.Id)].Y}) und ({x2}:{y2})({TaskPointsDictionary[getTaskGroup(destNode.Id)].X}:{TaskPointsDictionary[getTaskGroup(destNode.Id)].Y}) wurde erstellt.");
                     }
                     catch (Exception e)
                     {

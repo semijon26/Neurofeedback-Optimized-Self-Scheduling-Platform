@@ -65,7 +65,7 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel
         MoveBall();
     }
 
-    protected override void StopGame()
+    public override void StopGame()
     {
         IsGameRunning = false;
         BricksBroken = 0;

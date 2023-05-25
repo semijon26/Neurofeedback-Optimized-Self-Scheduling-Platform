@@ -19,8 +19,7 @@ public static class TaskManager
 
     public static void UpdatePulledTaskByServer(int pulledTaskId)
     {
-        ClientObject.GetInstance().PulledTaskId = pulledTaskId;
-        ClientManagementSocket.SendClientObjectWhenConnectionEstablished();
+        TaskGraphProvider.GetInstance().SendUpdatedTaskGraphToServer(new DataPayload{SetDone = false, ChangeWorker = true, IntValue = pulledTaskId, Woker = ClientObject.GetInstance()});
     }
 
     public static bool IsGameCurrentlyActive(int taskId, GameType gameType)

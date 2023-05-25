@@ -69,7 +69,7 @@ public sealed class PathPilotViewModel : AbstractGameViewModel
         IsGameRunning = true;
     }
 
-    protected override void StopGame()
+    public override void StopGame()
     {
         IsGameRunning = false;
         _currentMeters = 0;
