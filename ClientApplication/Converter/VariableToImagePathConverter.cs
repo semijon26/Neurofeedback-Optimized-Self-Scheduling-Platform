@@ -17,11 +17,11 @@ public class VariableToImagePathConverter : IValueConverter
 
         var imagePath = variableValue switch
         {
-            GameType.TextGame => "../Assets/TextGame/logo.jpg",
-            GameType.BricketBraker => "../Assets/BricketBraker/logo.jpg",
-            GameType.ColorEcho => "../Assets/ColorEcho/logo.jpg",
-            GameType.MemoMaster => "../Assets/MemoMaster/logo.jpg",
-            GameType.PathPilot => "../Assets/PathPilot/logo.jpg",
+            GameType.TextGame => "../Assets/tornado_normal.png",
+            GameType.BricketBraker => "../Assets/brick_normal.png",
+            GameType.ColorEcho => "../Assets/brain_normal.png",
+            GameType.MemoMaster => "../Assets/back_normal.png",
+            GameType.PathPilot => "../Assets/plane_normal.png",
             _ => "../Assets/empty/logo.jpg"
         };
 

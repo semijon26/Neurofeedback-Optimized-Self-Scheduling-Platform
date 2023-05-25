@@ -6,15 +6,15 @@ namespace Shared;
 [Serializable]
 public enum GameType
 {
-    [Description("/Assets/TextGame/logo_normal.png")]
+    [Description("/Assets/tornado_normal.png")]
     TextGame,
-    [Description("/Assets/BricketBraker/logo_normal.png")]
+    [Description("/Assets/brick_normal.png")]
     BricketBraker,
-    [Description("/Assets/PathPilot/logo_normal.png")]
+    [Description("/Assets/plane_normal.png")]
     PathPilot,
-    [Description("/Assets/MemoMaster/logo_normal.png")]
+    [Description("/Assets/back_normal.png")]
     MemoMaster,
-    [Description("/Assets/ColorEcho/logo_normal.png")]
+    [Description("/Assets/brain_normal.png")]
     ColorEcho
 }
 
