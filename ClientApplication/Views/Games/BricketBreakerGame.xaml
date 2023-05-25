@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="ClientApplication.Views.Games.BricketBreakerGame"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converter="clr-namespace:ClientApplication.Converter"
+             xmlns:models="clr-namespace:ClientApplication.Models"
+             xmlns:games="clr-namespace:ClientApplication.ViewModels.Games"
+             d:DataContext="{d:DesignInstance Type=games:BricketBreakerViewModel}"
+             mc:Ignorable="d"
+             d:DesignHeight="340" d:DesignWidth="640"
+             Background="White"
+             Focusable="True">
+    <UserControl.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <models:Brick x:Key="Brick" />
+    </UserControl.Resources>
+    <Grid>
+        <Image Source="{Binding GameIcon}" Width="35" Height="35" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+
+        <Canvas Margin="0,0,0,32">
+            <Rectangle Fill="Black" Width="200" Height="20" Canvas.Left="{Binding RectangleX}" Canvas.Top="276" HorizontalAlignment="Center" VerticalAlignment="Top" />
+
+            <Ellipse Fill="Red" Width="20" Height="20" Canvas.Left="{Binding BallX}" Canvas.Top="{Binding BallY}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+            <ItemsControl ItemsSource="{Binding Bricks}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="4" Columns="5" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle Fill="Blue" Stroke="Black" Width="128" Height="30" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Canvas>
+
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Height="32" Margin="0,308,0,0">
+            <!--
+             <ProgressBar></ProgressBar>
+            -->
+        </Grid>
+    </Grid>
+</UserControl>
