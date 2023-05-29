@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using ClientApplication.Commands;
 using ClientApplication.Models;
@@ -54,8 +55,8 @@ namespace ClientApplication.ViewModels
         private Dictionary<int, List<TaskGroup>> _layers;
         private Dictionary<TaskGroup, TaskPoint> _drawingPoints;
         private List<Line> _lines;
-
         
+
         // Properties
         public List<Line> LineList
         {
