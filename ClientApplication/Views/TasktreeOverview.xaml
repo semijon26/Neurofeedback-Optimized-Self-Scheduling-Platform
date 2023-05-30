@@ -20,24 +20,9 @@
     </UserControl.Resources>
     <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
-            <TextBox x:Name="MessageTextBox"></TextBox>
-            <Button Content="Nachricht an Server senden" Click="SubmitMessage"></Button>
-            <TextBlock Text="String Nachricht des Servers:"></TextBlock>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                <TextBlock Margin="20,5, 0,5" Text="{Binding StringMessage}"></TextBlock>
-            </ScrollViewer>
-            <TextBlock Text="Empfangenes Serverobjekt"></TextBlock>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                <TextBlock Margin="20,5, 0,5" Text="{Binding ObjectMessage}" TextWrapping="Wrap"  ></TextBlock>
-            </ScrollViewer>
-            
-        </StackPanel>
-        
-        <ScrollViewer Grid.Column="1" Name="ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
+        <ScrollViewer Grid.Column="0" Name="ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
                       PreviewKeyDown="ScrollViewer_OnPreviewKeyDown" PreviewKeyUp="ScrollViewer_OnPreviewKeyUp">
             <Grid>
                 
