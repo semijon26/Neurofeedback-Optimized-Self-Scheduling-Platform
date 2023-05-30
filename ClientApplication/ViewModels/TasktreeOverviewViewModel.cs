@@ -153,77 +153,13 @@ namespace ClientApplication.ViewModels
 
         private void CalculateDrawingPoints()
         {
-            Dictionary<TaskGroup, TaskPoint> current_ = new Dictionary<TaskGroup, TaskPoint>();
-            int CanvasWidth = 1200;
-            int initialYValue = 0;
-            int initialWidth = 60;
-            foreach (int key in _layers.Keys)
-            {
-                int circleDistance;
-                int counter = 1;
-                // Where(TaskGraphProvider.GetInstance().TaskGraph.GetAvailableTaskGroups().Contains)
-                foreach (TaskGroup group in _layers[key])
-                {
-                    int NumberOfNodes = _layers[key].Count;
-                    int NumberOfTasks = group.Tasks.Count;
-                    circleDistance = CanvasWidth / (NumberOfNodes+1);
-                    int step = circleDistance;
-                    int y_value = initialYValue;
-                    int x_value =  counter * step;
-                    TaskPoint point = new TaskPoint { X = x_value, Y = y_value, Width = NumberOfTasks*initialWidth};
-                    current_[group] = point;
-                    counter++;
-                }
-                initialYValue += 90;
-            }
-            TaskPointsDictionary = current_;
+            TaskPointsDictionary = PointCalculator.CalculateDrawingPoints(_layers, 1200, 60, 90);
             CalculateDrawingLines();
-        }
-        
-        // ID muss unique sein --> keine Dopplung, sonst fehlerhafte Zuweisung
-        private TaskGroup getTaskGroup(int Id)
-        {
-            foreach (var task in TaskPointsDictionary.Keys)
-            {
-                if (task.Id == Id)
-                {
-                    return task;
-                }
-            }
-            return null;
         }
 
         private void CalculateDrawingLines()
         {
-            int height = 70;
-            Dictionary<int, List<int>> _lineHelper = new Dictionary<int, List<int>>();
-            List<Line> _current = new List<Line>();
-            foreach (var group in TaskPointsDictionary.Keys)
-            {
-                _lineHelper.Add(group.Id, new List<int>());
-                
-                //.Where(TaskPointsDictionary.ContainsKey)
-                foreach (var destNode in TaskGraphProvider.GetInstance().TaskGraph.GetAdjacentGroupsOf(group.Id))
-                {
-                    try
-                    {
-                        // Daher jetzt erst Kacke
-                        int x1 = TaskPointsDictionary[getTaskGroup(group.Id)].X;
-                        int y1 = TaskPointsDictionary[getTaskGroup(group.Id)].Y;
-                        int width1 = TaskPointsDictionary[getTaskGroup(group.Id)].Width;
-                        int x2 = TaskPointsDictionary[getTaskGroup(destNode.Id)].X;
-                        int y2 = TaskPointsDictionary[getTaskGroup(destNode.Id)].Y;
-                        int width2 = TaskPointsDictionary[getTaskGroup(destNode.Id)].Width;
-                        _current.Add(new Line {X1 = x1+width1/2, X2 = x2+width2/2, Y1 = y1+height/2, Y2 = y2+height/2, SourceGroup = group, DestGroup = destNode});
-                    }
-                    catch (Exception e)
-                    {
-                        Logging.LogError("Thrown in Line Calculation: " + e.Message);
-                    }
-                    
-                }
-            }
-            LineList = _current;
+            LineList = PointCalculator.CalculateDrawingLines(TaskPointsDictionary, 70);
         }
     }
 }

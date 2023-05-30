@@ -7,11 +7,12 @@ namespace ServerApplication.modules;
 
 public static class Logging
 {
+    static string logDate = $"{DateTime.Now:yyyyMMdd_HHmmss}";
 
     private static readonly ILogger ApplicationLogger = new LoggerConfiguration()
         .MinimumLevel.Debug()
         .WriteTo.Console()
-        .WriteTo.File("logs.txt")
+        .WriteTo.File($"log_{logDate}.txt")
         .CreateLogger();
 
     private const string RawMessagWithNewlineTemplate = "{Message:lj}{NewLine}";
@@ -21,7 +22,7 @@ public static class Logging
     private static readonly ILogger EventLogger = new LoggerConfiguration()
         .MinimumLevel.Debug()
         .WriteTo.Console(outputTemplate: RawMessagWithNewlineTemplate)
-        .WriteTo.File("event_log.csv", outputTemplate: RawMessagWithNewlineTemplate)
+        .WriteTo.File($"event_log_{logDate}.csv", outputTemplate: RawMessagWithNewlineTemplate)
         .CreateLogger();
 
     static Logging()
