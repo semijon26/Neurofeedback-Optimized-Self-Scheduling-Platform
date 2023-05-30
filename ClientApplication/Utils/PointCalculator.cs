@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ClientApplication.Models;
 using Shared;
 
@@ -10,31 +11,29 @@ public static class PointCalculator
     
     public static Dictionary<TaskGroup, TaskPoint> CalculateDrawingPoints(Dictionary<int, List<TaskGroup>> Layers, int canvasWidth, int groupWidth, int groupHeight)
     {
-        Dictionary<TaskGroup, TaskPoint> current_ = new Dictionary<TaskGroup, TaskPoint>();
+        Dictionary<TaskGroup, TaskPoint> current = new Dictionary<TaskGroup, TaskPoint>();
         int CanvasWidth = canvasWidth;
         int initialYValue = 0;
         int initialWidth = groupWidth;
         foreach (int key in Layers.Keys)
         {
-            int circleDistance;
-            int counter = 1;
-            // Where(TaskGraphProvider.GetInstance().TaskGraph.GetAvailableTaskGroups().Contains)
+            int temp = 0;
+            int wholeTaskNumber = Layers.TryGetValue(key, out var layer) ? layer.Sum(taskGroup => taskGroup.Tasks.Count) : 0;
+            int circleDistance = (CanvasWidth / (wholeTaskNumber+1));
             foreach (TaskGroup group in Layers[key])
             {
-                int NumberOfNodes = Layers[key].Count;
-                int NumberOfTasks = group.Tasks.Count;
-                circleDistance = CanvasWidth / (NumberOfNodes+1);
-                int step = circleDistance;
-                int y_value = initialYValue;
-                int x_value =  counter * step;
-                TaskPoint point = new TaskPoint { X = x_value, Y = y_value, Width = NumberOfTasks*initialWidth};
-                current_[group] = point;
-                counter++;
+                int numberOfTasks = group.Tasks.Count;
+                int yValue = initialYValue;
+                int xValue =  circleDistance * temp;
+                temp += numberOfTasks;
+                TaskPoint point = new TaskPoint { X = xValue, Y = yValue, Width = numberOfTasks*initialWidth};
+                current[group] = point;
+                Logging.LogInformation($"TaskGroup {group.Id} - y:{yValue} x:{xValue}");
             }
             initialYValue += groupHeight;
         }
 
-        return current_;
+        return current;
     }
     
     public static List<Line> CalculateDrawingLines(Dictionary<TaskGroup, TaskPoint> TaskPointsDictionary, int groupHeight)
