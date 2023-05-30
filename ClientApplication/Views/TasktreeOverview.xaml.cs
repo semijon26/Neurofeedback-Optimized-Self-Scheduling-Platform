@@ -25,11 +25,6 @@ namespace ClientApplication.Views
             //(((TasktreeOverviewViewModel)DataContext).Initialize();
         }
 
-        private void SubmitMessage(object sender, RoutedEventArgs e)
-        {
-            SocketClientService.Send(MessageTextBox.Text);
-        }
-
         // Tasktree should not receive key events
         private void ScrollViewer_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {

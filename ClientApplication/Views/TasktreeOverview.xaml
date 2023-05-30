@@ -11,32 +11,18 @@
              Loaded="MyView_Loaded">
         <UserControl.Resources>
         <converter:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
-        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converter:BooleanToBlurEffectConverter x:Key="BooleanToBlurEffectConverter"></converter:BooleanToBlurEffectConverter>
         <converter:VariableToImagePathConverter x:Key="VariableToImagePathConverter"/>
-        <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converter:FirstLetterConverter x:Key="FirstLetterConverter"/>
         <converter:TwoVariableToVisibilityConverter x:Key="TwoVariableToVisibilityConverter" />
+        <converter:LineColorConverter x:Key="LineColorConverter"></converter:LineColorConverter>
+        <converter:ColorConverter x:Key="ColorConverter"/>
     </UserControl.Resources>
     <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
-            <TextBox x:Name="MessageTextBox"></TextBox>
-            <Button Content="Nachricht an Server senden" Click="SubmitMessage"></Button>
-            <TextBlock Text="String Nachricht des Servers:"></TextBlock>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                <TextBlock Margin="20,5, 0,5" Text="{Binding StringMessage}"></TextBlock>
-            </ScrollViewer>
-            <TextBlock Text="Empfangenes Serverobjekt"></TextBlock>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                <TextBlock Margin="20,5, 0,5" Text="{Binding ObjectMessage}" TextWrapping="Wrap"  ></TextBlock>
-            </ScrollViewer>
-            
-        </StackPanel>
-        
-        <ScrollViewer Grid.Column="1" Name="ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
+        <ScrollViewer Grid.Column="0" Name="ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
                       PreviewKeyDown="ScrollViewer_OnPreviewKeyDown" PreviewKeyUp="ScrollViewer_OnPreviewKeyUp">
             <Grid>
                 
@@ -50,9 +36,13 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Line X1="{Binding X1}" Y1="{Binding Y1}"
-                                  X2="{Binding X2}" Y2="{Binding Y2}"
-                                  Stroke="Black" StrokeThickness="2" 
-                                  Visibility="{Binding Visibility, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                  X2="{Binding X2}" Y2="{Binding Y2}" 
+                                  StrokeThickness="2" 
+                                  Visibility="Visible">
+                                <Line.Stroke>
+                                    <SolidColorBrush Color="{Binding Visibility, Converter={StaticResource LineColorConverter}}"/>
+                                </Line.Stroke>
+                            </Line>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -72,10 +62,10 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Visibility="{Binding Key.Executable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Rectangle Width="{Binding Value.Width}" Height="70" Fill="White" StrokeThickness="2" RadiusX="10" RadiusY="10">
+                            <Grid>
+                                <Rectangle Width="{Binding Value.Width}" Height="70" Fill="White" StrokeThickness="2" RadiusX="5" RadiusY="5">
                                     <Rectangle.Stroke>
-                                        DarkGray
+                                        Black
                                     </Rectangle.Stroke>
                                 </Rectangle>
                                 <ItemsControl ItemsSource="{Binding Key.Tasks}">
@@ -91,21 +81,21 @@
                                                     <RowDefinition Height="Auto"/> <!-- Erste Zeile für den oberen Kreis -->
                                                     <RowDefinition Height="Auto"/> <!-- Zweite Zeile für den unteren Kreis mit Buchstaben -->
                                                 </Grid.RowDefinitions>
-                                                <Button Grid.Row="0" Width="30" Height="30"
+                                                <Button Grid.Row="0" Width="30" Height="30" Margin="5, 0"
                                                         Command="{Binding DataContext.RelayCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=2}}"
                                                         CommandParameter="{Binding Id}"
                                                         Visibility="{Binding IsDone, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                                                     <Button.Template>
                                                         <ControlTemplate TargetType="Button">
                                                             <Grid x:Name="ButtonGrid">
-                                                                <Ellipse Width="30" Height="30">
-                                                                    <Ellipse.Stroke>
-                                                                        Black
-                                                                    </Ellipse.Stroke>
-                                                                    <Ellipse.Fill>
+                                                                <Rectangle Width="30" Height="30">
+                                                                    <Rectangle.Stroke>
+                                                                        White
+                                                                    </Rectangle.Stroke>
+                                                                    <Rectangle.Fill>
                                                                         <ImageBrush ImageSource="{Binding GameType, Converter={StaticResource VariableToImagePathConverter}}" Stretch="Fill"></ImageBrush>
-                                                                    </Ellipse.Fill>
-                                                                </Ellipse>
+                                                                    </Rectangle.Fill>
+                                                                </Rectangle>
                                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                             </Grid>
                                                         </ControlTemplate>
@@ -113,6 +103,9 @@
                                                     <Button.Content>
                                                         <TextBlock Text="{Binding Id}" Visibility="Hidden"/>
                                                     </Button.Content>
+                                                    <Button.Effect>
+                                                        <Binding Path="Key.Executable" Converter="{StaticResource BooleanToBlurEffectConverter}" />
+                                                    </Button.Effect>
                                                 </Button>
                                                 <Button Grid.Row="1" Width="25" Height="25"
                                                         Command="{Binding DataContext.ChangeCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=2}}"
@@ -131,7 +124,7 @@
                                                                         DarkGray
                                                                     </Ellipse.Stroke>
                                                                     <Ellipse.Fill>
-                                                                        GreenYellow
+                                                                        <Binding Path="Worker" Converter="{StaticResource ColorConverter}" />
                                                                     </Ellipse.Fill>
                                                                 </Ellipse>
                                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -149,13 +142,18 @@
                                                         </TextBlock>
                                                     </Button.Content>
                                                 </Button>
-
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-
-                                
+                                <Rectangle Width="{Binding Value.Width}" Height="70" Fill="White" StrokeThickness="2" RadiusX="5" RadiusY="5" Visibility="{Binding Key.Executable, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                    <Rectangle.Stroke>
+                                        <SolidColorBrush Color="LightGray" />
+                                    </Rectangle.Stroke>
+                                    <Rectangle.OpacityMask>
+                                        <SolidColorBrush Color="#DDFFFFFF"/> <!-- Hier wird die Alpha-Komponente auf 50% (128) gesetzt -->
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
