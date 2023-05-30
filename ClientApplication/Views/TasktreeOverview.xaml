@@ -161,12 +161,12 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                <Rectangle Width="{Binding Value.Width}" Height="70" Fill="White" StrokeThickness="2" RadiusX="10" RadiusY="10" Visibility="{Binding Key.Executable, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                <Rectangle Width="{Binding Value.Width}" Height="70" Fill="White" StrokeThickness="2" RadiusX="5" RadiusY="5" Visibility="{Binding Key.Executable, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                                     <Rectangle.Stroke>
                                         <SolidColorBrush Color="LightGray" />
                                     </Rectangle.Stroke>
                                     <Rectangle.OpacityMask>
-                                        <SolidColorBrush Color="#CCFFFFFF"/> <!-- Hier wird die Alpha-Komponente auf 50% (128) gesetzt -->
+                                        <SolidColorBrush Color="#DDFFFFFF"/> <!-- Hier wird die Alpha-Komponente auf 50% (128) gesetzt -->
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </Grid>
