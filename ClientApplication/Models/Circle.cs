@@ -14,6 +14,7 @@ public class Circle
     public string Label { get; set; }
 
     public Thickness ButtonMargin { get; set; }
-    public Color UserColor { get; set; }
+
+    public ClientObject Client { get; set; }
 
 }

@@ -10,6 +10,11 @@ public class ClientObject
         Label = "";
         ActiveGames = new Dictionary<int, GameObject>();
         MinClientsToStartGames = 7;
+        Random random = new Random();
+        A = 255;
+        R = (byte)random.Next(100, 256);
+        G = (byte)random.Next(100, 256);
+        B = (byte)random.Next(100, 256);
     }
 
     public static ClientObject GetInstance()
@@ -50,4 +55,9 @@ public class ClientObject
             ActiveGames.Add(taskId, new GameObject(gameType, 1, 1));
         }
     }
+    
+    public byte A { get; set; }
+    public byte R { get; set; }
+    public byte G { get; set; }
+    public byte B { get; set; }
 }

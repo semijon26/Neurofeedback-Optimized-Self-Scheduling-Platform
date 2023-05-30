@@ -8,5 +8,6 @@
         <converter:VariableToImagePathConverter x:Key="VariableToImagePathConverter" />
         <converter:FirstLetterConverter x:Key="FirstLetterConverter" />
         <converter:TwoLetterConverter x:Key="TwoLetterConverter" />
+        <converter:ColorConverter x:Key="ColorConverter"/>
     </Application.Resources>
 </Application>

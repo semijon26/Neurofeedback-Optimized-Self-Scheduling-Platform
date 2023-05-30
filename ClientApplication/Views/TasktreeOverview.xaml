@@ -16,6 +16,7 @@
         <converter:FirstLetterConverter x:Key="FirstLetterConverter"/>
         <converter:TwoVariableToVisibilityConverter x:Key="TwoVariableToVisibilityConverter" />
         <converter:LineColorConverter x:Key="LineColorConverter"></converter:LineColorConverter>
+        <converter:ColorConverter x:Key="ColorConverter"/>
     </UserControl.Resources>
     <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
@@ -138,7 +139,7 @@
                                                                         DarkGray
                                                                     </Ellipse.Stroke>
                                                                     <Ellipse.Fill>
-                                                                        LightGray
+                                                                        <Binding Path="Worker" Converter="{StaticResource ColorConverter}" />
                                                                     </Ellipse.Fill>
                                                                 </Ellipse>
                                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>

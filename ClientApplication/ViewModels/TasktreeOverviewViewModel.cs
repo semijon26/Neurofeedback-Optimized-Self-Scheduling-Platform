@@ -156,7 +156,7 @@ namespace ClientApplication.ViewModels
             Dictionary<TaskGroup, TaskPoint> current_ = new Dictionary<TaskGroup, TaskPoint>();
             int CanvasWidth = 1200;
             int initialYValue = 0;
-            int initialWidth = 70;
+            int initialWidth = 60;
             foreach (int key in _layers.Keys)
             {
                 int circleDistance;
