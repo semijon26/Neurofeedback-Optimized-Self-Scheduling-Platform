@@ -8,7 +8,18 @@ namespace ClientApplication.Utils;
 
 public static class PointCalculator
 {
-    
+
+    public static List<int> CalculateActiveArea(Dictionary<TaskGroup, TaskPoint> TaskPointDictionary)
+    {
+        Dictionary<TaskGroup, TaskPoint> filteredDictionary = TaskPointDictionary
+            .Where(pair => pair.Key.Executable && !pair.Key.IsDone())
+            .ToDictionary(pair => pair.Key, pair => pair.Value)!;
+        
+        TaskPoint lowestPoint = filteredDictionary.Values.MinBy(point => point.Y);
+        TaskPoint highestPoint = filteredDictionary.Values.MaxBy(point => point.Y);
+        return new List<int> { lowestPoint.Y, highestPoint.Y + 10 };
+    }
+
     public static Dictionary<TaskGroup, TaskPoint> CalculateDrawingPoints(Dictionary<int, List<TaskGroup>> Layers, int canvasWidth, int groupWidth, int groupHeight)
     {
         Dictionary<TaskGroup, TaskPoint> current = new Dictionary<TaskGroup, TaskPoint>();
