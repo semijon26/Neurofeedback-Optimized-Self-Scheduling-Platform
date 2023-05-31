@@ -17,7 +17,8 @@ namespace ClientApplication.ViewModels
             { GameType.TextGame, new TextGameView() },
             { GameType.BricketBraker, new BricketBreakerGame() },
             { GameType.PathPilot, new PathPilotView() },
-            { GameType.MemoMaster, new MemoMasterView() }
+            { GameType.MemoMaster, new MemoMasterView() },
+            { GameType.BackTrack, new BackTrackView() }
         };
         
         protected readonly Dictionary<GameType, AbstractGameViewModel> gameViewModels = new()
@@ -25,7 +26,8 @@ namespace ClientApplication.ViewModels
             { GameType.TextGame, new TextGameViewModel(Utils.NavigationService.GetInstance()) },
             { GameType.BricketBraker, new BricketBreakerViewModel(Utils.NavigationService.GetInstance()) },
             { GameType.PathPilot, new PathPilotViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.MemoMaster, new MemoMasterViewModel(Utils.NavigationService.GetInstance()) }
+            { GameType.MemoMaster, new MemoMasterViewModel(Utils.NavigationService.GetInstance()) },
+            { GameType.BackTrack , new BackTrackViewModel(Utils.NavigationService.GetInstance())}
         };
 
         public List<KeyValuePair<GameType, AbstractGameViewModel>> ActiveGameViewModels
@@ -46,6 +48,8 @@ namespace ClientApplication.ViewModels
             var bricketBreakerViewModel = (BricketBreakerViewModel)GameDictionary[GameType.BricketBraker].DataContext;
             var pathPilotViewModel = (PathPilotViewModel)GameDictionary[GameType.PathPilot].DataContext;
             var memoMasterViewModel = (MemoMasterViewModel)GameDictionary[GameType.MemoMaster].DataContext;
+            var backTrackViewModel = (BackTrackViewModel)GameDictionary[GameType.BackTrack].DataContext;
+            
             
             ClientManagementSocket.OnStartGamesMessageReceived += (_, _) =>
             {
@@ -88,7 +92,14 @@ namespace ClientApplication.ViewModels
                                 Application.Current.Dispatcher.Invoke(memoMasterViewModel.StartGame);
                                 memoMasterViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
-
+                            break;
+                        case GameType.BackTrack:
+                            if (!backTrackViewModel.IsGameRunning)
+                            {
+                                AddTaskToUiEvent?.Invoke(null, GameType.BackTrack);
+                                Application.Current.Dispatcher.Invoke(backTrackViewModel.StartGame);
+                                backTrackViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
+                            }   
                             break;
                     }
                 }

@@ -16,7 +16,10 @@ public sealed class PathPilotViewModel : AbstractGameViewModel
     private int _currentMetersFloored = 0;
     private const int PixelToMeterFactor = 20;
     private int _timeLeft;
-    private DispatcherTimer _timer;
+    private DispatcherTimer _timer = new DispatcherTimer
+    {
+        Interval = TimeSpan.FromSeconds(1)
+    };
     private CircleOnPathDetection _circleOnPathDetection = new();
 
     // use this constant to change speed of game
