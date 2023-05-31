@@ -11,6 +11,8 @@ public sealed class TextGameViewModel : AbstractGameViewModel
 {
     private string _inputText;
     private int _errorCount = 0;
+    private string _inputWord;
+    private bool _isWordFullyWritten = false;
 
     List<string> texts = new()
     {
@@ -65,6 +67,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel
         IsGameRunning = false;
         InputText = "";
         ErrorCount = 0;
+        TargetText = GetRandomText();
     }
 
     public int TimeLeft
@@ -143,6 +146,32 @@ public sealed class TextGameViewModel : AbstractGameViewModel
             {
                 fullWordsWritten = value;
                 OnPropertyChanged(nameof(FullWordsWritten));
+            }
+        }
+    }
+
+    public string InputWord
+    {
+        get { return _inputWord; }
+        set
+        {
+            if (_inputWord != value)
+            {
+                _inputWord = value;
+                _inputText += _inputWord;
+                OnPropertyChanged(nameof(InputWord));
+            }
+        }
+    }
+
+    public bool IsWordFullyWritten
+    {
+        get { return _isWordFullyWritten; }
+        set
+        {
+            if (_isWordFullyWritten != value)
+            {
+                _isWordFullyWritten = value;
             }
         }
     }
@@ -271,24 +300,34 @@ public sealed class TextGameViewModel : AbstractGameViewModel
             return 0;
         }
 
-        string[] inputWords = inputText.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        string[] targetWords = TargetText.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        List<string> inputWords = new(inputText.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+        List<string> targetWords = new(TargetText.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
 
         int fullWordsWritten = 0;
 
-        for (int i = 0; i < Math.Min(inputWords.Length, targetWords.Length); i++)
+        for (int i = 0; i < Math.Min(inputWords.Count, targetWords.Count); i++)
         {
             if (inputWords[i] == targetWords[i])
             {
                 fullWordsWritten++;
+
+                _isWordFullyWritten = true;
+
+                targetWords.Remove(targetWords[i]);
+                var newTargetText = String.Join(" ", targetWords);
+
+                TargetText = newTargetText;
+
                 FullWordsWritten = fullWordsWritten;
                 Logging.LogGameEvent($"FULL WORDS WRITTEN: {fullWordsWritten}");
             }
             else
             {
+                _isWordFullyWritten = false;
                 break; // Exit the loop if a word doesn't match
             }
         }
+        _isWordFullyWritten = false;
 
         return fullWordsWritten;
     }

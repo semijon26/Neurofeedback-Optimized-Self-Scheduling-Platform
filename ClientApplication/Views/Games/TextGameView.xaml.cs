@@ -21,6 +21,11 @@ public partial class TextGameView : UserControl
         var viewModel = DataContext as TextGameViewModel;
 
         viewModel.InputText = textBox.Text;
+
+        if (viewModel.IsWordFullyWritten)
+        {
+            InputTextBox.Text = string.Empty;
+        }
     }
 
     private void TextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
