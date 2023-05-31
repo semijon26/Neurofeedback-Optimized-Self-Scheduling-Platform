@@ -26,7 +26,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel
 
     private string _targetText;
 
-    private int fullWordsWritten;
+    private int fullWordsWritten = 0;
     private int difficulty = 15;
 
     private bool _isCorrect;
@@ -309,11 +309,9 @@ public sealed class TextGameViewModel : AbstractGameViewModel
         List<string> targetWords = new(TargetText.Split(new[] { ' ' }));
         string targetWord = targetWords[0];
 
-        int fullWordsWritten = 0;
-
-        if (inputText == targetWord)
+        if (inputText == targetWord + " ")
         {
-            fullWordsWritten++;
+            FullWordsWritten++;
 
             _isWordFullyWritten = true;
 
