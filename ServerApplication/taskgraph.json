@@ -7,6 +7,16 @@
                     "TaskId": 1,
                     "GameType": 2,
                     "TaskDifficulty": 2
+                },
+                {
+                    "TaskId": 2,
+                    "GameType": 2,
+                    "TaskDifficulty": 2
+                },
+                {
+                    "TaskId": 3,
+                    "GameType": 2,
+                    "TaskDifficulty": 2
                 }
             ]
         },
@@ -14,7 +24,27 @@
             "GroupId": 2,
             "Tasks": [
                 {
-                    "TaskId": 2,
+                    "TaskId": 4,
+                    "GameType": 1,
+                    "TaskDifficulty": 1
+                },
+                {
+                    "TaskId": 5,
+                    "GameType": 1,
+                    "TaskDifficulty": 1
+                },
+                {
+                    "TaskId": 6,
+                    "GameType": 1,
+                    "TaskDifficulty": 1
+                },
+                {
+                    "TaskId": 7,
+                    "GameType": 1,
+                    "TaskDifficulty": 1
+                },
+                {
+                    "TaskId": 8,
                     "GameType": 1,
                     "TaskDifficulty": 1
                 }
@@ -24,13 +54,8 @@
             "GroupId": 3,
             "Tasks": [
                 {
-                    "TaskId": 3,
+                    "TaskId": 9,
                     "GameType": 2,
-                    "TaskDifficulty": 0
-                },
-                {
-                    "TaskId": 30,
-                    "GameType": 1,
                     "TaskDifficulty": 0
                 }
             ]
@@ -39,7 +64,22 @@
             "GroupId": 4,
             "Tasks": [
                 {
-                    "TaskId": 4,
+                    "TaskId": 10,
+                    "GameType": 0,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 11,
+                    "GameType": 0,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 12,
+                    "GameType": 0,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 13,
                     "GameType": 0,
                     "TaskDifficulty": 0
                 }
@@ -49,17 +89,22 @@
             "GroupId": 5,
             "Tasks": [
                 {
-                    "TaskId": 5,
+                    "TaskId": 14,
                     "GameType": 0,
                     "TaskDifficulty": 0
                 },
                 {
-                    "TaskId": 50,
+                    "TaskId": 15,
                     "GameType": 5,
                     "TaskDifficulty": 0
                 },
                 {
-                    "TaskId": 51,
+                    "TaskId": 16,
+                    "GameType": 0,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 17,
                     "GameType": 0,
                     "TaskDifficulty": 0
                 }
@@ -69,7 +114,12 @@
             "GroupId": 6,
             "Tasks": [
                 {
-                    "TaskId": 6,
+                    "TaskId": 18,
+                    "GameType": 0,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 19,
                     "GameType": 0,
                     "TaskDifficulty": 0
                 }
@@ -79,22 +129,12 @@
             "GroupId": 7,
             "Tasks": [
                 {
-                    "TaskId": 7,
+                    "TaskId": 20,
                     "GameType": 0,
                     "TaskDifficulty": 0
                 },
                 {
-                    "TaskId": 70,
-                    "GameType": 0,
-                    "TaskDifficulty": 0
-                },
-                {
-                    "TaskId": 71,
-                    "GameType": 0,
-                    "TaskDifficulty": 0
-                },
-                {
-                    "TaskId": 72,
+                    "TaskId": 21,
                     "GameType": 0,
                     "TaskDifficulty": 0
                 }
@@ -104,7 +144,32 @@
             "GroupId": 8,
             "Tasks": [
                 {
-                    "TaskId": 8,
+                    "TaskId": 22,
+                    "GameType": 1,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 23,
+                    "GameType": 1,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 24,
+                    "GameType": 1,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 25,
+                    "GameType": 1,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 26,
+                    "GameType": 1,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 27,
                     "GameType": 1,
                     "TaskDifficulty": 0
                 }
@@ -114,26 +179,235 @@
             "GroupId": 9,
             "Tasks": [
                 {
-                    "TaskId": 9,
+                    "TaskId": 28,
                     "GameType": 3,
                     "TaskDifficulty": 0
                 },
                 {
-                    "TaskId": 90,
+                    "TaskId": 29,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 30,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 31,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 32,
                     "GameType": 4,
                     "TaskDifficulty": 0
                 }
             ]
+        },
+        {
+            "GroupId": 10,
+            "Tasks": [
+                {
+                    "TaskId": 33,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 34,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 35,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                }
+            ]
+        },
+        {
+            "GroupId": 11,
+            "Tasks": [
+                {
+                    "TaskId": 36,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 37,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 38,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 39,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 40,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 41,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 42,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 43,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                }
+            ]
+        },
+        {
+            "GroupId": 12,
+            "Tasks": [
+                {
+                    "TaskId": 44,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 45,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 46,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                }
+            ]
+        },
+        {
+            "GroupId": 13,
+            "Tasks": [
+                {
+                    "TaskId": 47,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 48,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                }
+            ]
+        },
+        {
+            "GroupId": 14,
+            "Tasks": [
+                {
+                    "TaskId": 49,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 50,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 51,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                }
+            ]
+        },
+        {
+            "GroupId": 15,
+            "Tasks": [
+                {
+                    "TaskId": 52,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 53,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 54,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                },
+                {
+                    "TaskId": 55,
+                    "GameType": 4,
+                    "TaskDifficulty": 0
+                }
+            ]
+        },
+        {
+            "GroupId": 16,
+            "Tasks": [
+                {
+                    "TaskId": 56,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                }
+            ]
+        },
+        {
+            "GroupId": 17,
+            "Tasks": [
+                {
+                    "TaskId": 57,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                }
+            ]
+        },
+        {
+            "GroupId": 18,
+            "Tasks": [
+                {
+                    "TaskId": 58,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                }
+            ]
+        },
+        {
+            "GroupId": 19,
+            "Tasks": [
+                {
+                    "TaskId": 59,
+                    "GameType": 3,
+                    "TaskDifficulty": 0
+                }
+            ]
         }
+        
+        
     ],
     "ConnectionsFromTo": {
-        "1": [2],
-        "2": [7],
-        "3": [4],
-        "4": [7, 8],
-        "5": [6],
-        "6": [8],
-        "7": [9],
-        "8": [9]
+        "1": [5],
+        "2": [6, 7],
+        "3": [8],
+        "4": [8],
+        "5": [9],
+        "6": [9, 10],
+        "7": [10, 11],
+        "8": [11],
+        "9": [12, 13],
+        "10": [13, 14],
+        "11": [14,15],
+        "12": [16],
+        "13": [17],
+        "14": [18],
+        "15": [19]
     }
 }

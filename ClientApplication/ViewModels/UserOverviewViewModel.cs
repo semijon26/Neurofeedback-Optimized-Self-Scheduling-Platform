@@ -64,7 +64,7 @@ namespace ClientApplication.ViewModels
         {
             Circles = new ObservableCollection<Circle>();
             var circles = new ObservableCollection<Circle>();
-            Circle circle = new Circle { Label = clientManagementData.CurrentClient.Label, ButtonMargin = new Thickness(0,0,0,45)};
+            Circle circle = new Circle { Label = clientManagementData.CurrentClient.Label, ButtonMargin = new Thickness(0,0,0,45), Client = clientManagementData.CurrentClient};
             foreach (var activeGame in clientManagementData.CurrentClient.ActiveGames)
             {
                 SetGameIconToEmptyImage(circle, activeGame.Value);
@@ -72,7 +72,7 @@ namespace ClientApplication.ViewModels
             circles.Add(circle);
             foreach (var client in clientManagementData.OtherClients)
             {
-                circle = new Circle { Label = client.Label, ButtonMargin = new Thickness(0,0,0,0) };
+                circle = new Circle { Label = client.Label, ButtonMargin = new Thickness(0,0,0,0), Client = client};
                 foreach (var activeGame in client.ActiveGames)
                 {
                     SetGameIconToEmptyImage(circle, activeGame.Value);
