@@ -12,6 +12,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel
     private string _inputText;
     private int _errorCount = 0;
     private string _inputWord;
+    private readonly string _targetWord;
     private bool _isWordFullyWritten = false;
 
     List<string> texts = new()
@@ -164,16 +165,14 @@ public sealed class TextGameViewModel : AbstractGameViewModel
         }
     }
 
+    public string TargetWord
+    {
+        get { return _targetWord; }
+    }
+
     public bool IsWordFullyWritten
     {
         get { return _isWordFullyWritten; }
-        set
-        {
-            if (_isWordFullyWritten != value)
-            {
-                _isWordFullyWritten = value;
-            }
-        }
     }
 
     private void CheckText()
@@ -203,6 +202,11 @@ public sealed class TextGameViewModel : AbstractGameViewModel
                     Logging.LogGameEvent("User input is false");
                     inputTextLength--;
                     Logging.LogGameEvent($"Text after character deletion: [{InputText}]");
+                    return;
+                }
+
+                if (IsWordFullyWritten)
+                {
                     return;
                 }
 
@@ -278,7 +282,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel
 
     private void IsErrorCountBelowThree()
     {
-        if (ErrorCount > 3)
+        if (_errorCount > 3)
         {
             timer.Stop();
             RemoveActiveTask();
@@ -295,39 +299,36 @@ public sealed class TextGameViewModel : AbstractGameViewModel
 
     private int GetFullWordsWritten(string inputText)
     {
+        _isWordFullyWritten = false;
+
         if (string.IsNullOrEmpty(inputText))
         {
             return 0;
         }
-
-        List<string> inputWords = new(inputText.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
-        List<string> targetWords = new(TargetText.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+        
+        List<string> targetWords = new(TargetText.Split(new[] { ' ' }));
+        string targetWord = targetWords[0];
 
         int fullWordsWritten = 0;
 
-        for (int i = 0; i < Math.Min(inputWords.Count, targetWords.Count); i++)
+        if (inputText == targetWord)
         {
-            if (inputWords[i] == targetWords[i])
-            {
-                fullWordsWritten++;
+            fullWordsWritten++;
 
-                _isWordFullyWritten = true;
+            _isWordFullyWritten = true;
 
-                targetWords.Remove(targetWords[i]);
-                var newTargetText = String.Join(" ", targetWords);
+            targetWords.Remove(targetWord);
+            var newTargetText = String.Join(" ", targetWords);
 
-                TargetText = newTargetText;
+            TargetText = newTargetText;
 
-                FullWordsWritten = fullWordsWritten;
-                Logging.LogGameEvent($"FULL WORDS WRITTEN: {fullWordsWritten}");
-            }
-            else
-            {
-                _isWordFullyWritten = false;
-                break; // Exit the loop if a word doesn't match
-            }
+            FullWordsWritten = fullWordsWritten;
+            Logging.LogGameEvent($"FULL WORDS WRITTEN: {fullWordsWritten}");
         }
-        _isWordFullyWritten = false;
+        else
+        {
+            _isWordFullyWritten = false;
+        }
 
         return fullWordsWritten;
     }

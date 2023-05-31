@@ -75,7 +75,7 @@ public sealed class PathPilotViewModel : AbstractGameViewModel
         _currentMeters = 0;
         _currentMetersFloored = 0;
         _timeLeft = GameDurationSeconds;
-        _timer.Stop();
+        //_timer.Stop();
         _circleOnPathDetection = new();
     }
 

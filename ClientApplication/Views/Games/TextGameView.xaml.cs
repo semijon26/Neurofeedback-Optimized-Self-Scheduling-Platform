@@ -24,7 +24,11 @@ public partial class TextGameView : UserControl
 
         if (viewModel.IsWordFullyWritten)
         {
-            InputTextBox.Text = string.Empty;
+            textBox.Text = string.Empty;
+        }
+        if (!viewModel.IsGameRunning)
+        {
+            textBox.Text = string.Empty;
         }
     }
 
