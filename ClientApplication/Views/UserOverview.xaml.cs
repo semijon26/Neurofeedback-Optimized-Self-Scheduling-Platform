@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ClientApplication.Commands;
 using ClientApplication.Models;
 using ClientApplication.Utils;
 using ClientApplication.ViewModels;
@@ -52,19 +50,7 @@ namespace ClientApplication.Views
                     break;
             }
 
-            int? taskId = null;
-            foreach (var activeGame in circle.Client.ActiveGames)
-            {
-                if (activeGame.Value.GameType == gameType)
-                {
-                    taskId = activeGame.Key;
-                }
-            }
-
-            if (taskId != null)
-            {
-                new TakeOtherUsersTaskCommand().Execute(taskId);
-            }
+            _viewModel.OnGameImageClick(gameType, circle.Client);
         }
 
         private void Image_Top_Left_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
