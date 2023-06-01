@@ -15,14 +15,14 @@ public static class Logging
         .WriteTo.File($"log_{logDate}.txt")
         .CreateLogger();
 
-    private const string RawMessagWithNewlineTemplate = "{Message:lj}{NewLine}";
+    private const string RawMessageWithNewlineTemplate = "{Message:lj}{NewLine}";
 
     private const string CsvSeparator = ";";
 
     private static readonly ILogger EventLogger = new LoggerConfiguration()
         .MinimumLevel.Debug()
-        .WriteTo.Console(outputTemplate: RawMessagWithNewlineTemplate)
-        .WriteTo.File($"event_log_{logDate}.csv", outputTemplate: RawMessagWithNewlineTemplate)
+        .WriteTo.Console(outputTemplate: RawMessageWithNewlineTemplate)
+        .WriteTo.File($"event_log_{logDate}.csv", outputTemplate: RawMessageWithNewlineTemplate)
         .CreateLogger();
 
     static Logging()
