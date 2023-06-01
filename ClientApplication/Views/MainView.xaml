@@ -18,8 +18,9 @@
             <RowDefinition Height="200"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <views:UserOverview Grid.Row="1" Margin="5"/>
-        <views:TasktreeOverview Grid.ColumnSpan="2" Margin="10"/>
+        <views:UserOverview Grid.Column="0" Grid.Row="1" Margin="5"/>
+        <views:MacroTaskView Grid.Row="0" Grid.Column="0"></views:MacroTaskView>
+        <views:TasktreeOverview Grid.Row="0" Grid.Column="1" Margin="10"/>
         <views:GamesOverview Grid.Row="1" Grid.Column="1" Margin="10"/>
     </Grid>
 </Page>

@@ -29,8 +29,12 @@
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="1" Margin="3,0,3,0" VerticalAlignment="Center">
                         <Grid>
-                            <Ellipse Width="45" Height="45" Fill="LightGray"/>
-                            <TextBlock Text="{Binding Label, Converter={StaticResource TwoLetterConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="22"/>
+                            <Ellipse Width="45" Height="45">
+                                <Ellipse.Fill>
+                                    <Binding Path="Client" Converter="{StaticResource ColorConverter}" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Label, Converter={StaticResource FirstLetterConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="22"/>
                         </Grid>
                     </StackPanel>
                     <Grid Grid.Row="0" Grid.Column="2">

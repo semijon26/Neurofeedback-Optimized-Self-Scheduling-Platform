@@ -8,9 +8,11 @@ namespace ClientApplication.Utils
 {
     public static class Logging
     {
+        static string logFileName = $"logs_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+        
         private static readonly ILogger logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File("logs.txt")
+                .WriteTo.File(logFileName)
                 .WriteTo.Debug()
                 .CreateLogger();
 
