@@ -69,9 +69,9 @@
                                                     <Button.Template>
                                                         <ControlTemplate TargetType="Button">
                                                             <Grid x:Name="ButtonGrid">
-                                                                <Rectangle Width="10" Height="10">
+                                                                <Rectangle Width="10" Height="10" Margin="1,0">
                                                                     <Rectangle.Fill>
-                                                                        <ImageBrush ImageSource="{Binding GameType, Converter={StaticResource VariableToImagePathConverter}}" Stretch="Fill"></ImageBrush>
+                                                                        Black
                                                                     </Rectangle.Fill>
                                                                 </Rectangle>
                                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
