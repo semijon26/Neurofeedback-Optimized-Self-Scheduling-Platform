@@ -30,16 +30,8 @@ public class ChangeCommand : CommandBase
                 {
                     if (availTask.Id == taskId)
                     {
-                        var currentInstance = GetCurrentInstance();
-
-                        // Hier die Bedingung, wann Task abgenommen werden kann, einfügen.
-                        if (!currentInstance.ActiveGames.ContainsKey(taskId))
-                        {
-                            // Hier den Code ausführen
-                            //MessageBox.Show("Task sollte übernommen werden.");
-                            TaskManager.UpdatePulledTaskByServer(availTask.Id);
-                        }
-                        else
+                        var isTaskOfSomeoneElse = TaskManager.TakeTaskFromOtherUser(availTask.Id);
+                        if (!isTaskOfSomeoneElse)
                         {
                             MessageBox.Show("Du kannst das Spiel nicht selbst abnehmen.");
                         }
@@ -47,11 +39,5 @@ public class ChangeCommand : CommandBase
                 }
             }
         }
-    }
-
-    private static ClientObject GetCurrentInstance()
-    {
-        var currentClient = ClientManagementData.GetInstance(ClientObject.GetInstance()).CurrentClient;
-        return currentClient;
     }
 }

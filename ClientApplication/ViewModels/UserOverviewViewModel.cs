@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using ClientApplication.Commands;
 using ClientApplication.Models;
 using ClientApplication.Utils;
 using Shared;
@@ -101,6 +102,23 @@ namespace ClientApplication.ViewModels
             }else if (activeGame is { Row: 1, Column: 1 })
             {
                 circle.FourthActiveGameType = activeGame.GameType;
+            }
+        }
+
+        public void OnGameImageClick(GameType? gameType, ClientObject clientObject)
+        {
+            int? taskId = null;
+            foreach (var activeGame in clientObject.ActiveGames)
+            {
+                if (activeGame.Value.GameType == gameType)
+                {
+                    taskId = activeGame.Key;
+                }
+            }
+
+            if (taskId != null)
+            {
+                new TakeOtherUsersTaskCommand().Execute(taskId);
             }
         }
     }
