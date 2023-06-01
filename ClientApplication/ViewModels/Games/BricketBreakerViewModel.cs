@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using ClientApplication.Models;
+using ClientApplication.Models.GameState;
 using ClientApplication.Utils;
 using Shared;
 
 namespace ClientApplication.ViewModels.Games;
 
-public sealed class BricketBreakerViewModel : AbstractGameViewModel
+public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreakerGameState>
 {
     private ObservableCollection<Brick> _bricks;
 
@@ -43,7 +44,7 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel
         BallY = InitialBallY;
     }
 
-    public override void StartGame()
+    public override void StartGame(BricketBreakerGameState? state)
     {
         // Create a new DispatcherTimer with a 10-second interval
         timer = new DispatcherTimer
@@ -63,6 +64,11 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel
         IsGameRunning = true;
 
         MoveBall();
+    }
+
+    public override BricketBreakerGameState GetGameState()
+    {
+        return new BricketBreakerGameState();
     }
 
     public override void StopGame()
