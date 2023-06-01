@@ -19,22 +19,6 @@ namespace ClientApplication.ViewModels
             { GameType.PathPilot, new PathPilotView() },
             { GameType.MemoMaster, new MemoMasterView() }
         };
-        
-        protected readonly Dictionary<GameType, AbstractGameViewModel> gameViewModels = new()
-        {
-            { GameType.TextGame, new TextGameViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.BricketBraker, new BricketBreakerViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.PathPilot, new PathPilotViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.MemoMaster, new MemoMasterViewModel(Utils.NavigationService.GetInstance()) }
-        };
-
-        public List<KeyValuePair<GameType, AbstractGameViewModel>> ActiveGameViewModels
-        {
-            get
-            {
-                return gameViewModels.Where(vm => vm.Value.IsGameRunning).ToList();
-            }
-        }
 
         public event EventHandler<GameType>? AddTaskToUiEvent;
         public event EventHandler<GameType>? RemoveTaskFromUiEvent;
