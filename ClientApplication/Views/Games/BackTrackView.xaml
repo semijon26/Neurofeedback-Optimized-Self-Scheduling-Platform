@@ -5,10 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ClientApplication.Views.Games"
              xmlns:games="clr-namespace:ClientApplication.ViewModels.Games"
+             xmlns:placeholderTextbox="clr-namespace:PlaceholderTextbox;assembly=PlaceholderTextbox"
              d:DataContext="{d:DesignInstance Type=games:BackTrackViewModel}"
              mc:Ignorable="d"
              Height="340" Width="640">
     <Grid>
         <Image Source="{Binding GameIcon, Converter={StaticResource VariableToImagePathConverter}}" Width="35" Height="35" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Grid Height="250" Width="500">
+            <TextBox x:Name="BackTrackTextBox" Loaded="textBox_Loaded" PreviewTextInput="TextBox_PreviewKeyDown" FontSize="35" HorizontalAlignment="Left" Margin="170,100,0,0" TextWrapping="Wrap" Text="{Binding NextNumber, Mode=TwoWay}" FontWeight="Bold" TextAlignment="Center" MaxLength="1" VerticalAlignment="Top" Width="140" Height="140" Padding="2"/>
+        </Grid>
     </Grid>
 </UserControl>
