@@ -28,7 +28,7 @@ public static class Logging
     static Logging()
     {
         // first line in csv should be the header
-        EventLogger.Information($"timestamp;user;event_type;message");
+        EventLogger.Information($"timestamp{CsvSeparator}user{CsvSeparator}event_type{CsvSeparator}message");
     }
 
     public static void LogEvent(EventLogEntry logEntry)
