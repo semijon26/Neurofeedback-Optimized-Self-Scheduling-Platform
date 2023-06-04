@@ -43,8 +43,12 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel
         BallY = InitialBallY;
     }
 
-    public override void StartGame()
+    public override void StartGame(TaskDifficulty taskDifficulty)
     {
+        if (taskDifficulty == TaskDifficulty.Hard)
+        {
+           
+        }
         // Create a new DispatcherTimer with a 10-second interval
         timer = new DispatcherTimer
         {

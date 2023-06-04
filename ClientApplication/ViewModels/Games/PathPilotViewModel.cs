@@ -56,8 +56,12 @@ public sealed class PathPilotViewModel : AbstractGameViewModel
         }
     }
 
-    public override void StartGame()
+    public override void StartGame(TaskDifficulty taskDifficulty)
     {
+        if (taskDifficulty == TaskDifficulty.Hard)
+        {
+            
+        }
         Logging.LogGameEvent("PathPilot started");
         _timer = new DispatcherTimer
         {

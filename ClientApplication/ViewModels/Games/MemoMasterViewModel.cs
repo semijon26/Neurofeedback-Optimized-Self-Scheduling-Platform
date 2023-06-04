@@ -10,8 +10,12 @@ public class MemoMasterViewModel: AbstractGameViewModel
     {
     }
 
-    public override void StartGame()
+    public override void StartGame(TaskDifficulty taskDifficulty)
     {
+        if (taskDifficulty == TaskDifficulty.Hard)
+        {
+            
+        }
         IsGameRunning = true;
     }
 

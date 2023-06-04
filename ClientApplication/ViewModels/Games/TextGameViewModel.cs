@@ -37,8 +37,12 @@ public sealed class TextGameViewModel : AbstractGameViewModel
         _targetText = GetRandomText();
     }
 
-    public override void StartGame()
+    public override void StartGame(TaskDifficulty taskDifficulty)
     {
+        if (taskDifficulty == TaskDifficulty.Hard)
+        {
+            
+        }
         //var currentClientPlaying = GetClientInstanceLogging();
         Logging.LogInformation("------StartTextGame executed");
         Logging.LogGameEvent("TextGame started");

@@ -2,5 +2,5 @@
 
 public enum TaskDifficulty
 {
-    Easy, Medium, Hard
+    Easy, Hard
 }

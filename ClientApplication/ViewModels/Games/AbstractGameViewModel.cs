@@ -1,4 +1,6 @@
 using System;
+using System.Collections.ObjectModel;
+using ClientApplication.Models;
 using ClientApplication.Utils;
 using Shared;
 
@@ -9,6 +11,7 @@ public abstract class AbstractGameViewModel : ViewModelBase
     private bool _isGameRunning;
     private readonly GameType _gameType;
     public GameType GameIcon { get; private set; }
+    public ObservableCollection<Heart> Hearts { get; } = new();
 
     protected AbstractGameViewModel(INavigationService navigationService, GameType gameType) : base(navigationService)
     {
@@ -25,7 +28,7 @@ public abstract class AbstractGameViewModel : ViewModelBase
             OnPropertyChanged(nameof(IsGameRunning));
         } }
 
-    public abstract void StartGame();
+    public abstract void StartGame(TaskDifficulty taskDifficulty);
 
     public abstract void StopGame();
 
@@ -38,4 +41,5 @@ public abstract class AbstractGameViewModel : ViewModelBase
         TaskManager.RemoveActiveTaskForCurrentClient((int)taskId);
         RemoveTaskFromUiEvent?.Invoke(null, _gameType);
     }
+    
 }

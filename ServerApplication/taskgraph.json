@@ -30,17 +30,17 @@
                 },
                 {
                     "TaskId": 5,
-                    "GameType": 1,
+                    "GameType": 5,
                     "TaskDifficulty": 1
                 },
                 {
                     "TaskId": 6,
                     "GameType": 5,
-                    "TaskDifficulty": 1
+                    "TaskDifficulty": 0
                 },
                 {
                     "TaskId": 7,
-                    "GameType": 1,
+                    "GameType": 5,
                     "TaskDifficulty": 1
                 },
                 {
