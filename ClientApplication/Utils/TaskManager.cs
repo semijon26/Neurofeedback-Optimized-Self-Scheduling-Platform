@@ -17,7 +17,26 @@ public static class TaskManager
         return null;
     }
 
-    public static void UpdatePulledTaskByServer(int pulledTaskId)
+    
+    // Returns true if task is from someone else (not one of the client's own tasks), otherwise method returns false
+    public static bool TakeTaskFromOtherUser(int taskId)
+    {
+        if (!GetClientObject().ActiveGames.ContainsKey(taskId))
+        {
+            UpdatePulledTaskByServer(taskId);
+            return true;
+        }
+
+        return false;
+    }
+    
+    private static ClientObject GetClientObject()
+    {
+        var currentClient = ClientManagementData.GetInstance(ClientObject.GetInstance()).CurrentClient;
+        return currentClient;
+    }
+
+    private static void UpdatePulledTaskByServer(int pulledTaskId)
     {
         TaskGraphProvider.GetInstance().SendUpdatedTaskGraphToServer(new DataPayload{SetDone = false, ChangeWorker = true, IntValue = pulledTaskId, Woker = ClientObject.GetInstance()});
     }

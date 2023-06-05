@@ -46,10 +46,14 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding FirstActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,0,0,3"/>
-                        <Image Grid.Row="0" Grid.Column="1" Source="{Binding SecondActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,0,0,3"/>
-                        <Image Grid.Row="1" Grid.Column="0" Source="{Binding ThirdActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,3,0,0"/>
-                        <Image Grid.Row="1" Grid.Column="1" Source="{Binding FourthActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,3,0,0"/>
+                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding FirstActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,0,0,3"
+                               MouseLeftButtonDown="Image_Top_Left_OnMouseLeftButtonDown" />
+                        <Image Grid.Row="0" Grid.Column="1" Source="{Binding SecondActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,0,0,3"
+                               MouseLeftButtonDown="Image_Top_Right_OnMouseLeftButtonDown" />
+                        <Image Grid.Row="1" Grid.Column="0" Source="{Binding ThirdActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,3,0,0"
+                               MouseLeftButtonDown="Image_Bottom_Left_OnMouseLeftButtonDown" />
+                        <Image Grid.Row="1" Grid.Column="1" Source="{Binding FourthActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,3,0,0"
+                               MouseLeftButtonDown="Image_Bottom_Right_OnMouseLeftButtonDown" />
                     </Grid>
                 </Grid>
             </DataTemplate>
@@ -57,19 +61,38 @@
     </UserControl.Resources>
     <Grid>
         <StackPanel>
-            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" ItemsSource="{Binding Circles}" MaxHeight="700" MaxWidth="400">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="1"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
+            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" ItemsSource="{Binding Circles}" MaxHeight="700" MaxWidth="400"
+                     PreviewKeyDown="ListBox_OnPreviewKeyDown" PreviewKeyUp="ListBox_OnPreviewKeyUp">
+    <ListBox.ItemsPanel>
+        <ItemsPanelTemplate>
+            <UniformGrid Columns="1"/>
+        </ItemsPanelTemplate>
+    </ListBox.ItemsPanel>
+    <ListBox.ItemContainerStyle>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="Bd" Property="Background" Value="Transparent" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ListBox.ItemContainerStyle>
+</ListBox>
+
         </StackPanel>
     </Grid>
 </UserControl>

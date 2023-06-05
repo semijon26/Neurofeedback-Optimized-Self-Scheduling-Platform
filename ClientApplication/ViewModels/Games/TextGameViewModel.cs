@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Threading;
+using ClientApplication.Models.GameState;
 using ClientApplication.Utils;
 using Shared;
 
 namespace ClientApplication.ViewModels.Games;
 
-public sealed class TextGameViewModel : AbstractGameViewModel
+public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 {
     private string _inputText;
     private int _errorCount = 0;
@@ -40,7 +41,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel
         _targetText = GetRandomText();
     }
 
-    public override void StartGame()
+    public override void StartGame(TextGameGameState? state)
     {
         //var currentClientPlaying = GetClientInstanceLogging();
         Logging.LogInformation("------StartTextGame executed");
@@ -61,6 +62,11 @@ public sealed class TextGameViewModel : AbstractGameViewModel
         // Set the time left to 60 seconds
         TimeLeft = 60;
         IsGameRunning = true;
+    }
+
+    public override TextGameGameState GetGameState()
+    {
+        return new TextGameGameState();
     }
 
     public override void StopGame()

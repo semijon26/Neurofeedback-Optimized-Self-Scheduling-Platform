@@ -19,22 +19,6 @@ namespace ClientApplication.ViewModels
             { GameType.PathPilot, new PathPilotView() },
             { GameType.MemoMaster, new MemoMasterView() }
         };
-        
-        protected readonly Dictionary<GameType, AbstractGameViewModel> gameViewModels = new()
-        {
-            { GameType.TextGame, new TextGameViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.BricketBraker, new BricketBreakerViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.PathPilot, new PathPilotViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.MemoMaster, new MemoMasterViewModel(Utils.NavigationService.GetInstance()) }
-        };
-
-        public List<KeyValuePair<GameType, AbstractGameViewModel>> ActiveGameViewModels
-        {
-            get
-            {
-                return gameViewModels.Where(vm => vm.Value.IsGameRunning).ToList();
-            }
-        }
 
         public event EventHandler<GameType>? AddTaskToUiEvent;
         public event EventHandler<GameType>? RemoveTaskFromUiEvent;
@@ -58,7 +42,7 @@ namespace ClientApplication.ViewModels
                             if (!textGameViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.TextGame);
-                                Application.Current.Dispatcher.Invoke(textGameViewModel.StartGame);
+                                Application.Current.Dispatcher.Invoke(() => textGameViewModel.StartGame(null));
                                 textGameViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -67,7 +51,7 @@ namespace ClientApplication.ViewModels
                             if (!bricketBreakerViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.BricketBraker);
-                                Application.Current.Dispatcher.Invoke(bricketBreakerViewModel.StartGame);
+                                Application.Current.Dispatcher.Invoke(() => bricketBreakerViewModel.StartGame(null));
                                 bricketBreakerViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -76,7 +60,7 @@ namespace ClientApplication.ViewModels
                             if (!pathPilotViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.PathPilot);
-                                Application.Current.Dispatcher.Invoke(pathPilotViewModel.StartGame);
+                                Application.Current.Dispatcher.Invoke(() => pathPilotViewModel.StartGame(null));
                                 pathPilotViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -85,7 +69,7 @@ namespace ClientApplication.ViewModels
                             if (!memoMasterViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.MemoMaster);
-                                Application.Current.Dispatcher.Invoke(memoMasterViewModel.StartGame);
+                                Application.Current.Dispatcher.Invoke(() => memoMasterViewModel.StartGame(null));
                                 memoMasterViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
