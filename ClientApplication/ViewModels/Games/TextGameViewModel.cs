@@ -75,6 +75,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         InputText = "";
         ErrorCount = 0;
         TargetText = GetRandomText();
+        FullWordsWritten = 0;
     }
 
     public int TimeLeft
