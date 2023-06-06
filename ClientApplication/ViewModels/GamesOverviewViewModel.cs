@@ -21,20 +21,6 @@ namespace ClientApplication.ViewModels
             { GameType.BackTrack, new BackTrackView() }
         };
 
-        protected readonly Dictionary<GameType, AbstractGameViewModel> gameViewModels = new()
-        {
-            { GameType.TextGame, new TextGameViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.BricketBraker, new BricketBreakerViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.PathPilot, new PathPilotViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.MemoMaster, new MemoMasterViewModel(Utils.NavigationService.GetInstance()) },
-            { GameType.BackTrack, new BackTrackViewModel(Utils.NavigationService.GetInstance()) }
-        };
-
-        public List<KeyValuePair<GameType, AbstractGameViewModel>> ActiveGameViewModels
-        {
-            get { return gameViewModels.Where(vm => vm.Value.IsGameRunning).ToList(); }
-        }
-
         public event EventHandler<GameType>? AddTaskToUiEvent;
         public event EventHandler<GameType>? RemoveTaskFromUiEvent;
 
@@ -97,7 +83,7 @@ namespace ClientApplication.ViewModels
                                 AddTaskToUiEvent?.Invoke(null, GameType.BackTrack);
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
-                                    backTrackViewModel.StartGame(taskDifficulty);
+                                    backTrackViewModel.StartGame(taskDifficulty, null);
                                 });
                                 backTrackViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }

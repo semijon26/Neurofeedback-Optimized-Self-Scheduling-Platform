@@ -80,6 +80,11 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
         BallY = InitialBallY;
     }
 
+    public override BricketBreakerGameState GetGameState()
+    {
+       return new BricketBreakerGameState();
+    }
+
     public double RectangleX
     {
         get { return rectangleX; }

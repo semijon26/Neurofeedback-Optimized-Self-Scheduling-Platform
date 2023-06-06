@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Threading;
 using ClientApplication.Models;
+using ClientApplication.Models.GameState;
 using ClientApplication.Utils;
 using Shared;
 
 namespace ClientApplication.ViewModels.Games;
 
-public class BackTrackViewModel: AbstractGameViewModel
+public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
 {
     private string _nextNumber = "";
     public string NextNumber
@@ -61,7 +62,7 @@ public class BackTrackViewModel: AbstractGameViewModel
         NumberInsertedEvent();
     }
 
-    public override void StartGame(TaskDifficulty taskDifficulty)
+    public override void StartGame(TaskDifficulty taskDifficulty, BackTrackGameState? gameState)
     {
         if (taskDifficulty == TaskDifficulty.Hard)
         {
@@ -106,7 +107,12 @@ public class BackTrackViewModel: AbstractGameViewModel
         NextNumber = "";
         IsGameRunning = false;
     }
-    
+
+    public override BackTrackGameState GetGameState()
+    {
+        return new BackTrackGameState();
+    }
+
     private void GameTimerTick(object? sender, EventArgs e)
     {
         _timeLeft--;
