@@ -44,8 +44,12 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
         BallY = InitialBallY;
     }
 
-    public override void StartGame(BricketBreakerGameState? state)
+    public override void StartGame(TaskDifficulty taskDifficulty, BricketBreakerGameState? state)
     {
+        if (taskDifficulty == TaskDifficulty.Hard)
+        {
+           
+        }
         // Create a new DispatcherTimer with a 10-second interval
         timer = new DispatcherTimer
         {
@@ -66,11 +70,6 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
         MoveBall();
     }
 
-    public override BricketBreakerGameState GetGameState()
-    {
-        return new BricketBreakerGameState();
-    }
-
     public override void StopGame()
     {
         IsGameRunning = false;
@@ -79,6 +78,11 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
         RectangleX = InitialRectangleX;
         BallX = InitialBallX;
         BallY = InitialBallY;
+    }
+
+    public override BricketBreakerGameState GetGameState()
+    {
+       return new BricketBreakerGameState();
     }
 
     public double RectangleX

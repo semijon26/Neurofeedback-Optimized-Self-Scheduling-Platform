@@ -17,7 +17,8 @@ namespace ClientApplication.ViewModels
             { GameType.TextGame, new TextGameView() },
             { GameType.BricketBraker, new BricketBreakerGame() },
             { GameType.PathPilot, new PathPilotView() },
-            { GameType.MemoMaster, new MemoMasterView() }
+            { GameType.MemoMaster, new MemoMasterView() },
+            { GameType.BackTrack, new BackTrackView() }
         };
 
         public event EventHandler<GameType>? AddTaskToUiEvent;
@@ -30,19 +31,21 @@ namespace ClientApplication.ViewModels
             var bricketBreakerViewModel = (BricketBreakerViewModel)GameDictionary[GameType.BricketBraker].DataContext;
             var pathPilotViewModel = (PathPilotViewModel)GameDictionary[GameType.PathPilot].DataContext;
             var memoMasterViewModel = (MemoMasterViewModel)GameDictionary[GameType.MemoMaster].DataContext;
-            
+            var backTrackViewModel = (BackTrackViewModel)GameDictionary[GameType.BackTrack].DataContext;
+
+
             ClientManagementSocket.OnStartGamesMessageReceived += (_, _) =>
             {
-                
                 foreach (var activeGame in ClientObject.GetInstance().ActiveGames)
                 {
+                    var taskDifficulty = GetTaskDifficulty(activeGame.Key) ?? TaskDifficulty.Easy;
                     switch (activeGame.Value.GameType)
                     {
                         case GameType.TextGame:
                             if (!textGameViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.TextGame);
-                                Application.Current.Dispatcher.Invoke(() => textGameViewModel.StartGame(null));
+                                Application.Current.Dispatcher.Invoke(() => textGameViewModel.StartGame(taskDifficulty, null));
                                 textGameViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -51,7 +54,7 @@ namespace ClientApplication.ViewModels
                             if (!bricketBreakerViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.BricketBraker);
-                                Application.Current.Dispatcher.Invoke(() => bricketBreakerViewModel.StartGame(null));
+                                Application.Current.Dispatcher.Invoke(() => bricketBreakerViewModel.StartGame(taskDifficulty,null));
                                 bricketBreakerViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -60,7 +63,7 @@ namespace ClientApplication.ViewModels
                             if (!pathPilotViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.PathPilot);
-                                Application.Current.Dispatcher.Invoke(() => pathPilotViewModel.StartGame(null));
+                                Application.Current.Dispatcher.Invoke(() => pathPilotViewModel.StartGame(taskDifficulty, null));
                                 pathPilotViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -69,14 +72,25 @@ namespace ClientApplication.ViewModels
                             if (!memoMasterViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.MemoMaster);
-                                Application.Current.Dispatcher.Invoke(() => memoMasterViewModel.StartGame(null));
+                                Application.Current.Dispatcher.Invoke(() => memoMasterViewModel.StartGame(taskDifficulty, null));
                                 memoMasterViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
                             break;
+                        case GameType.BackTrack:
+                            if (!backTrackViewModel.IsGameRunning)
+                            {
+                                AddTaskToUiEvent?.Invoke(null, GameType.BackTrack);
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    backTrackViewModel.StartGame(taskDifficulty, null);
+                                });
+                                backTrackViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
+                            }
+                            break;
                     }
                 }
-                
+
             };
 
             ClientManagementSocket.MessageReceived += (_, _) =>
@@ -84,15 +98,15 @@ namespace ClientApplication.ViewModels
                 Logging.LogInformation("Message Received Event ausgeführt");
                 var clientGames = ClientObject.GetInstance().ActiveGames.Values.Select(game => game.GameType).ToList();
                 List<GameType> types = new List<GameType>
-                    { GameType.BricketBraker, GameType.PathPilot, GameType.MemoMaster, GameType.TextGame };
-                
+                    { GameType.BricketBraker, GameType.PathPilot, GameType.MemoMaster, GameType.TextGame, GameType.BackTrack};
+
                 Logging.LogWarning("clientGames:");
                 foreach (var gameType in clientGames)
                 {
                     Logging.LogWarning($"{gameType}");
                 }
-                
-                
+
+
                 foreach (var activeGame in types)
                 {
                     if (!clientGames.Contains(activeGame))
@@ -104,24 +118,34 @@ namespace ClientApplication.ViewModels
                             RemoveTaskFromUiEvent?.Invoke(null, activeGame);
                             textGameViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
                         }
+
                         if (activeGame == GameType.BricketBraker)
                         {
                             bricketBreakerViewModel.StopGame();
                             RemoveTaskFromUiEvent?.Invoke(null, activeGame);
                             bricketBreakerViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
                         }
+
                         if (activeGame == GameType.MemoMaster)
                         {
                             memoMasterViewModel.StopGame();
                             RemoveTaskFromUiEvent?.Invoke(null, activeGame);
                             memoMasterViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
                         }
+
                         if (activeGame == GameType.PathPilot)
                         {
                             Logging.LogInformation("Stopping ------------------------------------- Path Pilot");
                             pathPilotViewModel.StopGame();
                             RemoveTaskFromUiEvent?.Invoke(null, activeGame);
                             pathPilotViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
+                        }
+                        if (activeGame == GameType.BackTrack)
+                        {
+                            Logging.LogInformation("Stopping ------------------------------------- Back Track");
+                            backTrackViewModel.StopGame();
+                            RemoveTaskFromUiEvent?.Invoke(null, activeGame);
+                            backTrackViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
                         }
                     }
                     else
@@ -130,6 +154,11 @@ namespace ClientApplication.ViewModels
                     }
                 }
             };
+        }
+
+        private TaskDifficulty? GetTaskDifficulty(int taskId)
+        {
+            return TaskGraphProvider.GetInstance().TaskGraph?.GetTaskById(taskId)?.Difficulty;
         }
     }
 }
