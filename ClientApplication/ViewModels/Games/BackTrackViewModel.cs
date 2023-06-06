@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Threading;
 using ClientApplication.Models;
@@ -23,7 +24,7 @@ public class BackTrackViewModel: AbstractGameViewModel
     private DispatcherTimer? _gameTimer;
     private DispatcherTimer? _showNumberTimer;
     private int _timeLeft;
-    private int _predictableNumber;
+    private readonly List<int> _predictableNumbers = new();
     public int TimeLeft
     {
         get => _timeLeft;
@@ -43,23 +44,15 @@ public class BackTrackViewModel: AbstractGameViewModel
             OnPropertyChanged(nameof(ShowNextNumberTimeLeft));
         }
     }
-
-    private bool _showNextNumberTimeLeftIsVisible;
-    public bool ShowNextNumberTimeLeftIsVisible { 
-        get => _showNextNumberTimeLeftIsVisible ;
-        set
-        {
-            _showNextNumberTimeLeftIsVisible  = value;
-            OnPropertyChanged(nameof(ShowNextNumberTimeLeftIsVisible));
-        } 
-    }
-
-    private int _showNextNumberCounter;
+    private int _showNextFieldCounter;
     private const int GameDurationSeconds = 60;
     private int _correctlyRecognizedNumbers;
     private int _lives = 5;
     private int _requiredNumbersToWin = 5;
     private const int TimeSpanToShowNumber = 3;
+    private const int NBacks = 10;
+    private const int MaxNumberToShow = NBacks*2-2;
+    private bool _isNumberInserted = true;
     
     public event EventHandler<bool>? TypingEnabledEventHandler;
     public event EventHandler<int>? NumberInsertedEventHandler;
@@ -103,11 +96,14 @@ public class BackTrackViewModel: AbstractGameViewModel
 
     public override void StopGame()
     {
+        _showNextFieldCounter = 0;
         _correctlyRecognizedNumbers = 0;
-        _lives = 3;
+        _lives = 5;
+        _isNumberInserted = true;
         _timeLeft = GameDurationSeconds;
         _gameTimer?.Stop();
         _showNumberTimer?.Stop();
+        NextNumber = "";
         IsGameRunning = false;
     }
     
@@ -123,40 +119,40 @@ public class BackTrackViewModel: AbstractGameViewModel
 
     private void ShowNextNumberTimerTick(object? sender, EventArgs e)
     {
-        if (_showNextNumberCounter < 2)
+        if (!_isNumberInserted)
+        {
+            NumberInsertedEventHandler?.Invoke(null, -1);
+        }
+        if (_showNextFieldCounter % 2 == 1 && _showNextFieldCounter < MaxNumberToShow)
         {
             ShowNextNumber();
         }
         else
         {
-            _showNextNumberCounter = 0;
+            _showNextNumberTimeLeft = TimeSpanToShowNumber;
+            _showNextFieldCounter++;
             NextNumber = "";
-            if (_showNumberTimer != null)
-            {
-                _showNumberTimer.Stop();
-                _showNumberTimer.Tick -= ShowNextNumberTimerTick;
-            }
+            _isNumberInserted = false;
             TypingEnabledEventHandler?.Invoke(null, true);
-            ShowNextNumberTimeLeftIsVisible = false;
         }
     }
 
     private void ShowNextNumber()
     {
+        NextNumber = "";
         _showNextNumberTimeLeft = TimeSpanToShowNumber;
         TypingEnabledEventHandler?.Invoke(null, false);
         var nextNumberAsInt = _random.Next(1, 10);
         NextNumber = nextNumberAsInt.ToString();
-        _showNextNumberCounter++;
-        if (_showNextNumberCounter == 1) _predictableNumber = nextNumberAsInt;
+        _showNextFieldCounter++;
+        _predictableNumbers.Add(nextNumberAsInt);
         Logging.LogGameEvent($"BackTrack show next Number: {nextNumberAsInt}");
-        ShowNextNumberTimeLeftIsVisible = true;
     }
 
     private void CheckIfAlreadyWinOrLose()
     {
         bool? win = null;
-        if (TimeLeft == 0 || _lives == 0)
+        if (TimeLeft == 0 || _lives == -1)
         {
             win = false;
         }
@@ -181,25 +177,25 @@ public class BackTrackViewModel: AbstractGameViewModel
     {
         if(NumberInsertedEventHandler == null){
             NumberInsertedEventHandler += (_, insertedNumber) =>
-        {
-            if (insertedNumber == _predictableNumber)
-            {
-                Logging.LogGameEvent($"BackTrack insert correct number: {insertedNumber}");
-                _correctlyRecognizedNumbers++;
-            }
-            else
-            {
-                Logging.LogGameEvent($"BackTrack insert false number: {insertedNumber}");
-                _lives--;
-                Hearts.RemoveAt(_lives);
-            }
-            ShowNextNumber();
-            if (_showNumberTimer != null)
-            {
-                _showNumberTimer.Tick += ShowNextNumberTimerTick;
-                _showNumberTimer.Start();
-            }
-        };
+            { 
+                _isNumberInserted = true;
+                var predictableNumber = _predictableNumbers[^2];
+                if (_showNextFieldCounter == NBacks * 2)
+                {
+                    predictableNumber = _predictableNumbers[^1];
+                }
+                if (insertedNumber == predictableNumber)
+                {
+                    Logging.LogGameEvent($"BackTrack insert correct number: {insertedNumber}");
+                    _correctlyRecognizedNumbers++;
+                }
+                else
+                {
+                    Logging.LogGameEvent($"BackTrack insert false number: {insertedNumber}");
+                    _lives--;
+                    if(_lives >= 0) Hearts.RemoveAt(_lives);
+                }
+            };
         }
     }
 

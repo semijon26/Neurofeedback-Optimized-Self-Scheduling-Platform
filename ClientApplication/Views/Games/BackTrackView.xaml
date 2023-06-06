@@ -36,7 +36,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBox Grid.Row="0" x:Name="BackTrackTextBox" PreviewTextInput="TextBox_PreviewKeyDown" FontSize="65" HorizontalAlignment="Center" Margin="0,60,0,0" TextWrapping="Wrap" Text="{Binding NextNumber, Mode=TwoWay}" FontWeight="Bold" TextAlignment="Center" MaxLength="1" VerticalAlignment="Top" Width="140" Height="140" Padding="2"/>
-            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap"  Visibility="{Binding ShowNextNumberTimeLeftIsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Path=ShowNextNumberTimeLeft, StringFormat='Time left: {0}'}" VerticalAlignment="Bottom" Width="73" Background="White"/>
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="{Binding Path=ShowNextNumberTimeLeft, StringFormat='Time left: {0}'}" VerticalAlignment="Bottom" Width="73" Background="White"/>
         </Grid>
         <TextBlock Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding Path=TimeLeft, StringFormat='Time left: {0}'}" VerticalAlignment="Bottom" Width="73" Background="White"/>
     </Grid>
