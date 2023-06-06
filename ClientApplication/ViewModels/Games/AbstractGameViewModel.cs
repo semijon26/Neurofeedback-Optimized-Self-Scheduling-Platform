@@ -1,4 +1,5 @@
 using System;
+using ClientApplication.Models.GameState;
 using System.Collections.ObjectModel;
 using ClientApplication.Models;
 using ClientApplication.Utils;
@@ -6,7 +7,8 @@ using Shared;
 
 namespace ClientApplication.ViewModels.Games;
 
-public abstract class AbstractGameViewModel : ViewModelBase
+public abstract class AbstractGameViewModel<T> : ViewModelBase
+    where T : AbstractGameState 
 {
     private bool _isGameRunning;
     private readonly GameType _gameType;
@@ -28,9 +30,11 @@ public abstract class AbstractGameViewModel : ViewModelBase
             OnPropertyChanged(nameof(IsGameRunning));
         } }
 
-    public abstract void StartGame(TaskDifficulty taskDifficulty);
+    public abstract void StartGame(TaskDifficulty taskDifficulty, T? state);
 
     public abstract void StopGame();
+
+    public abstract T GetGameState();
 
     protected void RemoveActiveTask()
     {
@@ -41,5 +45,4 @@ public abstract class AbstractGameViewModel : ViewModelBase
         TaskManager.RemoveActiveTaskForCurrentClient((int)taskId);
         RemoveTaskFromUiEvent?.Invoke(null, _gameType);
     }
-    
 }

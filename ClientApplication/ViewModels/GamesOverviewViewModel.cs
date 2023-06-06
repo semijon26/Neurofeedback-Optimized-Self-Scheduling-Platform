@@ -59,10 +59,7 @@ namespace ClientApplication.ViewModels
                             if (!textGameViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.TextGame);
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    textGameViewModel.StartGame(taskDifficulty);
-                                });
+                                Application.Current.Dispatcher.Invoke(() => textGameViewModel.StartGame(taskDifficulty, null));
                                 textGameViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -71,10 +68,7 @@ namespace ClientApplication.ViewModels
                             if (!bricketBreakerViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.BricketBraker);
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    bricketBreakerViewModel.StartGame(taskDifficulty);
-                                });
+                                Application.Current.Dispatcher.Invoke(() => bricketBreakerViewModel.StartGame(taskDifficulty,null));
                                 bricketBreakerViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -83,10 +77,7 @@ namespace ClientApplication.ViewModels
                             if (!pathPilotViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.PathPilot);
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    pathPilotViewModel.StartGame(taskDifficulty);
-                                });
+                                Application.Current.Dispatcher.Invoke(() => pathPilotViewModel.StartGame(taskDifficulty, null));
                                 pathPilotViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -95,10 +86,7 @@ namespace ClientApplication.ViewModels
                             if (!memoMasterViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.MemoMaster);
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    memoMasterViewModel.StartGame(taskDifficulty);
-                                });
+                                Application.Current.Dispatcher.Invoke(() => memoMasterViewModel.StartGame(taskDifficulty, null));
                                 memoMasterViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 

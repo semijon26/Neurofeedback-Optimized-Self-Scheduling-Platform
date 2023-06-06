@@ -2,12 +2,13 @@
 using System.Windows;
 using System.Windows.Threading;
 using ClientApplication.Models;
+using ClientApplication.Models.GameState;
 using ClientApplication.Utils;
 using Shared;
 
 namespace ClientApplication.ViewModels.Games;
 
-public sealed class PathPilotViewModel : AbstractGameViewModel
+public sealed class PathPilotViewModel : AbstractGameViewModel<PathPilotGameState>
 {
     public int GameDurationSeconds = 20;
     private int _requiredMetersToWinInstantly = 50;
@@ -56,7 +57,7 @@ public sealed class PathPilotViewModel : AbstractGameViewModel
         }
     }
 
-    public override void StartGame(TaskDifficulty taskDifficulty)
+    public override void StartGame(TaskDifficulty taskDifficulty, PathPilotGameState? state)
     {
         if (taskDifficulty == TaskDifficulty.Hard)
         {
@@ -71,6 +72,11 @@ public sealed class PathPilotViewModel : AbstractGameViewModel
         _timer?.Start();
         TimeLeft = GameDurationSeconds;
         IsGameRunning = true;
+    }
+
+    public override PathPilotGameState GetGameState()
+    {
+        return new PathPilotGameState();
     }
 
     public override void StopGame()
