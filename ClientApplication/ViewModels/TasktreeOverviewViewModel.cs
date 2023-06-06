@@ -19,6 +19,8 @@ namespace ClientApplication.ViewModels
             SocketClientService.OnMessageStringReceived = OnMessageStringReceived;
             TaskPointsDictionary = new Dictionary<TaskGroup, TaskPoint>();
             LineList = new List<Line>();
+            MacroTaskPointDictionary = new Dictionary<TaskGroup, TaskPoint>();
+            MacroLineList = new List<Line>();
             RelayCommand = new RelayCommand(this);
             ChangeCommand = new ChangeCommand(this);
         }
@@ -30,6 +32,8 @@ namespace ClientApplication.ViewModels
             TaskLayers = new Dictionary<int, List<TaskGroup>>(layers);
             _drawingPoints = new Dictionary<TaskGroup, TaskPoint>();
             _lines = new List<Line>();
+            _macroDrawingPoints = new Dictionary<TaskGroup, TaskPoint>();
+            _macroLines = new List<Line>();
             CalculateDrawingPoints();
         }
         
@@ -55,7 +59,10 @@ namespace ClientApplication.ViewModels
         private Dictionary<int, List<TaskGroup>> _layers;
         private Dictionary<TaskGroup, TaskPoint> _drawingPoints;
         private List<Line> _lines;
-        
+
+        //Variables for MacroView
+        private Dictionary<TaskGroup, TaskPoint> _macroDrawingPoints;
+        private List<Line> _macroLines;
 
         // Properties
         public List<Line> LineList
@@ -139,7 +146,37 @@ namespace ClientApplication.ViewModels
             }
         }
         
-        
+        // MacroView Properties
+        public List<Line> MacroLineList
+        {
+            get
+            {
+                return _macroLines;
+            }
+            set
+            {
+                if (_macroLines != value)
+                {
+                    _macroLines = value;
+                    OnPropertyChanged(nameof(MacroLineList));
+                }
+            }
+        }
+
+        public Dictionary<TaskGroup, TaskPoint> MacroTaskPointDictionary
+        {
+            get { return _macroDrawingPoints; }
+            set
+            {
+                if (_macroDrawingPoints != value)
+                {
+                    _macroDrawingPoints = value;
+                    OnPropertyChanged(nameof(MacroTaskPointDictionary));
+                }
+            }
+        }
+
+
         // METHODS
         private void OnMessageStringReceived(string obj)
         {
@@ -154,12 +191,15 @@ namespace ClientApplication.ViewModels
         private void CalculateDrawingPoints()
         {
             TaskPointsDictionary = PointCalculator.CalculateDrawingPoints(_layers, 1200, 60, 90);
+            MacroTaskPointDictionary =
+                PointCalculator.CalculateDrawingPoints(_layers, 200, 10, 180 / _layers.Count - 5);
             CalculateDrawingLines();
         }
 
         private void CalculateDrawingLines()
         {
             LineList = PointCalculator.CalculateDrawingLines(TaskPointsDictionary, 70);
+            MacroLineList = PointCalculator.CalculateDrawingLines(MacroTaskPointDictionary, 10);
         }
     }
 }

@@ -20,12 +20,97 @@
     </UserControl.Resources>
     <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="20*" x:Name="firstColumn" />
+            <ColumnDefinition Width="80*" />
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="0" Name="ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
-                      PreviewKeyDown="ScrollViewer_OnPreviewKeyDown" PreviewKeyUp="ScrollViewer_OnPreviewKeyUp">
+            <Grid Grid.Column="0">
+                <!-- Canvas für das Einfügen der Verbindungen untereinander -->
+                    <ItemsControl ItemsSource="{Binding MacroLineList}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Background="White"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Line X1="{Binding X1}" Y1="{Binding Y1}"
+                                      X2="{Binding X2}" Y2="{Binding Y2}" 
+                                      StrokeThickness="1" 
+                                      Visibility="Visible">
+                                    <Line.Stroke>
+                                        Black
+                                    </Line.Stroke>
+                                </Line>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                <!-- Einfügen der Knoten mit jeweiligem Template über Dictionary-->
+                    <ItemsControl ItemsSource="{Binding MacroTaskPointDictionary}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas utils:CanvasExtensions.AutoSize="False" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Canvas.Left" Value="{Binding Value.X}" />
+                                <Setter Property="Canvas.Top" Value="{Binding Value.Y}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Rectangle Width="{Binding Value.Width}" Height="10" Fill="Black" StrokeThickness="1" RadiusX="5" RadiusY="5">
+                                    </Rectangle>
+                                    <ItemsControl ItemsSource="{Binding Key.Tasks}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid HorizontalAlignment="Center">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/> <!-- Erste Zeile für den oberen Kreis -->
+                                                        <RowDefinition Height="Auto"/> <!-- Zweite Zeile für den unteren Kreis mit Buchstaben -->
+                                                    </Grid.RowDefinitions>
+                                                    <Button Grid.Row="0" Width="10" Height="10">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Grid x:Name="ButtonGrid">
+                                                                    <Rectangle Width="10" Height="10" Margin="1,0">
+                                                                        <Rectangle.Fill>
+                                                                            <SolidColorBrush Color="Black" />
+                                                                        </Rectangle.Fill>
+                                                                    </Rectangle>
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Grid>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                    </Button>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <!-- Rechteck über die gesamte Breite der View -->
+                    <Canvas>
+                        <Rectangle x:Name="scrollRect" Fill="Transparent" Stroke="Blue" StrokeThickness="2"
+                                   Width="{Binding ActualWidth, ElementName=firstColumn}" Height="10"
+                                   Canvas.Left="0" Canvas.Top="0">
+                            <!-- Weitere Eigenschaften und Inhalt des Rechtecks -->
+                        </Rectangle>
+                    </Canvas>
+            </Grid>
+        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
+                      Name="ScrollViewer"
+                      PreviewKeyDown="ScrollViewer_OnPreviewKeyDown" PreviewKeyUp="ScrollViewer_OnPreviewKeyUp"
+                      ScrollChanged="scrollViewer_ScrollChanged">
             <Grid>
-                
                 <!-- Canvas für das Einfügen der Verbindungen untereinander -->
                 <ItemsControl ItemsSource="{Binding LineList}">
                     <ItemsControl.ItemsPanel>
