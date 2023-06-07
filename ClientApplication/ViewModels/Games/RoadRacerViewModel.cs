@@ -8,22 +8,22 @@ using Shared;
 
 namespace ClientApplication.ViewModels.Games;
 
-public sealed class PathPilotViewModel : AbstractGameViewModel<PathPilotGameState>
+public sealed class RoadRacerViewModel : AbstractGameViewModel<RoadRacerGameState>
 {
-    public int GameDurationSeconds = 20;
-    private int _requiredMetersToWinInstantly = 50;
-    private int _requiredMetersToNotLose = 30;
+    public int GameDurationSeconds = 60;
+    private int _requiredMetersToWinInstantly = 1000;
+    private int _requiredMetersToNotLose;
     private double _currentMeters = 0;
     private int _currentMetersFloored = 0;
-    private const int PixelToMeterFactor = 20;
     private int _timeLeft;
     private DispatcherTimer? _timer = null;
     private CircleOnPathDetection _circleOnPathDetection = new();
-
+    // change how fast meters count
+    private const int PixelToMeterFactor = 6;
     // use this constant to change speed of game
-    public readonly int PixelsPer50Millis = 7;
+    public readonly int PixelsPer50Millis = 6;
 
-    public PathPilotViewModel(INavigationService navigationService) : base(navigationService, GameType.PathPilot)
+    public RoadRacerViewModel(INavigationService navigationService) : base(navigationService, GameType.RoadRacer)
     {
     }
 
@@ -57,13 +57,17 @@ public sealed class PathPilotViewModel : AbstractGameViewModel<PathPilotGameStat
         }
     }
 
-    public override void StartGame(TaskDifficulty taskDifficulty, PathPilotGameState? state)
+    public override void StartGame(TaskDifficulty taskDifficulty, RoadRacerGameState? state)
     {
-        if (taskDifficulty == TaskDifficulty.Hard)
+        if (taskDifficulty == TaskDifficulty.Easy)
         {
-            
+            _requiredMetersToNotLose = (int)(_requiredMetersToWinInstantly * 0.5);
         }
-        Logging.LogGameEvent("PathPilot started");
+        else
+        {
+            _requiredMetersToNotLose = (int)(_requiredMetersToWinInstantly * 0.7);
+        }
+        Logging.LogGameEvent("RoadRacer started");
         _timer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(1)
@@ -74,9 +78,9 @@ public sealed class PathPilotViewModel : AbstractGameViewModel<PathPilotGameStat
         IsGameRunning = true;
     }
 
-    public override PathPilotGameState GetGameState()
+    public override RoadRacerGameState GetGameState()
     {
-        return new PathPilotGameState();
+        return new RoadRacerGameState();
     }
 
     public override void StopGame()
@@ -93,7 +97,7 @@ public sealed class PathPilotViewModel : AbstractGameViewModel<PathPilotGameStat
     {
         _timeLeft--;
         TimeLeft = _timeLeft;
-        Logging.LogGameEvent($"PathPilot time left: {_timeLeft}, currentMeters: {_currentMeters}");
+        Logging.LogGameEvent($"RoadRacer time left: {_timeLeft}, currentMeters: {_currentMeters}");
         CheckIfAlreadyWinOrLose();
     }
 
@@ -117,7 +121,7 @@ public sealed class PathPilotViewModel : AbstractGameViewModel<PathPilotGameStat
         {
             RemoveActiveTask();
             MessageBox.Show((bool)win ? "Congratulations, you win!" : "Sorry, you lose.");
-            Logging.LogGameEvent($"PathPilot {((bool)win ? "win" : "lose")}");
+            Logging.LogGameEvent($"RoadRacer {((bool)win ? "win" : "lose")}");
         }
     }
 

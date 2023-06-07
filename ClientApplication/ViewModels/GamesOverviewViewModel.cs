@@ -16,7 +16,7 @@ namespace ClientApplication.ViewModels
         {
             { GameType.TextGame, new TextGameView() },
             { GameType.BricketBraker, new BricketBreakerGame() },
-            { GameType.PathPilot, new PathPilotView() },
+            { GameType.RoadRacer, new RoadRacerView() },
             { GameType.MemoMaster, new MemoMasterView() },
             { GameType.BackTrack, new BackTrackView() }
         };
@@ -29,7 +29,7 @@ namespace ClientApplication.ViewModels
         {
             var textGameViewModel = (TextGameViewModel)GameDictionary[GameType.TextGame].DataContext;
             var bricketBreakerViewModel = (BricketBreakerViewModel)GameDictionary[GameType.BricketBraker].DataContext;
-            var pathPilotViewModel = (PathPilotViewModel)GameDictionary[GameType.PathPilot].DataContext;
+            var roadRacerViewModel = (RoadRacerViewModel)GameDictionary[GameType.RoadRacer].DataContext;
             var memoMasterViewModel = (MemoMasterViewModel)GameDictionary[GameType.MemoMaster].DataContext;
             var backTrackViewModel = (BackTrackViewModel)GameDictionary[GameType.BackTrack].DataContext;
 
@@ -59,12 +59,12 @@ namespace ClientApplication.ViewModels
                             }
 
                             break;
-                        case GameType.PathPilot:
-                            if (!pathPilotViewModel.IsGameRunning)
+                        case GameType.RoadRacer:
+                            if (!roadRacerViewModel.IsGameRunning)
                             {
-                                AddTaskToUiEvent?.Invoke(null, GameType.PathPilot);
-                                Application.Current.Dispatcher.Invoke(() => pathPilotViewModel.StartGame(taskDifficulty, null));
-                                pathPilotViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
+                                AddTaskToUiEvent?.Invoke(null, GameType.RoadRacer);
+                                Application.Current.Dispatcher.Invoke(() => roadRacerViewModel.StartGame(taskDifficulty, null));
+                                roadRacerViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
                             break;
@@ -98,7 +98,7 @@ namespace ClientApplication.ViewModels
                 Logging.LogInformation("Message Received Event ausgeführt");
                 var clientGames = ClientObject.GetInstance().ActiveGames.Values.Select(game => game.GameType).ToList();
                 List<GameType> types = new List<GameType>
-                    { GameType.BricketBraker, GameType.PathPilot, GameType.MemoMaster, GameType.TextGame, GameType.BackTrack};
+                    { GameType.BricketBraker, GameType.RoadRacer, GameType.MemoMaster, GameType.TextGame, GameType.BackTrack};
 
                 Logging.LogWarning("clientGames:");
                 foreach (var gameType in clientGames)
@@ -133,16 +133,16 @@ namespace ClientApplication.ViewModels
                             memoMasterViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
                         }
 
-                        if (activeGame == GameType.PathPilot)
+                        if (activeGame == GameType.RoadRacer)
                         {
-                            Logging.LogInformation("Stopping ------------------------------------- Path Pilot");
-                            pathPilotViewModel.StopGame();
+                            Logging.LogInformation("Stopping ------------------------------------- RoadRacer");
+                            roadRacerViewModel.StopGame();
                             RemoveTaskFromUiEvent?.Invoke(null, activeGame);
-                            pathPilotViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
+                            roadRacerViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
                         }
                         if (activeGame == GameType.BackTrack)
                         {
-                            Logging.LogInformation("Stopping ------------------------------------- Back Track");
+                            Logging.LogInformation("Stopping ------------------------------------- BackTrack");
                             backTrackViewModel.StopGame();
                             RemoveTaskFromUiEvent?.Invoke(null, activeGame);
                             backTrackViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
