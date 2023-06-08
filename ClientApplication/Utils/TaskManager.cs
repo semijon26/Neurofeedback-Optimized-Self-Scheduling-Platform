@@ -23,7 +23,8 @@ public static class TaskManager
     public static bool TakeTaskFromOtherUser(int taskId)
     {
         var currentClient = GetClientObject();
-        if (!currentClient.ActiveGames.ContainsKey(taskId))
+        var task = TaskGraphProvider.GetInstance().TaskGraph?.GetTaskById(taskId);
+        if (task?.GameType != null && !currentClient.ContainsGameType(task.GameType) && !currentClient.ActiveGames.ContainsKey(taskId))
         {
             UpdatePulledTaskByServer(taskId, currentClient);
             return true;
