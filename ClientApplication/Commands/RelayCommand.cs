@@ -45,9 +45,9 @@ public class RelayCommand : CommandBase
                                 continue;
                             }
 
-                            currentInstance.AddNewActiveGame(availTask.Id, availTask.GameType);
+                            currentInstance.AddNewActiveGame(availTask.Id, availTask.GameType, null);
                             //availTask.ChangeWoker(currentInstance);
-                            TaskGraphProvider.GetInstance().SendUpdatedTaskGraphToServer(new DataPayload{SetDone = false, ChangeWorker = false, IntValue = availTask.Id, Woker = currentInstance});
+                            TaskGraphProvider.GetInstance().SendUpdatedTaskGraphToServer(new DataPayload{SetDone = false, ChangeWorker = false, IntValue = availTask.Id, WorkerWithPulledTask = currentInstance, WorkerRemovesPulledTask = null});
                             Logging.LogGameEvent($"{currentInstance.Label} added {availTask.GameType} to active games");
                             ClientManagementSocket.SendClientObjectWhenConnectionEstablished();
                         }

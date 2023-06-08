@@ -8,7 +8,6 @@ public enum GameType
     BricketBraker,
     PathPilot,
     MemoMaster,
-    ColorEcho,
     BackTrack
 }
 

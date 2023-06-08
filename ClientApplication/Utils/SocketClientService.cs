@@ -27,6 +27,7 @@ namespace ClientApplication.Utils
                     UserManagement.InitUserWebSocket(ip, port);
                     ClientManagementSocket.InitClientSocket(ip, port);
                     TaskGraphProvider.GetInstance().InitTaskGraphProvider(ip, port);
+                    GameStateSocket.InitGameStateSocket(ip, port);
                 });
         }
 

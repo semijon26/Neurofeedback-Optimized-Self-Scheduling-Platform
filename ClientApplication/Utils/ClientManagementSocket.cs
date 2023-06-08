@@ -58,7 +58,7 @@ public abstract class ClientManagementSocket
     private static void OnMessage(object? sender, MessageEventArgs e)
     {
         var clientList = SocketMessageHelper.DeserializeFromByteArray<List<ClientObject>>(e.RawData);
-        var currentClient = ClientObject.GetInstance(); 
+        var currentClient = ClientObject.GetInstance();
         var clientManagementData = ClientManagementData.GetInstance(currentClient); 
         clientManagementData.OtherClients.Clear();
         foreach (var clientObject in clientList)
@@ -100,10 +100,5 @@ public abstract class ClientManagementSocket
                 }
             }
         });
-    }
-
-    private static void OnMessageReceived()
-    {
-        MessageReceived?.Invoke(null, EventArgs.Empty);
     }
 }

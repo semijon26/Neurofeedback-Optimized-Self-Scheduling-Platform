@@ -1,6 +1,6 @@
-﻿using ClientApplication.Models.GameState;
-using ClientApplication.Utils;
+﻿using ClientApplication.Utils;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels.Games;
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Threading;
 using ClientApplication.Models;
-using ClientApplication.Models.GameState;
 using ClientApplication.Utils;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels.Games;
 
@@ -69,6 +69,11 @@ public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
             _lives = 3;
             _requiredNumbersToWin = 7;
         }
+        TimeLeft = GameDurationSeconds;
+        if (gameState != null)
+        {
+            SetGameState(gameState);
+        }
 
         Application.Current.Dispatcher.Invoke(() =>
         {
@@ -91,7 +96,6 @@ public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
         _showNumberTimer.Tick += ShowNextNumberTimerTick;
         _showNumberTimer?.Start();
         _gameTimer?.Start();
-        TimeLeft = GameDurationSeconds;
         IsGameRunning = true;
     }
 
@@ -110,7 +114,7 @@ public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
 
     public override BackTrackGameState GetGameState()
     {
-        return new BackTrackGameState();
+        return new BackTrackGameState(_correctlyRecognizedNumbers, _lives, _requiredNumbersToWin, _showNextFieldCounter, _timeLeft);
     }
 
     private void GameTimerTick(object? sender, EventArgs e)
@@ -205,6 +209,15 @@ public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
         }
     }
 
+    private void SetGameState(BackTrackGameState gameState)
+    {
+        _timeLeft = gameState.TimeLeft;
+        TimeLeft = _timeLeft;
+        _lives = gameState.Lives;
+        _correctlyRecognizedNumbers = gameState.CorrectlyRecognizedNumbers;
+        _requiredNumbersToWin = gameState.RequiredNumbersToWin;
+        _showNextFieldCounter = gameState.ShowNextFieldCounter;
+    }
     public void InvokeNumberInsertedEventHandler(int number)
     {
         NumberInsertedEventHandler?.Invoke(null, number);
