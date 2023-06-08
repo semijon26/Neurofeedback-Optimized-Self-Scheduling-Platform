@@ -7,6 +7,7 @@ using ClientApplication.Utils;
 using ClientApplication.ViewModels.Games;
 using ClientApplication.Views.Games;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels
 {
@@ -110,6 +111,7 @@ namespace ClientApplication.ViewModels
                             }
                             break;
                     }
+                    ResetAllGameStateToNull(activeGame.Value.GameStateHolder);
                 }
 
             };
@@ -213,6 +215,15 @@ namespace ClientApplication.ViewModels
         private TaskDifficulty? GetTaskDifficulty(int taskId)
         {
             return TaskGraphProvider.GetInstance().TaskGraph?.GetTaskById(taskId)?.Difficulty;
+        }
+
+        private void ResetAllGameStateToNull(GameStateHolder gameStateHolder)
+        {
+            gameStateHolder.BackTrackGameState = null;
+            gameStateHolder.TextGameGameState = null;
+            gameStateHolder.BackTrackGameState = null;
+            gameStateHolder.MemoMasterGameState = null;
+            gameStateHolder.PathPilotGameState = null;
         }
     }
 }
