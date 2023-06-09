@@ -22,9 +22,9 @@ public class GameObject
         }else if (gameState is MemoMasterGameState memoMasterGameState)
         {
             GameStateHolder.MemoMasterGameState = memoMasterGameState;
-        }else if (gameState is PathPilotGameState pathPilotGameState)
+        }else if (gameState is RoadRacerGameState roadRacerGameState)
         {
-            GameStateHolder.PathPilotGameState = pathPilotGameState;
+            GameStateHolder.RoadRacerGameState = roadRacerGameState;
         }else if (gameState is TextGameGameState textGameGameState)
         {
             GameStateHolder.TextGameGameState = textGameGameState;

@@ -75,9 +75,9 @@ public class TaskGraphWebSocketBehavior : WebSocketBehavior
                         {
                             currentGameState = gameStateHolder.MemoMasterGameState;
                         }
-                        else if (gameStateHolder.PathPilotGameState != null)
+                        else if (gameStateHolder.RoadRacerGameState != null)
                         {
-                            currentGameState = gameStateHolder.PathPilotGameState;
+                            currentGameState = gameStateHolder.RoadRacerGameState;
                         }
 
                         keyValuePair.Value.ActiveGames.Remove(taskId);
@@ -132,9 +132,9 @@ public class TaskGraphWebSocketBehavior : WebSocketBehavior
         {
             currentGameState = gameStateHolder.MemoMasterGameState;
         }
-        else if (gameStateHolder.PathPilotGameState != null)
+        else if (gameStateHolder.RoadRacerGameState != null)
         {
-            currentGameState = gameStateHolder.PathPilotGameState;
+            currentGameState = gameStateHolder.RoadRacerGameState;
         }
     }
 }

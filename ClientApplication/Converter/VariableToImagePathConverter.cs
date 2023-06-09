@@ -20,7 +20,7 @@ public class VariableToImagePathConverter : IValueConverter
             GameType.TextGame => "../Assets/tornado_normal.png",
             GameType.BricketBraker => "../Assets/brick_normal.png",
             GameType.MemoMaster => "../Assets/brain_normal.png",
-            GameType.PathPilot => "../Assets/plane_normal.png",
+            GameType.RoadRacer => "../Assets/car_normal.png",
             GameType.BackTrack => "../Assets/back_normal.png",
             _ => "../Assets/empty/logo.jpg"
         };

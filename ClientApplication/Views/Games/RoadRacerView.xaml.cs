@@ -14,9 +14,9 @@ using ClientApplication.ViewModels.Games;
 
 namespace ClientApplication.Views.Games;
 
-public partial class PathPilotView : UserControl
+public partial class RoadRacerView : UserControl
 {
-    private readonly PathPilotViewModel _viewModel;
+    private readonly RoadRacerViewModel _viewModel;
     private bool _isGameUiInit = false;
     private CancellationTokenSource? _moveCircleUpCancellationTokenSource;
     private CancellationTokenSource? _moveCircleDownCancellationTokenSource;
@@ -29,10 +29,10 @@ public partial class PathPilotView : UserControl
     private readonly Stopwatch _stopwatch = new();
     private double _currentPathPointCollectionOffset;
 
-    public PathPilotView()
+    public RoadRacerView()
     {
         InitializeComponent();
-        _viewModel = new PathPilotViewModel(NavigationService.GetInstance());
+        _viewModel = new RoadRacerViewModel(NavigationService.GetInstance());
         DataContext = _viewModel;
     }
 
