@@ -40,6 +40,8 @@
       <Resource Include="Assets\tornado_normal.png" />
       <None Remove="Assets\tornado_hard.png" />
       <Resource Include="Assets\tornado_hard.png" />
+      <None Remove="Assets\heart.png" />
+      <Resource Include="Assets\heart.png" />
     </ItemGroup>
 
     <ItemGroup>

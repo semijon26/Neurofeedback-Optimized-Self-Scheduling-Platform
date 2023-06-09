@@ -94,6 +94,10 @@ public abstract class ClientManagementSocket
                     byte[] clientObjectByteArray = SocketMessageHelper.SerializeToByteArray(clientObject);
                     _clientWebSocket?.Send(clientObjectByteArray);
                 }
+                else
+                {
+                    Logging.LogInformation($"ClientLabel is missing {clientObject.Label}");
+                }
             }
         });
     }
