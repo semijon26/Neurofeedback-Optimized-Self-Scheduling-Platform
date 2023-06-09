@@ -25,7 +25,7 @@ public partial class BricketBreakerGame : UserControl
     {
         if (e.Key == Key.Left)
         {
-            double newRectangleX = bricketBreakerViewModel.RectangleX - bricketBreakerViewModel.GetRectangleSpeed();
+            double newRectangleX = bricketBreakerViewModel.RectangleX - 1 * bricketBreakerViewModel.GetRectangleSpeed();
             if (newRectangleX >= 0) // Check if the new position is within the left boundary
             {
                 bricketBreakerViewModel.RectangleX = newRectangleX;
@@ -34,7 +34,7 @@ public partial class BricketBreakerGame : UserControl
         }
         else if (e.Key == Key.Right)
         {
-            double newRectangleX = bricketBreakerViewModel.RectangleX + bricketBreakerViewModel.GetRectangleSpeed();
+            double newRectangleX = bricketBreakerViewModel.RectangleX + 1 * bricketBreakerViewModel.GetRectangleSpeed();
             if (newRectangleX + 200 <= 640) // Check if the new position is within the right boundary
             {
                 bricketBreakerViewModel.RectangleX = newRectangleX;

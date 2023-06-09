@@ -26,12 +26,12 @@
             <ItemsControl ItemsSource="{Binding Bricks}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="4" Columns="5" />
+                        <UniformGrid Rows="3" Columns="10" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Rectangle Fill="Blue" Stroke="Black" Width="128" Height="30" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" />
+                        <Rectangle Fill="Blue" Stroke="Black" Width="64" Height="40" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

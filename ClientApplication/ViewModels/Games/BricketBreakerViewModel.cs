@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Threading;
 using ClientApplication.Models;
 using ClientApplication.Models.GameState;
@@ -33,6 +35,8 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
 
     private double ballX;
     private double ballY;
+
+    private readonly int _generateBrickCount = 20;
 
     public BricketBreakerViewModel(INavigationService navigationService) : base(navigationService, GameType.BricketBraker)
     {
@@ -157,12 +161,31 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
 
     private void AddBricks()
     {
+        var brickPosition = new Random();
+        List<Random> brickPositions = new();
+
+        for (int i = 0; i < _generateBrickCount; i++)
+        {
+            brickPositions.Add(brickPosition);
+        }
+
+        foreach (var position in brickPositions)
+        {
+            Bricks.Add(new Brick());
+        }
         // Add bricks to the collection with desired positions
-        Bricks.Add(new Brick() { X = 10, Y = 20 });
-        Bricks.Add(new Brick() { X = 150, Y = 20 });
-        Bricks.Add(new Brick() { X = 290, Y = 20 });
-        Bricks.Add(new Brick() { X = 430, Y = 20 });
-        Bricks.Add(new Brick() { X = 570, Y = 20 });
+        //Bricks.Add(new Brick() { X = 10, Y = 20 });
+        //Bricks.Add(new Brick() { X = 150, Y = 20 });
+        //Bricks.Add(new Brick() { X = 290, Y = 20 });
+        //Bricks.Add(new Brick() { X = 430, Y = 20 });
+        //Bricks.Add(new Brick() { X = 570, Y = 20 });
+    }
+
+    private Random RandomPositionForBricks()
+    {
+        var randomNumber = new Random();
+        randomNumber.Next(0, 29);
+        return randomNumber;
     }
 
     private void MoveBall()
