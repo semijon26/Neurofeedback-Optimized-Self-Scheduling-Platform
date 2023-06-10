@@ -18,7 +18,7 @@
     <Grid>
         <Image Source="{Binding GameIcon}" Width="35" Height="35" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
 
-        <Canvas Margin="0,0,0,32">
+        <Canvas Name="gameCanvas" Margin="0,0,0,32">
             <Rectangle Fill="Black" Width="200" Height="20" Canvas.Left="{Binding RectangleX}" Canvas.Top="276" HorizontalAlignment="Center" VerticalAlignment="Top" />
 
             <Ellipse Fill="Red" Width="20" Height="20" Canvas.Left="{Binding BallX}" Canvas.Top="{Binding BallY}" HorizontalAlignment="Left" VerticalAlignment="Center" />
@@ -35,6 +35,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
         </Canvas>
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Height="32" Margin="0,308,0,0">

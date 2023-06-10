@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
@@ -165,32 +166,37 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
 
     private void AddBricks()
     {
-        var brickPosition = new Random();
-        List<Random> brickPositions = new();
+        //var brickPosition = new Random();
+        //List<Random> brickPositions = new();
 
-        for (int i = 0; i < _generateBrickCount; i++)
-        {
-            brickPositions.Add(brickPosition);
-        }
+        //for (int i = 0; i < _generateBrickCount; i++)
+        //{
+        //    brickPositions.Add(brickPosition);
+        //}
 
-        foreach (var position in brickPositions)
-        {
-            Bricks.Add(new Brick());
-        }
+        //foreach (var position in brickPositions)
+        //{
+        //    Bricks.Add(new Brick());
+        //}
         // Add bricks to the collection with desired positions
-        //Bricks.Add(new Brick() { X = 10, Y = 20 });
-        //Bricks.Add(new Brick() { X = 150, Y = 20 });
-        //Bricks.Add(new Brick() { X = 290, Y = 20 });
-        //Bricks.Add(new Brick() { X = 430, Y = 20 });
-        //Bricks.Add(new Brick() { X = 570, Y = 20 });
+        Bricks.Add(new Brick());
+        Bricks.Add(new Brick());
+        Bricks.Add(new Brick());
+        Bricks.Add(new Brick());
+        Bricks.Add(new Brick());
+        Bricks.Add(new Brick());
+        Bricks.Add(new Brick());
+        Bricks.Add(new Brick());
+        Bricks.Add(new Brick());
+        Bricks.Add(new Brick());
     }
 
-    private Random RandomPositionForBricks()
-    {
-        var randomNumber = new Random();
-        randomNumber.Next(0, 29);
-        return randomNumber;
-    }
+    //private Random RandomPositionForBricks()
+    //{
+    //    var randomNumber = new Random();
+    //    randomNumber.Next(0, 29);
+    //    return randomNumber;
+    //}
 
     private void MoveBall()
     {
@@ -226,7 +232,7 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
 
         double barLeft = RectangleX;
         double barRight = RectangleX + 200; // Assuming bar width is 200
-        double barTop = 276; // Assuming bar top position
+        double barTop = 276; // Assuming bar top po sition
         double barBottom = barTop + 20; // Assuming bar height is 20
 
         // Check collision with the bar
@@ -257,42 +263,40 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
             MessageBox.Show("You loose!");
         }
 
-        //var (brickHit, isBrickHit) = CheckBrickCollision();
-        //if (isBrickHit)
-        //{
-        //    //foreach (var hitBrick in brickHit)
-        //    Bricks.Remove(brickHit);
-        //}
-
+        var (brickHit, isBrickHit) = CheckBrickCollision();
     }
 
-    //private (Brick?, bool) CheckBrickCollision()
-    //{
-    //    //List<Brick> hitBricks = new();
+    private (Brick, bool) CheckBrickCollision()
+    {
+        double ballLeft = BallX;
+        double ballRight = BallX + 20; // Assuming ball width is 20
+        double ballTop = BallY;
+        double ballBottom = BallY + 20; // Assuming ball height is 20
 
-    //    double ballLeft = ballX;
-    //    double ballRight = ballX + 10;
-    //    double ballTop = ballY;
-    //    double ballBottom = ballY + 10;
+        for (int i = 0; i < Bricks.Count; i++)
+        {
+            Brick brick = Bricks[i];
 
-    //    foreach (var brick in Bricks)
-    //    {
-    //        double brickLeft = brick.X;
-    //        double brickRight = brick.X + 128;
-    //        double brickTop = brick.Y;
-    //        double brickBottom = brick.Y + 30;
+            double brickLeft = brick.X;
+            double brickRight = brick.X + 64; // Assuming brick width is 64
+            double brickTop = brick.Y;
+            double brickBottom = brick.Y + 40; // Assuming brick height is 40
 
-    //        if (ballRight >= brickLeft && ballLeft <= brickRight && ballTop <= brickBottom)
-    //        {
-    //            // Collision detected
-    //            //hitBricks.Add(brick);
-    //            return (brick, true);
-    //        }
-    //    }
+            if (ballBottom >= brickTop && ballTop <= brickBottom && ballRight >= brickLeft && ballLeft <= brickRight)
+            {
+                // Ball collided with the brick
+                Bricks.RemoveAt(i);
+                ballDirectionY = -ballDirectionY;
+                brick.IsDestroyed = true;
+                return (brick, true);
+            }
+        }
 
-    //    // No collision detected
-    //    return (null, false);
-    //}
+        return (null, false);
+    }
+
+
+
 
     private void Timer_Tick(object sender, EventArgs e)
     {

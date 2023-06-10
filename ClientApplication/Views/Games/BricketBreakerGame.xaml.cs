@@ -1,8 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClientApplication.Models;
+using System.Windows.Media;
 using ClientApplication.Utils;
 using ClientApplication.ViewModels.Games;
+using System.Drawing;
 
 namespace ClientApplication.Views.Games;
 
