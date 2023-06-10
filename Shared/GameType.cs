@@ -6,7 +6,7 @@ public enum GameType
 {
     TextGame,
     BricketBraker,
-    PathPilot,
+    RoadRacer,
     MemoMaster,
     ColorEcho,
     BackTrack

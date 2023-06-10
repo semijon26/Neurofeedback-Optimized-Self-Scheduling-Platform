@@ -1,6 +1,6 @@
 ﻿namespace ClientApplication.Models.GameState;
 
-public class PathPilotGameState : AbstractGameState
+public class RoadRacerGameState : AbstractGameState
 {
     
 }
