@@ -31,7 +31,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Rectangle Fill="Blue" Stroke="Black" Width="64" Height="40" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" />
+                        <Rectangle Fill="Blue" Stroke="Black" Width="64" Height="40" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

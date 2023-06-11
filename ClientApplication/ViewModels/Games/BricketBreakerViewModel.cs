@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Threading;
 using ClientApplication.Models;
@@ -153,14 +154,11 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
 
     public ObservableCollection<Brick> Bricks
     {
-        get => _bricks;
+        get { return _bricks; }
         set
         {
-            if (_bricks != value)
-            {
-                _bricks = value;
-                OnPropertyChanged(nameof(Bricks));
-            }
+            _bricks = value;
+            OnPropertyChanged(nameof(Bricks));
         }
     }
 
@@ -179,16 +177,16 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
         //    Bricks.Add(new Brick());
         //}
         // Add bricks to the collection with desired positions
-        Bricks.Add(new Brick());
-        Bricks.Add(new Brick());
-        Bricks.Add(new Brick());
-        Bricks.Add(new Brick());
-        Bricks.Add(new Brick());
-        Bricks.Add(new Brick());
-        Bricks.Add(new Brick());
-        Bricks.Add(new Brick());
-        Bricks.Add(new Brick());
-        Bricks.Add(new Brick());
+        Bricks.Add(new Brick() { X = 0, Y = 0});
+        Bricks.Add(new Brick() { X = 128, Y = 0});
+        Bricks.Add(new Brick() { X = 192, Y = 0 });
+        Bricks.Add(new Brick() { X = 256, Y = 0 });
+        Bricks.Add(new Brick() { X = 320, Y = 0 });
+        Bricks.Add(new Brick() { X = 384, Y = 0 });
+        Bricks.Add(new Brick() { X = 448, Y = 0 });
+        Bricks.Add(new Brick() { X = 512, Y = 0 });
+        Bricks.Add(new Brick() { X = 576, Y = 0 });
+        Bricks.Add(new Brick() { X = 630, Y = 0 });
     }
 
     //private Random RandomPositionForBricks()
@@ -226,32 +224,29 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
     {
         // Get the dimensions of the ball and the rectangle/bar
         double ballLeft = BallX;
-        double ballRight = BallX + 20; // Assuming ball width is 20
+        double ballRight = BallX + 20;
         double ballTop = BallY;
-        double ballBottom = BallY + 20; // Assuming ball height is 20
+        double ballBottom = BallY + 20;
 
         double barLeft = RectangleX;
-        double barRight = RectangleX + 200; // Assuming bar width is 200
-        double barTop = 276; // Assuming bar top po sition
-        double barBottom = barTop + 20; // Assuming bar height is 20
+        double barRight = RectangleX + 200;
+        double barTop = 276;
+        double barBottom = barTop + 20;
 
         // Check collision with the bar
         if (ballBottom >= barTop && ballTop <= barBottom && ballRight >= barLeft && ballLeft <= barRight)
         {
-            // Ball collided with the bar
             ballDirectionY = -ballDirectionY;
         }
 
         // Check collision with the walls
-        if (ballLeft <= 0 || ballRight >= 640) // Assuming game width is 640
+        if (ballLeft <= 0 || ballRight >= 640)
         {
-            // Ball collided with the left or right wall
             ballDirectionX = -ballDirectionX;
         }
 
         if (ballTop <= 0)
         {
-            // Ball collided with the top wall
             ballDirectionY = -ballDirectionY;
         }
 
@@ -260,43 +255,89 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
             // Ball misses the bar
             RemoveActiveTask();
             timer.Stop();
-            MessageBox.Show("You loose!");
+            MessageBox.Show("You lose!");
         }
 
-        var (brickHit, isBrickHit) = CheckBrickCollision();
-    }
+        Brick collidedBrick = null;
 
-    private (Brick, bool) CheckBrickCollision()
-    {
-        double ballLeft = BallX;
-        double ballRight = BallX + 20; // Assuming ball width is 20
-        double ballTop = BallY;
-        double ballBottom = BallY + 20; // Assuming ball height is 20
-
-        for (int i = 0; i < Bricks.Count; i++)
+        foreach (var brick in Bricks)
         {
-            Brick brick = Bricks[i];
-
             double brickLeft = brick.X;
-            double brickRight = brick.X + 64; // Assuming brick width is 64
+            double brickRight = brick.X + 63; // Assuming brick width is 64
             double brickTop = brick.Y;
-            double brickBottom = brick.Y + 40; // Assuming brick height is 40
+            double brickBottom = brick.Y + 39; // Assuming brick height is 40
 
             if (ballBottom >= brickTop && ballTop <= brickBottom && ballRight >= brickLeft && ballLeft <= brickRight)
             {
                 // Ball collided with the brick
-                Bricks.RemoveAt(i);
-                ballDirectionY = -ballDirectionY;
-                brick.IsDestroyed = true;
-                return (brick, true);
+                if (collidedBrick == null || brick.Y > collidedBrick.Y)
+                {
+                    brick.IsVisible = false;
+                    collidedBrick = brick;
+                }
             }
         }
 
-        return (null, false);
+        if (collidedBrick != null)
+        {
+            Bricks.Remove(collidedBrick); // Remove the collided brick
+        }
     }
 
+    //private void CollisionDetection()
+    //{
+    //    // Get the dimensions of the ball and the rectangle/bar
+    //    double ballLeft = BallX;
+    //    double ballRight = BallX + 20;
+    //    double ballTop = BallY;
+    //    double ballBottom = BallY + 20;
 
+    //    double barLeft = RectangleX;
+    //    double barRight = RectangleX + 200;
+    //    double barTop = 276;
+    //    double barBottom = barTop + 20;
 
+    //    // Check collision with the bar
+    //    if (ballBottom >= barTop && ballTop <= barBottom && ballRight >= barLeft && ballLeft <= barRight)
+    //    {
+    //        ballDirectionY = -ballDirectionY;
+    //    }
+
+    //    // Check collision with the walls
+    //    if (ballLeft <= 0 || ballRight >= 640)
+    //    {
+    //        ballDirectionX = -ballDirectionX;
+    //    }
+
+    //    if (ballTop <= 0)
+    //    {
+    //        ballDirectionY = -ballDirectionY;
+    //    }
+
+    //    if (ballBottom >= 308)
+    //    {
+    //        // Ball misses the bar
+    //        RemoveActiveTask();
+    //        timer.Stop();
+    //        MessageBox.Show("You loose!");
+    //    }
+
+    //    foreach (var brick in Bricks)
+    //    {
+    //        double brickLeft = brick.X;
+    //        double brickRight = brick.X + 63; // Assuming brick width is 64
+    //        double brickTop = brick.Y;
+    //        double brickBottom = brick.Y + 39; // Assuming brick height is 40
+
+    //        if (ballBottom >= brickTop && ballTop <= brickBottom && ballRight >= brickLeft && ballLeft <= brickRight)
+    //        {
+    //            // Ball collided with the brick
+    //            ballDirectionY = -ballDirectionY;
+    //            brick.IsVisible = false;
+    //            Bricks.Remove(brick);
+    //        }
+    //    }
+    //}
 
     private void Timer_Tick(object sender, EventArgs e)
     {
