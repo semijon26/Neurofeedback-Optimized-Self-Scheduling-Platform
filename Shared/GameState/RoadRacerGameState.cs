@@ -1,5 +1,5 @@
-﻿namespace ClientApplication.Models.GameState;
-
+namespace Shared.GameState;
+[Serializable]
 public class RoadRacerGameState : AbstractGameState
 {
     

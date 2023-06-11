@@ -29,9 +29,10 @@ namespace ServerApplication.modules
             WebSocketServer.AddWebSocketService<UserWebSocketBehavior>("/users");
             WebSocketServer.AddWebSocketService<ClientWebsocketBehavior>("/clients");
             WebSocketServer.AddWebSocketService("/taskgraph", () => new TaskGraphWebSocketBehavior(taskGraph));
+            WebSocketServer.AddWebSocketService<GameStateWebsocketBehavior>("/gamestate");
             WebSocketServer.Start();
         }
-
+        
         private static void AddConnectedClient(WebSocketContext client)
         {
             lock (locker)

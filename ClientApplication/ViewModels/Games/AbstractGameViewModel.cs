@@ -1,9 +1,9 @@
 using System;
-using ClientApplication.Models.GameState;
 using System.Collections.ObjectModel;
 using ClientApplication.Models;
 using ClientApplication.Utils;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels.Games;
 
@@ -41,7 +41,7 @@ public abstract class AbstractGameViewModel<T> : ViewModelBase
         var taskId = TaskManager.GetTaskIdByGameType(_gameType);
         if (taskId == null) return;
         StopGame();
-        TaskGraphProvider.SendUpdatedTaskGraphToServer(new DataPayload{SetDone = true, ChangeWorker = false, IntValue = (int)taskId, Woker = null});
+        TaskGraphProvider.SendUpdatedTaskGraphToServer(new DataPayload{SetDone = true, ChangeWorker = false, IntValue = (int)taskId, WorkerWithPulledTask = null, WorkerRemovesPulledTask = null});
         TaskManager.RemoveActiveTaskForCurrentClient((int)taskId);
         RemoveTaskFromUiEvent?.Invoke(null, _gameType);
     }

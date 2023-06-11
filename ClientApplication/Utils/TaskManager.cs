@@ -1,3 +1,4 @@
+using System;
 using ClientApplication.Models;
 using Shared;
 
@@ -21,9 +22,11 @@ public static class TaskManager
     // Returns true if task is from someone else (not one of the client's own tasks), otherwise method returns false
     public static bool TakeTaskFromOtherUser(int taskId)
     {
-        if (!GetClientObject().ActiveGames.ContainsKey(taskId))
+        var currentClient = GetClientObject();
+        var task = TaskGraphProvider.GetInstance().TaskGraph?.GetTaskById(taskId);
+        if (task?.GameType != null && !currentClient.ContainsGameType(task.GameType) && !currentClient.ActiveGames.ContainsKey(taskId))
         {
-            UpdatePulledTaskByServer(taskId);
+            UpdatePulledTaskByServer(taskId, currentClient);
             return true;
         }
 
@@ -36,9 +39,10 @@ public static class TaskManager
         return currentClient;
     }
 
-    private static void UpdatePulledTaskByServer(int pulledTaskId)
+    private static void UpdatePulledTaskByServer(int pulledTaskId, ClientObject currentClient)
     {
-        TaskGraphProvider.GetInstance().SendUpdatedTaskGraphToServer(new DataPayload{SetDone = false, ChangeWorker = true, IntValue = pulledTaskId, Woker = ClientObject.GetInstance()});
+        currentClient.PulledTaskId = pulledTaskId;
+        GameStateSocket.SendTaskIdToSetGameState(currentClient).WaitAsync(TimeSpan.FromMilliseconds(500));
     }
 
     public static bool IsGameCurrentlyActive(int taskId, GameType gameType)

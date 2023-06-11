@@ -8,7 +8,6 @@ public enum GameType
     BricketBraker,
     RoadRacer,
     MemoMaster,
-    ColorEcho,
     BackTrack
 }
 
