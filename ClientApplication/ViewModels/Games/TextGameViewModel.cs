@@ -28,7 +28,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
     private string _targetText;
 
     private int fullWordsWritten = 0;
-    private int difficulty = 15;
+    private int _difficulty;
 
     private bool _isCorrect;
     private int timeLeft;
@@ -45,7 +45,11 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
     {
         if (taskDifficulty == TaskDifficulty.Hard)
         {
-            
+            _difficulty = 30;
+        }
+        else
+        {
+            _difficulty = 15;
         }
         //var currentClientPlaying = GetClientInstanceLogging();
         Logging.LogInformation("------StartTextGame executed");
