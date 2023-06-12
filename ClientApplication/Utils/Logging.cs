@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 using ClientApplication.Models;
 using Serilog;
 using Shared;
@@ -44,6 +45,12 @@ namespace ClientApplication.Utils
         public static void LogNeuroEvent(string msg)
         {
             _InternalLogEvent(new EventLogEntry{Message = msg, Type = EventLogType.NEURO_EVENT});
+        }
+
+        public static void LogKeyEvent(Key key)
+        {
+            KeyConverter converter = new KeyConverter();
+            _InternalLogEvent(new EventLogEntry { Message = converter.ConvertToString(key) ?? "Key konnte nicht ermittelt werden", Type = EventLogType.KEY_EVENT, User = GetClientInstanceLogging()});
         }
         
         private static void _InternalLogEvent(EventLogEntry e) {
