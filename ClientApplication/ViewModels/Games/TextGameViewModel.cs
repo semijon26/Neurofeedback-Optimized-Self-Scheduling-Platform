@@ -38,7 +38,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
     public TextGameViewModel(INavigationService navigationService) : base(navigationService, GameType.TextGame)
     {
-        _targetText = GetRandomText();
+        TargetText = GetRandomText();
     }
 
     public override void StartGame(TaskDifficulty taskDifficulty, TextGameGameState? state)
@@ -51,6 +51,15 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         {
             _difficulty = 15;
         }
+
+        if (state != null)
+        {
+            TimeLeft = state.TimeLeft;
+            ErrorCount = state.ErrorCount;
+            TargetText = state.TargetText;
+            FullWordsWritten = state.FullWordsWritten;
+        }
+
         //var currentClientPlaying = GetClientInstanceLogging();
         Logging.LogInformation("------StartTextGame executed");
         Logging.LogGameEvent("TextGame started");
@@ -74,7 +83,12 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
     public override TextGameGameState GetGameState()
     {
-        return new TextGameGameState();
+        return new TextGameGameState(
+            timeLeft: TimeLeft,
+            errorCount: ErrorCount,
+            targetText: TargetText,
+            fullWordsWritten: FullWordsWritten
+            ); 
     }
 
     public override void StopGame()
@@ -265,7 +279,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
             timer.Stop();
 
             // Check if the text is fully written
-            if (IsTextFullyWritten() || fullWordsWritten >= difficulty)
+            if (IsTextFullyWritten() || fullWordsWritten >= _difficulty)
             {
                 // The game is won
                 Logging.LogGameEvent("Text game won");
