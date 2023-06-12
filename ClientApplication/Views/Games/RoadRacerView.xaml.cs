@@ -155,7 +155,7 @@ public partial class RoadRacerView : UserControl
     {
         var random = new Random();
         var requiredPointsCount = (int)_canvasWidth;
-        requiredPointsCount += _viewModel.GameDurationSeconds * _viewModel.PixelsPer50Millis * 100;
+        requiredPointsCount += RoadRacerViewModel.GameDurationSeconds * _viewModel.PixelsPer50Millis * 100;
         var requiredNumbersToInterpolateCount = requiredPointsCount / 160;
         var numbers = new List<int>();
         for (var i = 0; i < requiredNumbersToInterpolateCount; i++)
