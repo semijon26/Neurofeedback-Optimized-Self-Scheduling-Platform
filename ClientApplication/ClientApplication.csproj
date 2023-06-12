@@ -52,4 +52,8 @@
       <Resource Include="Assets\brick_normal.png" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Events\" />
+    </ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClientApplication.Utils;
@@ -16,22 +17,14 @@ namespace ClientApplication.Views
             InitializeComponent();
             NavigationService navigationService = Utils.NavigationService.GetInstance();
             TasktreeOverviewViewModel viewModel = new TasktreeOverviewViewModel(navigationService);
-            //viewModel.TaskGraphLoaded += HandleTaskGraphLoadedEvent;
             DataContext = viewModel;
         }
-        
         private void MyView_Loaded(object sender, RoutedEventArgs e)
         {
-            // Methode im ViewModel aufrufen, wenn die View geladen ist
-            Logging.LogInformation("Loader aufgerufen");
-
-            // Breite der ersten Spalte abrufen
             var firstColumnWidth = firstColumn.ActualWidth;
-
-            // Breite des Rechtecks festlegen
             scrollRect.Width = firstColumnWidth;
         }
-
+        
         private void scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             // Überprüfen, ob die vertikale Scrollbar sichtbar ist

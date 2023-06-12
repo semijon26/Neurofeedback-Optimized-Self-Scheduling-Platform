@@ -45,7 +45,6 @@ namespace ClientApplication.ViewModels
             {
                 SetOrUpdateTaskGraph(tg);
                 CanvasHeight = GetMaxGraphHeight();
-                //TaskGraphLoaded?.Invoke(this, new TaskGraphLoaded(GetMaxGraphHeight()));
             }
         }
 
@@ -61,6 +60,7 @@ namespace ClientApplication.ViewModels
         private Dictionary<int, List<TaskGroup>> _layers;
         private Dictionary<TaskGroup, TaskPoint> _drawingPoints;
         private List<Line> _lines;
+        private bool _initial;
 
         //Variables for MacroView
         private Dictionary<TaskGroup, TaskPoint> _macroDrawingPoints;
@@ -69,6 +69,14 @@ namespace ClientApplication.ViewModels
         
         // Rectangle Canvas Height
         private double canvasHeight;
+        
+        // View const 
+        private const double FirstColumnWidth = 0.2 * 1480;
+        private const double SecondColumnWidth = 0.8 * 1480;
+        private const double RowHeight = 180;
+        private const double MacroGroupHeight = 30;
+        private const double GroupHeight = 100;
+        
 
         // Properties
         public List<Line> LineList
@@ -194,14 +202,6 @@ namespace ClientApplication.ViewModels
                 }
             }
         }
-        
-        // View const 
-        private const double FirstColumnWidth = 0.2 * 1480;
-        private const double SecondColumnWidth = 0.8 * 1480;
-        private const double RowHeight = 180;
-        private const double MacroGroupHeight = 30;
-        private const double GroupHeight = 100;
-        
 
         // METHODS
         private void OnMessageStringReceived(string obj)

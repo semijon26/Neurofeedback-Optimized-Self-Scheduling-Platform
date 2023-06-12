@@ -17,6 +17,7 @@
         <converter:TwoVariableToVisibilityConverter x:Key="TwoVariableToVisibilityConverter" />
         <converter:LineColorConverter x:Key="LineColorConverter"></converter:LineColorConverter>
         <converter:ColorConverter x:Key="ColorConverter"/>
+        <converter:MacroTaskColorConverter x:Key="MacroTaskColorConverter"/>
     </UserControl.Resources>
     <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
@@ -39,7 +40,7 @@
                                           StrokeThickness="1" 
                                           Visibility="Visible">
                                         <Line.Stroke>
-                                            Black
+                                            <SolidColorBrush Color="{Binding Visibility, Converter={StaticResource LineColorConverter}}"/>
                                         </Line.Stroke>
                                     </Line>
                                 </DataTemplate>
@@ -61,7 +62,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
-                                        <Rectangle Width="{Binding Value.Width}" Height="10" Fill="Black" StrokeThickness="1" RadiusX="5" RadiusY="5">
+                                        <Rectangle Width="{Binding Value.Width}" Height="10" Stroke="Black" Fill="White" StrokeThickness="1" RadiusX="1" RadiusY="1">
                                         </Rectangle>
                                         <ItemsControl ItemsSource="{Binding Key.Tasks}">
                                             <ItemsControl.ItemsPanel>
@@ -76,24 +77,39 @@
                                                             <RowDefinition Height="Auto"/> <!-- Erste Zeile für den oberen Kreis -->
                                                             <RowDefinition Height="Auto"/> <!-- Zweite Zeile für den unteren Kreis mit Buchstaben -->
                                                         </Grid.RowDefinitions>
-                                                        <Button Grid.Row="0" Width="10" Height="10">
+                                                        <Button Grid.Row="0" Width="10" Height="10" Visibility="{Binding IsDone, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                                                             <Button.Template>
                                                                 <ControlTemplate TargetType="Button">
                                                                     <Grid x:Name="ButtonGrid">
                                                                         <Rectangle Width="10" Height="10" Margin="1,0">
                                                                             <Rectangle.Fill>
-                                                                                <SolidColorBrush Color="Black" />
+                                                                                <SolidColorBrush>
+                                                                                    <SolidColorBrush.Color>
+                                                                                        <Binding Path="Worker" Converter="{StaticResource MacroTaskColorConverter}" />
+                                                                                    </SolidColorBrush.Color>
+                                                                                </SolidColorBrush>
                                                                             </Rectangle.Fill>
                                                                         </Rectangle>
                                                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                                     </Grid>
                                                                 </ControlTemplate>
                                                             </Button.Template>
+                                                            <Button.Effect>
+                                                                <Binding Path="Key.Executable" Converter="{StaticResource BooleanToBlurEffectConverter}" />
+                                                            </Button.Effect>
                                                         </Button>
                                                     </Grid>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
+                                        <Rectangle Width="{Binding Value.Width}" Height="10" Fill="White" StrokeThickness="1" RadiusX="1" RadiusY="1" Visibility="{Binding Key.Executable, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                            <Rectangle.Stroke>
+                                                <SolidColorBrush Color="LightGray" />
+                                            </Rectangle.Stroke>
+                                            <Rectangle.OpacityMask>
+                                                <SolidColorBrush Color="#DDFFFFFF"/> <!-- Hier wird die Alpha-Komponente auf 50% (128) gesetzt -->
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
