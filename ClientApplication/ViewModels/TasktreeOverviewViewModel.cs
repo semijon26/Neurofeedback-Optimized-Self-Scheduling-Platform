@@ -34,7 +34,6 @@ namespace ClientApplication.ViewModels
             _lines = new List<Line>();
             _macroDrawingPoints = new Dictionary<TaskGroup, TaskPoint>();
             _macroLines = new List<Line>();
-            _rectangleHeight = CalculateRectangleSize();
             CalculateDrawingPoints();
         }
         
@@ -65,7 +64,6 @@ namespace ClientApplication.ViewModels
         //Variables for MacroView
         private Dictionary<TaskGroup, TaskPoint> _macroDrawingPoints;
         private List<Line> _macroLines;
-        private double _rectangleHeight;
         
         // Rectangle Canvas Height
         private double canvasHeight;
@@ -214,21 +212,10 @@ namespace ClientApplication.ViewModels
             ObjectMessage = obj;
         }
 
-        private double CalculateRectangleSize()
-        {
-            // TODO
-            return 0.0;
-        }
-
         private void CalculateDrawingPoints()
         {
             TaskPointsDictionary = PointCalculator.CalculateDrawingPoints(_layers, SecondColumnWidth, 40, GroupHeight);
-            MacroTaskPointDictionary =
-                PointCalculator.CalculateDrawingPoints(_layers, FirstColumnWidth, 12, MacroGroupHeight);
-            Logging.LogInformation($"FirstColumnWidth = {FirstColumnWidth}");
-            Logging.LogInformation($"SecondColumnWidth = {SecondColumnWidth}");
-            Logging.LogInformation($"RowHeight = {RowHeight}");
-
+            MacroTaskPointDictionary = PointCalculator.CalculateDrawingPoints(_layers, FirstColumnWidth, 12, MacroGroupHeight);
             CalculateDrawingLines();
         }
 
@@ -240,25 +227,18 @@ namespace ClientApplication.ViewModels
         
         private double GetMaxGraphHeight()
         {
+            // Höhe des Macrographen berechnen
             double maxGraphHeight = 0;
-
-            // Iteriere über alle Tasks im TaskPointsDictionary
             foreach (var taskPointPair in MacroTaskPointDictionary)
             {
                 var taskPoint = taskPointPair.Value;
-
-                // Berechne die maximale Höhe des aktuellen Taskpunkts
                 double taskPointHeight = taskPoint.Y + 10;
-
-                // Aktualisiere den maximalen Wert, falls der aktuelle Taskpunkt höher ist
                 if (taskPointHeight > maxGraphHeight)
                 {
                     maxGraphHeight = taskPointHeight;
                 }
             }
-
             return maxGraphHeight;
         }
-
     }
 }

@@ -27,7 +27,7 @@ namespace ClientApplication.Views
         
         private void scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            // Überprüfen, ob die vertikale Scrollbar sichtbar ist
+            // Eigenschaften der Scrollbar-Übertragung implementieren
             if (ScrollViewer.ComputedVerticalScrollBarVisibility == Visibility.Visible)
             {
                 // Höhe des MacroGraphen in der linken Spalte
@@ -52,12 +52,10 @@ namespace ClientApplication.Views
                     // Überprüfen, ob der Scrollviewer das Ende erreicht hat
                     if (scrollOffset == ScrollViewer.ScrollableHeight)
                     {
-                        // Das Rechteck auf die maximale Position setzen
                         Canvas.SetTop(scrollRect, leftColumnHeight - scrollRect.Height);
                     }
                     else
                     {
-                        // Aktualisieren Sie die Position des Rechtecks basierend auf der berechneten Position
                         Canvas.SetTop(scrollRect, rectPosition);
                     }
                 }
