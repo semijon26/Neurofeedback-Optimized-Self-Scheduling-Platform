@@ -1,6 +1,6 @@
-﻿using ClientApplication.Models.GameState;
-using ClientApplication.Utils;
+﻿using ClientApplication.Utils;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels.Games;
 
@@ -11,8 +11,12 @@ public class MemoMasterViewModel: AbstractGameViewModel<MemoMasterGameState>
     {
     }
 
-    public override void StartGame(MemoMasterGameState? state)
+    public override void StartGame(TaskDifficulty taskDifficulty, MemoMasterGameState? state)
     {
+        if (taskDifficulty == TaskDifficulty.Hard)
+        {
+            
+        }
         IsGameRunning = true;
     }
 

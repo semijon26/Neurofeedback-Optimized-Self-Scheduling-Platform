@@ -24,7 +24,6 @@
 
     <ItemGroup>
       <None Remove="Assets\plane_normal.png" />
-      <Resource Include="Assets\plane_normal.png" />
       <None Remove="Assets\back_hard.png" />
       <Resource Include="Assets\back_hard.png" />
       <None Remove="Assets\back_normal.png" />
@@ -36,11 +35,16 @@
       <None Remove="Assets\brick_hard.png" />
       <Resource Include="Assets\brick_hard.png" />
       <None Remove="Assets\plane_hard.png" />
-      <Resource Include="Assets\plane_hard.png" />
       <None Remove="Assets\tornado_normal.png" />
       <Resource Include="Assets\tornado_normal.png" />
       <None Remove="Assets\tornado_hard.png" />
       <Resource Include="Assets\tornado_hard.png" />
+      <None Remove="Assets\heart.png" />
+      <Resource Include="Assets\heart.png" />
+      <None Remove="Assets\car_normal.png" />
+      <Resource Include="Assets\car_normal.png" />
+      <None Remove="Assets\car_hard.png" />
+      <Resource Include="Assets\car_hard.png" />
     </ItemGroup>
 
     <ItemGroup>

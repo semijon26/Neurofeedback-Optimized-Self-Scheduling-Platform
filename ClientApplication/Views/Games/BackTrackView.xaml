@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="ClientApplication.Views.Games.BackTrackView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:games="clr-namespace:ClientApplication.ViewModels.Games"
+             xmlns:converter="clr-namespace:ClientApplication.Converter"
+             d:DataContext="{d:DesignInstance Type=games:BackTrackViewModel}"
+             mc:Ignorable="d"
+             Height="340" Width="640">
+    <UserControl.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Image Grid.Column="0" Source="{Binding GameIcon, Converter={StaticResource VariableToImagePathConverter}}" Width="35" Height="35" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ItemsControl Grid.Row="0" ItemsSource="{Binding Hearts}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="/Assets/heart.png" Width="20" Height="20" Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Grid Grid.Row="1" Height="250" Width="500">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" /> 
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" x:Name="BackTrackTextBox" PreviewTextInput="TextBox_PreviewKeyDown" FontSize="65" HorizontalAlignment="Center" Margin="0,60,0,0" TextWrapping="Wrap" Text="{Binding NextNumber, Mode=TwoWay}" FontWeight="Bold" TextAlignment="Center" MaxLength="1" VerticalAlignment="Top" Width="140" Height="140" Padding="2"/>
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="{Binding Path=ShowNextNumberTimeLeft, StringFormat='Time left: {0}'}" VerticalAlignment="Bottom" Width="73" Background="White"/>
+        </Grid>
+        <TextBlock Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding Path=TimeLeft, StringFormat='Time left: {0}'}" VerticalAlignment="Bottom" Width="73" Background="White"/>
+    </Grid>
+</UserControl>

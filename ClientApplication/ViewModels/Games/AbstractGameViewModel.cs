@@ -1,7 +1,9 @@
 using System;
-using ClientApplication.Models.GameState;
+using System.Collections.ObjectModel;
+using ClientApplication.Models;
 using ClientApplication.Utils;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels.Games;
 
@@ -11,6 +13,7 @@ public abstract class AbstractGameViewModel<T> : ViewModelBase
     private bool _isGameRunning;
     private readonly GameType _gameType;
     public GameType GameIcon { get; private set; }
+    public ObservableCollection<Heart> Hearts { get; } = new();
 
     protected AbstractGameViewModel(INavigationService navigationService, GameType gameType) : base(navigationService)
     {
@@ -27,7 +30,7 @@ public abstract class AbstractGameViewModel<T> : ViewModelBase
             OnPropertyChanged(nameof(IsGameRunning));
         } }
 
-    public abstract void StartGame(T? state);
+    public abstract void StartGame(TaskDifficulty taskDifficulty, T? state);
 
     public abstract void StopGame();
 
@@ -38,7 +41,7 @@ public abstract class AbstractGameViewModel<T> : ViewModelBase
         var taskId = TaskManager.GetTaskIdByGameType(_gameType);
         if (taskId == null) return;
         StopGame();
-        TaskGraphProvider.SendUpdatedTaskGraphToServer(new DataPayload{SetDone = true, ChangeWorker = false, IntValue = (int)taskId, Woker = null});
+        TaskGraphProvider.SendUpdatedTaskGraphToServer(new DataPayload{SetDone = true, ChangeWorker = false, IntValue = (int)taskId, WorkerWithPulledTask = null, WorkerRemovesPulledTask = null});
         TaskManager.RemoveActiveTaskForCurrentClient((int)taskId);
         RemoveTaskFromUiEvent?.Invoke(null, _gameType);
     }

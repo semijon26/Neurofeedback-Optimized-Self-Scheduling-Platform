@@ -60,8 +60,7 @@ public class TaskGraphProvider : INotifyPropertyChanged
 
     public void SendUpdatedTaskGraphToServer(DataPayload task)
     {
-        string json = JsonConvert.SerializeObject(task);
-        _webSocket.Send(json);
+        _webSocket.Send(SocketMessageHelper.SerializeToByteArray(task));
     }
     
     private byte[] GetSerializedTaskGraph()

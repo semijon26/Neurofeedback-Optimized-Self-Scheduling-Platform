@@ -13,16 +13,12 @@ public class ClientWebsocketBehavior : WebSocketBehavior
     
     protected override void OnMessage(MessageEventArgs e)
     {
-        ClientObject client = SocketMessageHelper.DeserializeFromByteArray<ClientObject>(e.RawData);
+        var client = SocketMessageHelper.DeserializeFromByteArray<ClientObject>(e.RawData);
         client.MinClientsToStartGames = TestConfigs.TestConfigs.minConnectedClients;
         if (!UpdateClient(client))
         {
             SocketServerService.Clients.Add(Context, client);
         }
-        /*else
-        {
-            UpdateActiveGamesWhenTaskWasPulled(client);
-        }*/
         Logging.LogInformation($"New Client connected Uid:{client.UniqueId} Games active:{client.ActiveGames.Count}");
         var clientsObjectByteArray = SocketMessageHelper.SerializeToByteArray(GetClientsList());
         SocketServerService.WebSocketServer.WebSocketServices["/clients"].Sessions.Broadcast(clientsObjectByteArray);
@@ -59,23 +55,5 @@ public class ClientWebsocketBehavior : WebSocketBehavior
         }
 
         return false;
-    }
-
-    private void UpdateActiveGamesWhenTaskWasPulled(ClientObject currentClient)
-    {
-        if (currentClient.PulledTaskId != null)
-        {
-            foreach (var keyValuePair in SocketServerService.Clients)
-            {
-                var activeGames = keyValuePair.Value.ActiveGames;
-                if (activeGames.ContainsKey((int)currentClient.PulledTaskId!))
-                {
-                    var gameType = activeGames[(int)currentClient.PulledTaskId];
-                    currentClient.ActiveGames.Add((int)currentClient.PulledTaskId, gameType);
-                    activeGames.Remove((int)currentClient.PulledTaskId);
-                    currentClient.PulledTaskId = null;
-                }
-            }
-        }
     }
 }

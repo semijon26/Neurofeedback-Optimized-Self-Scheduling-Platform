@@ -1,4 +1,6 @@
 
+using Shared.GameState;
+
 namespace Shared;
 [Serializable]
 public class ClientObject
@@ -31,31 +33,29 @@ public class ClientObject
     public Dictionary<int, GameObject> ActiveGames { get; set; }
 
     public int MinClientsToStartGames;
-
-    public int? PulledTaskId = null;
-
+    public int? PulledTaskId { get; set; }
     public bool ContainsGameType(GameType gameType)
     {
         return ActiveGames.Values.Any(gameObj => gameObj.GameType == gameType);
     }
 
-    public void AddNewActiveGame(int taskId, GameType gameType)
+    public void AddNewActiveGame(int taskId, GameType gameType, AbstractGameState? gameState)
     {
         if (!ActiveGames.Values.Any(item => item is { Row: 0, Column: 0 }))
         {
-            ActiveGames.Add(taskId, new GameObject(gameType, 0, 0));
+            ActiveGames.Add(taskId, new GameObject(gameType,gameState , 0, 0));
         }else if (!ActiveGames.Values.Any(item => item is { Row: 0, Column: 1 }))
         {
-            ActiveGames.Add(taskId, new GameObject(gameType, 0, 1));
+            ActiveGames.Add(taskId, new GameObject(gameType,gameState, 0, 1));
         }else if (!ActiveGames.Values.Any(item => item is { Row: 1, Column: 0 }))
         {
-            ActiveGames.Add(taskId, new GameObject(gameType, 1, 0));
+            ActiveGames.Add(taskId, new GameObject(gameType,gameState, 1, 0));
         }else if (!ActiveGames.Values.Any(item => item is { Row: 1, Column: 1 }))
         {
-            ActiveGames.Add(taskId, new GameObject(gameType, 1, 1));
+            ActiveGames.Add(taskId, new GameObject(gameType,gameState, 1, 1));
         }
     }
-    
+
     public byte A { get; set; }
     public byte R { get; set; }
     public byte G { get; set; }
