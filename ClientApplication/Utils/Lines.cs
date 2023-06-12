@@ -4,10 +4,10 @@ namespace ClientApplication.Utils;
 
 public class Line
 {
-    public int X1 { get; set; }
-    public int X2 { get; set; }
-    public int Y1 { get; set; }
-    public int Y2 { get; set; }
+    public double X1 { get; set; }
+    public double X2 { get; set; }
+    public double Y1 { get; set; }
+    public double Y2 { get; set; }
     public TaskGroup SourceGroup { get; set; }
     public TaskGroup DestGroup { get; set; }
     public bool Visibility => CheckVisibility();

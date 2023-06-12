@@ -2,10 +2,10 @@
 
 public class ActiveArea
 {
-    public int Y1 { get; set; }
-    public int Y2 { get; set; }
+    public double Y1 { get; set; }
+    public double Y2 { get; set; }
 
-    public int Height
+    public double Height
     {
         get
         {

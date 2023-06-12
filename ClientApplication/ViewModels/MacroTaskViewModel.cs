@@ -105,7 +105,7 @@ public class MacroTaskViewModel : ViewModelBase
     private void CalculateDrawingLines()
     {
         LineList = PointCalculator.CalculateDrawingLines(TaskPointsDictionary, 10);
-        List<int> LowerandUpper = PointCalculator.CalculateActiveArea(TaskPointsDictionary);
+        List<double> LowerandUpper = PointCalculator.CalculateActiveArea(TaskPointsDictionary);
         ActiveArea = new ActiveArea { Y1 = LowerandUpper[0]-4, Y2 = LowerandUpper[1] };
         Logging.LogInformation($"Y Koordinate: {ActiveArea.Y1} --> {ActiveArea.Y2}");
     }
