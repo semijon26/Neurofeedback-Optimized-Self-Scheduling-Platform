@@ -19,6 +19,8 @@ namespace ClientApplication.ViewModels
             SocketClientService.OnMessageStringReceived = OnMessageStringReceived;
             TaskPointsDictionary = new Dictionary<TaskGroup, TaskPoint>();
             LineList = new List<Line>();
+            MacroTaskPointDictionary = new Dictionary<TaskGroup, TaskPoint>();
+            MacroLineList = new List<Line>();
             RelayCommand = new RelayCommand(this);
             ChangeCommand = new ChangeCommand(this);
         }
@@ -30,6 +32,8 @@ namespace ClientApplication.ViewModels
             TaskLayers = new Dictionary<int, List<TaskGroup>>(layers);
             _drawingPoints = new Dictionary<TaskGroup, TaskPoint>();
             _lines = new List<Line>();
+            _macroDrawingPoints = new Dictionary<TaskGroup, TaskPoint>();
+            _macroLines = new List<Line>();
             CalculateDrawingPoints();
         }
         
@@ -39,10 +43,10 @@ namespace ClientApplication.ViewModels
             if (tg != null)
             {
                 SetOrUpdateTaskGraph(tg);
+                CanvasHeight = GetMaxGraphHeight();
             }
         }
 
-        
         //Commmands
         public RelayCommand RelayCommand { get; set; }
         public ChangeCommand ChangeCommand { get; set; }
@@ -55,6 +59,21 @@ namespace ClientApplication.ViewModels
         private Dictionary<int, List<TaskGroup>> _layers;
         private Dictionary<TaskGroup, TaskPoint> _drawingPoints;
         private List<Line> _lines;
+        private bool _initial;
+
+        //Variables for MacroView
+        private Dictionary<TaskGroup, TaskPoint> _macroDrawingPoints;
+        private List<Line> _macroLines;
+        
+        // Rectangle Canvas Height
+        private double canvasHeight;
+        
+        // View const 
+        private const double FirstColumnWidth = 0.2 * 1480;
+        private const double SecondColumnWidth = 0.8 * 1480;
+        private const double RowHeight = 180;
+        private const double MacroGroupHeight = 30;
+        private const double GroupHeight = 100;
         
 
         // Properties
@@ -139,7 +158,49 @@ namespace ClientApplication.ViewModels
             }
         }
         
-        
+        // MacroView Properties
+        public List<Line> MacroLineList
+        {
+            get
+            {
+                return _macroLines;
+            }
+            set
+            {
+                if (_macroLines != value)
+                {
+                    _macroLines = value;
+                    OnPropertyChanged(nameof(MacroLineList));
+                }
+            }
+        }
+
+        public Dictionary<TaskGroup, TaskPoint> MacroTaskPointDictionary
+        {
+            get { return _macroDrawingPoints; }
+            set
+            {
+                if (_macroDrawingPoints != value)
+                {
+                    _macroDrawingPoints = value;
+                    OnPropertyChanged(nameof(MacroTaskPointDictionary));
+                }
+            }
+        }
+
+        public double CanvasHeight
+        {
+            get { return canvasHeight; }
+            set
+            {
+                if (canvasHeight != value)
+                {
+                    canvasHeight = value;
+                    OnPropertyChanged(nameof(CanvasHeight));
+                }
+            }
+        }
+
         // METHODS
         private void OnMessageStringReceived(string obj)
         {
@@ -153,13 +214,31 @@ namespace ClientApplication.ViewModels
 
         private void CalculateDrawingPoints()
         {
-            TaskPointsDictionary = PointCalculator.CalculateDrawingPoints(_layers, 1200, 60, 90);
+            TaskPointsDictionary = PointCalculator.CalculateDrawingPoints(_layers, SecondColumnWidth, 40, GroupHeight);
+            MacroTaskPointDictionary = PointCalculator.CalculateDrawingPoints(_layers, FirstColumnWidth, 12, MacroGroupHeight);
             CalculateDrawingLines();
         }
 
         private void CalculateDrawingLines()
         {
             LineList = PointCalculator.CalculateDrawingLines(TaskPointsDictionary, 70);
+            MacroLineList = PointCalculator.CalculateDrawingLines(MacroTaskPointDictionary, 10);
+        }
+        
+        private double GetMaxGraphHeight()
+        {
+            // Höhe des Macrographen berechnen
+            double maxGraphHeight = 0;
+            foreach (var taskPointPair in MacroTaskPointDictionary)
+            {
+                var taskPoint = taskPointPair.Value;
+                double taskPointHeight = taskPoint.Y + 10;
+                if (taskPointHeight > maxGraphHeight)
+                {
+                    maxGraphHeight = taskPointHeight;
+                }
+            }
+            return maxGraphHeight;
         }
     }
 }

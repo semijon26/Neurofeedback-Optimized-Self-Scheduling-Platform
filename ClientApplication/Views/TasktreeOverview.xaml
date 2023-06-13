@@ -17,15 +17,114 @@
         <converter:TwoVariableToVisibilityConverter x:Key="TwoVariableToVisibilityConverter" />
         <converter:LineColorConverter x:Key="LineColorConverter"></converter:LineColorConverter>
         <converter:ColorConverter x:Key="ColorConverter"/>
+        <converter:MacroTaskColorConverter x:Key="MacroTaskColorConverter"/>
     </UserControl.Resources>
     <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="20*" x:Name="firstColumn" />
+            <ColumnDefinition Width="80*" />
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="0" Name="ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
-                      PreviewKeyDown="ScrollViewer_OnPreviewKeyDown" PreviewKeyUp="ScrollViewer_OnPreviewKeyUp">
+            <Grid Grid.Column="0">
+                <!-- Canvas für das Einfügen der Verbindungen untereinander -->
+                    <Canvas x:Name="macroGraph" Height="{Binding CanvasHeight}">
+                        <ItemsControl ItemsSource="{Binding MacroLineList}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas Background="White"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Line X1="{Binding X1}" Y1="{Binding Y1}"
+                                          X2="{Binding X2}" Y2="{Binding Y2}" 
+                                          StrokeThickness="1" 
+                                          Visibility="Visible">
+                                        <Line.Stroke>
+                                            <SolidColorBrush Color="{Binding Visibility, Converter={StaticResource LineColorConverter}}"/>
+                                        </Line.Stroke>
+                                    </Line>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    <!-- Einfügen der Knoten mit jeweiligem Template über Dictionary-->
+                        <ItemsControl ItemsSource="{Binding MacroTaskPointDictionary}" x:Name="itemsControl">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas utils:CanvasExtensions.AutoSize="False" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter Property="Canvas.Left" Value="{Binding Value.X}" />
+                                    <Setter Property="Canvas.Top" Value="{Binding Value.Y}" />
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Rectangle Width="{Binding Value.Width}" Height="10" Stroke="Black" Fill="White" StrokeThickness="1" RadiusX="1" RadiusY="1">
+                                        </Rectangle>
+                                        <ItemsControl ItemsSource="{Binding Key.Tasks}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid HorizontalAlignment="Center">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto"/> <!-- Erste Zeile für den oberen Kreis -->
+                                                            <RowDefinition Height="Auto"/> <!-- Zweite Zeile für den unteren Kreis mit Buchstaben -->
+                                                        </Grid.RowDefinitions>
+                                                        <Button Grid.Row="0" Width="10" Height="10" Visibility="{Binding IsDone, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                                            <Button.Template>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Grid x:Name="ButtonGrid">
+                                                                        <Rectangle Width="10" Height="10" Margin="1,0">
+                                                                            <Rectangle.Fill>
+                                                                                <SolidColorBrush>
+                                                                                    <SolidColorBrush.Color>
+                                                                                        <Binding Path="Worker" Converter="{StaticResource MacroTaskColorConverter}" />
+                                                                                    </SolidColorBrush.Color>
+                                                                                </SolidColorBrush>
+                                                                            </Rectangle.Fill>
+                                                                        </Rectangle>
+                                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Grid>
+                                                                </ControlTemplate>
+                                                            </Button.Template>
+                                                            <Button.Effect>
+                                                                <Binding Path="Key.Executable" Converter="{StaticResource BooleanToBlurEffectConverter}" />
+                                                            </Button.Effect>
+                                                        </Button>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <Rectangle Width="{Binding Value.Width}" Height="10" Fill="White" StrokeThickness="1" RadiusX="1" RadiusY="1" Visibility="{Binding Key.Executable, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                            <Rectangle.Stroke>
+                                                <SolidColorBrush Color="LightGray" />
+                                            </Rectangle.Stroke>
+                                            <Rectangle.OpacityMask>
+                                                <SolidColorBrush Color="#EFFFFFFF"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    <Rectangle x:Name="scrollRect" Fill="Transparent" Stroke="Black" StrokeThickness="2"
+                               Width="{Binding ActualWidth, ElementName=firstColumn}"
+                               Canvas.Left="0" Canvas.Top="0">
+                    </Rectangle>
+                    </Canvas>
+            </Grid>
+        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
+                      x:Name="ScrollViewer"
+                      PreviewKeyDown="ScrollViewer_OnPreviewKeyDown" PreviewKeyUp="ScrollViewer_OnPreviewKeyUp"
+                      ScrollChanged="scrollViewer_ScrollChanged">
             <Grid>
-                
                 <!-- Canvas für das Einfügen der Verbindungen untereinander -->
                 <ItemsControl ItemsSource="{Binding LineList}">
                     <ItemsControl.ItemsPanel>

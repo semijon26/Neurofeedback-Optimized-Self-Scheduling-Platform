@@ -13,9 +13,22 @@ public class MacroTaskViewModel : ViewModelBase
     private Dictionary<int, List<TaskGroup>>? _layers;
     private Dictionary<TaskGroup, TaskPoint>? _drawingPoints;
     private List<Line> _lines;
+    private ActiveArea _activeArea;
 
 
     // Properties
+    public ActiveArea ActiveArea
+    {
+        get { return _activeArea; }
+        set
+        {
+            if (_activeArea != value)
+            {
+                _activeArea = value;
+                OnPropertyChanged(nameof(ActiveArea));
+            }
+        }
+    }
     public List<Line> LineList
     {
         get { return _lines; }
@@ -79,6 +92,7 @@ public class MacroTaskViewModel : ViewModelBase
         TaskLayers = new Dictionary<int, List<TaskGroup>>(layers);
         _drawingPoints = new Dictionary<TaskGroup, TaskPoint>();
         _lines = new List<Line>();
+        _activeArea = new ActiveArea();
         CalculateDrawingPoints();
     }
 
@@ -91,6 +105,9 @@ public class MacroTaskViewModel : ViewModelBase
     private void CalculateDrawingLines()
     {
         LineList = PointCalculator.CalculateDrawingLines(TaskPointsDictionary, 10);
+        List<double> LowerandUpper = PointCalculator.CalculateActiveArea(TaskPointsDictionary);
+        ActiveArea = new ActiveArea { Y1 = LowerandUpper[0]-4, Y2 = LowerandUpper[1] };
+        Logging.LogInformation($"Y Koordinate: {ActiveArea.Y1} --> {ActiveArea.Y2}");
     }
 
 }

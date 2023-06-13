@@ -24,7 +24,7 @@
                         <DataTemplate>
                             <Line X1="{Binding X1}" Y1="{Binding Y1}"
                                   X2="{Binding X2}" Y2="{Binding Y2}" 
-                                  StrokeThickness="2" 
+                                  StrokeThickness="1" 
                                   Visibility="Visible">
                                 <Line.Stroke>
                                     Black
@@ -50,10 +50,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Rectangle Width="{Binding Value.Width}" Height="10" Fill="White" StrokeThickness="2" RadiusX="5" RadiusY="5">
-                                    <Rectangle.Stroke>
-                                        Black
-                                    </Rectangle.Stroke>
+                                <Rectangle Width="{Binding Value.Width}" Height="10" Fill="White" StrokeThickness="1" RadiusX="5" RadiusY="5">
                                 </Rectangle>
                                 <ItemsControl ItemsSource="{Binding Key.Tasks}">
                                     <ItemsControl.ItemsPanel>
@@ -68,6 +65,20 @@
                                                     <RowDefinition Height="Auto"/> <!-- Erste Zeile für den oberen Kreis -->
                                                     <RowDefinition Height="Auto"/> <!-- Zweite Zeile für den unteren Kreis mit Buchstaben -->
                                                 </Grid.RowDefinitions>
+                                                <Button Grid.Row="0" Width="10" Height="10">
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Grid x:Name="ButtonGrid">
+                                                                <Rectangle Width="10" Height="10" Margin="1,0">
+                                                                    <Rectangle.Fill>
+                                                                        Black
+                                                                    </Rectangle.Fill>
+                                                                </Rectangle>
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Grid>
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                </Button>
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -76,5 +87,16 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </Grid>
+                <!-- Rechteck über die gesamte Breite der View -->
+                <Canvas>
+                    <Rectangle Fill="Transparent" Stroke="Blue" StrokeThickness="2"
+                               Width="200" Height="{Binding ActiveArea.Height}"
+                               Canvas.Left="0" Canvas.Top="{Binding ActiveArea.Y1}">
+                        <!-- Weitere Eigenschaften und Inhalt des Rechtecks -->
+                    </Rectangle>
+                </Canvas>
+                
+    </Grid>
+    
+            
 </UserControl>
