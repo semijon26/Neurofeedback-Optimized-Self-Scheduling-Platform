@@ -29,17 +29,22 @@ public static class PointCalculator
         Logging.LogInformation($"CanvasWidth: {CanvasWidth}");
         foreach (int key in Layers.Keys)
         {
-            double temp = 0;
             int wholeTaskNumber = Layers.TryGetValue(key, out var layer) ? layer.Sum(taskGroup => taskGroup.Tasks.Count) : 0;
             double neededArea = wholeTaskNumber*taskWidth;
             double whiteSpace = CanvasWidth - neededArea;
             double circleDistance = whiteSpace / Layers[key].Count;
+            double temp = circleDistance / 2;
             
             foreach (TaskGroup group in Layers[key])
             {
                 int numberOfTasks = group.Tasks.Count;
                 double yValue = initialYValue;
                 double xValue = temp;
+
+                if (temp == 0.5 * circleDistance)
+                {
+                    temp = 0;
+                }
     
                 temp += numberOfTasks * taskWidth + circleDistance; // Aktualisierung von temp
     

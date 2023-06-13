@@ -107,7 +107,7 @@
                                                 <SolidColorBrush Color="LightGray" />
                                             </Rectangle.Stroke>
                                             <Rectangle.OpacityMask>
-                                                <SolidColorBrush Color="#DDFFFFFF"/> <!-- Hier wird die Alpha-Komponente auf 50% (128) gesetzt -->
+                                                <SolidColorBrush Color="#EFFFFFFF"/>
                                             </Rectangle.OpacityMask>
                                         </Rectangle>
                                     </Grid>
@@ -117,7 +117,6 @@
                     <Rectangle x:Name="scrollRect" Fill="Transparent" Stroke="Black" StrokeThickness="2"
                                Width="{Binding ActualWidth, ElementName=firstColumn}"
                                Canvas.Left="0" Canvas.Top="0">
-                        <!-- Weitere Eigenschaften und Inhalt des Rechtecks -->
                     </Rectangle>
                     </Canvas>
             </Grid>

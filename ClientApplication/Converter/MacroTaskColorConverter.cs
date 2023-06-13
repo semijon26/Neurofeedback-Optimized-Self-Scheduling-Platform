@@ -15,7 +15,7 @@ public class MacroTaskColorConverter : IValueConverter
         {
             return Color.FromRgb(r:0, g:0, b:0);
         }
-        return Color.FromRgb(r:255, g:255, b:0);
+        return Color.FromRgb(r:140, g:140, b:140);
         
     }
 
