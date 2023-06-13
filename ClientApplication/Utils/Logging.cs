@@ -50,7 +50,7 @@ namespace ClientApplication.Utils
         public static void LogKeyEvent(Key key)
         {
             KeyConverter converter = new KeyConverter();
-            _InternalLogEvent(new EventLogEntry { Message = converter.ConvertToString(key) ?? "Key konnte nicht ermittelt werden", Type = EventLogType.KEY_EVENT, User = GetClientInstanceLogging()});
+            _InternalLogEvent(new EventLogEntry { Message = converter.ConvertToString(key) ?? "unknown key", Type = EventLogType.KEY_EVENT, User = GetClientInstanceLogging()});
         }
         
         private static void _InternalLogEvent(EventLogEntry e) {

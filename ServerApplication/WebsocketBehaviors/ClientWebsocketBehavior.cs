@@ -26,7 +26,7 @@ public class ClientWebsocketBehavior : WebSocketBehavior
 
     protected override void OnClose(CloseEventArgs e)
     {
-        Logging.LogInformation($"Client disconnected - Current Client Count: {SocketServerService.Clients.Count}");
+        Logging.LogInformation($"Client disconnected - New Client Count: {SocketServerService.Clients.Count}");
         SocketServerService.Clients.Remove(Context);
         byte[] clientsObjectByteArray = SocketMessageHelper.SerializeToByteArray(GetClientsList());
         SocketServerService.WebSocketServer.WebSocketServices["/clients"].Sessions.Broadcast(clientsObjectByteArray);
