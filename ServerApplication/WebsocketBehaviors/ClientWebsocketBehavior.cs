@@ -18,15 +18,15 @@ public class ClientWebsocketBehavior : WebSocketBehavior
         if (!UpdateClient(client))
         {
             SocketServerService.Clients.Add(Context, client);
+            Logging.LogInformation($"New Client connected Uid: {client.Label} ({client.UniqueId})");
         }
-        Logging.LogInformation($"New Client connected Uid:{client.UniqueId} Games active:{client.ActiveGames.Count}");
         var clientsObjectByteArray = SocketMessageHelper.SerializeToByteArray(GetClientsList());
         SocketServerService.WebSocketServer.WebSocketServices["/clients"].Sessions.Broadcast(clientsObjectByteArray);
     }
 
     protected override void OnClose(CloseEventArgs e)
     {
-        Logging.LogInformation($"Client disconnected Count: {SocketServerService.Clients.Count}");
+        Logging.LogInformation($"Client disconnected - New Client Count: {SocketServerService.Clients.Count}");
         SocketServerService.Clients.Remove(Context);
         byte[] clientsObjectByteArray = SocketMessageHelper.SerializeToByteArray(GetClientsList());
         SocketServerService.WebSocketServer.WebSocketServices["/clients"].Sessions.Broadcast(clientsObjectByteArray);
