@@ -9,5 +9,6 @@
         <converter:FirstLetterConverter x:Key="FirstLetterConverter" />
         <converter:TwoLetterConverter x:Key="TwoLetterConverter" />
         <converter:ColorConverter x:Key="ColorConverter"/>
+        <converter:TransparencyConverter x:Key="TransparencyConverter"/>
     </Application.Resources>
 </Application>

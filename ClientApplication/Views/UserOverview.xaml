@@ -46,13 +46,17 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding FirstActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,0,0,3"
+                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding FirstActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,0,0,3" 
+                               Opacity="{Binding Client, Converter={StaticResource TransparencyConverter}}"
                                MouseLeftButtonDown="Image_Top_Left_OnMouseLeftButtonDown" />
                         <Image Grid.Row="0" Grid.Column="1" Source="{Binding SecondActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,0,0,3"
+                               Opacity="{Binding Client, Converter={StaticResource TransparencyConverter}}"
                                MouseLeftButtonDown="Image_Top_Right_OnMouseLeftButtonDown" />
                         <Image Grid.Row="1" Grid.Column="0" Source="{Binding ThirdActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,3,0,0"
+                               Opacity="{Binding Client, Converter={StaticResource TransparencyConverter}}"
                                MouseLeftButtonDown="Image_Bottom_Left_OnMouseLeftButtonDown" />
                         <Image Grid.Row="1" Grid.Column="1" Source="{Binding FourthActiveGameType, Converter={StaticResource VariableToImagePathConverter}}" Width="40" Height="40" Margin="4,3,0,0"
+                               Opacity="{Binding Client, Converter={StaticResource TransparencyConverter}}"
                                MouseLeftButtonDown="Image_Bottom_Right_OnMouseLeftButtonDown" />
                     </Grid>
                 </Grid>
