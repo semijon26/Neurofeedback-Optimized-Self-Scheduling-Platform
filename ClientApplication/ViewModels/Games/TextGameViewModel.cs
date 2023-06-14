@@ -61,7 +61,6 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         }
 
         //var currentClientPlaying = GetClientInstanceLogging();
-        Logging.LogInformation("------StartTextGame executed");
         Logging.LogGameEvent("TextGame started");
         // Create a new DispatcherTimer with a 10-second interval
         timer = new DispatcherTimer
@@ -106,7 +105,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         set
         {
             timeLeft = value;
-            Logging.LogGameEvent($"Text game time left: {timeLeft}");
+            Logging.LogGameEvent($"TextGame time left: {timeLeft}");
             OnPropertyChanged(nameof(TimeLeft));
         }
     }
@@ -119,7 +118,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
             if (_inputText != value)
             {
                 _inputText = value;
-                Logging.LogUserInteraction($"User input text: [{InputText}]");
+                Logging.LogUserInteraction($"TextGame user input text: [{InputText}]");
                 OnPropertyChanged(nameof(InputText));
                 CheckText();
                 GetFullWordsWritten(InputText);
