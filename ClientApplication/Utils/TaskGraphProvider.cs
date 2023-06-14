@@ -54,6 +54,7 @@ public class TaskGraphProvider : INotifyPropertyChanged
 
     private void OnMessage(object? sender, MessageEventArgs e)
     {
+        Logging.LogInformation("------- Task Graph received --------");
         var taskGraph = SocketMessageHelper.DeserializeFromByteArray<TaskGraph>(e.RawData);
         TaskGraph = taskGraph;
     }

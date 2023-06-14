@@ -19,7 +19,7 @@ namespace ClientApplication
             navigationService.RegisterView("MainView", typeof(MainView));
 
             Logging.LogInformation("MainWindow initialized");
-            this.KeyDown += KeyDownEventMethod;
+            this.PreviewKeyDown += KeyDownEventMethod;
         }
 
         private void KeyDownEventMethod(object sender, KeyEventArgs e)
