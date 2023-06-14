@@ -48,7 +48,7 @@ public class RelayCommand : CommandBase
                             currentInstance.AddNewActiveGame(availTask.Id, availTask.GameType, null);
                             //availTask.ChangeWoker(currentInstance);
                             TaskGraphProvider.GetInstance().SendUpdatedTaskGraphToServer(new DataPayload{SetDone = false, ChangeWorker = false, IntValue = availTask.Id, WorkerWithPulledTask = currentInstance, WorkerRemovesPulledTask = null});
-                            Logging.LogGameEvent($"{currentInstance.Label} added {availTask.GameType} to active games");
+                            Logging.LogGameEvent($"{availTask.GameType} is active now");
                             ClientManagementSocket.SendClientObjectWhenConnectionEstablished();
                         }
                         else

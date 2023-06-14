@@ -208,7 +208,6 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
     {
         if (InputText == null || InputText.Length == 0)
         {
-            Logging.LogGameEvent("Input text is empty");
             IsCorrect = false;
             inputTextLength = 0;
             return;
@@ -266,8 +265,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         if (TimeLeft != 0 && fullText)
         {
             timer.Stop();
-            Logging.LogGameEvent("Text game won");
-            Logging.LogGameEvent($"Final error count: {ErrorCount}");
+            Logging.LogGameEvent($"Text game won - Error Count: {ErrorCount}");
             RemoveActiveTask();
             MessageBox.Show("Congratulations, you win!");
         }
@@ -282,16 +280,14 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
             if (IsTextFullyWritten() || fullWordsWritten >= _difficulty)
             {
                 // The game is won
-                Logging.LogGameEvent("Text game won");
-                Logging.LogGameEvent($"Final error count: {ErrorCount}");
+                Logging.LogGameEvent($"Text game won - Error Count: {ErrorCount}");
                 RemoveActiveTask();
                 MessageBox.Show("Congratulations, you win!");
             }
             else
             {
                 // The game is lost
-                Logging.LogGameEvent("Text game lost");
-                Logging.LogGameEvent($"Final error count: {ErrorCount}");
+                Logging.LogGameEvent($"Text game lost - Error Count: {ErrorCount}");
                 RemoveActiveTask();
                 MessageBox.Show("Sorry, you lose.");
             }
