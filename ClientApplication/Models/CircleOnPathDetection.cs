@@ -1,5 +1,8 @@
 ﻿namespace ClientApplication.Models;
 
+/// <summary>
+///  Speichert zwei Snapshots, um zu berechnen, ob die Kugel im RoadRacer auf dem Pfad geblieben ist
+/// </summary>
 public class CircleOnPathDetection
 {
     private CircleAndPathSnapshot? _previousSnapshot;
@@ -11,6 +14,7 @@ public class CircleOnPathDetection
         _currentSnapshot = snapshot;
     }
 
+    // Berechnet die Strecke zwischen den zwei Snapshots
     public double GetDistanceSinceLastPointPixels()
     {
         if (_previousSnapshot == null || _currentSnapshot == null) return 0;

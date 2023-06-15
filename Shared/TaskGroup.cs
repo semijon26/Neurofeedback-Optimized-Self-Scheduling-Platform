@@ -1,5 +1,9 @@
 ﻿namespace Shared;
 
+
+/// <summary>
+/// Es gibt TaskGruppen, die mehrere Tasks (Klasse: WorkTask) zusammenfassen, da dies das Handling der Tasks erleichtert
+/// </summary>
 [Serializable]
 public class TaskGroup
 {

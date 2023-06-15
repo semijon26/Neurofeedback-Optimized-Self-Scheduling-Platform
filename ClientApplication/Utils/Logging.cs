@@ -9,6 +9,7 @@ namespace ClientApplication.Utils
 {
     public static class Logging
     {
+        // Logfile für clientseitige Logs (Für Debugging)
         static string logFileName = $"logs_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
         
         private static readonly ILogger logger = new LoggerConfiguration()
@@ -16,9 +17,10 @@ namespace ClientApplication.Utils
                 .WriteTo.File(logFileName)
                 .WriteTo.Debug()
                 .CreateLogger();
-
+        
         private static WebSocket? _loggingWebSocket;
 
+        // Event-Logs sollen an Server geschickt werden, daher wird hier eine Websocket Verbindung aufgebaut
         public static void InitServerLogging(string ip, int port)
         {
             try

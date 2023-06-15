@@ -1,4 +1,8 @@
 namespace Shared.GameState;
+
+/// <summary>
+/// Diese Klasse dient dazu, den State des RoadRacers aufzubewahren
+/// </summary>
 [Serializable]
 public class RoadRacerGameState : AbstractGameState
 {

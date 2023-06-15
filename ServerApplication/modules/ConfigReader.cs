@@ -5,7 +5,7 @@ using Shared;
 namespace ServerApplication.modules;
 
 public static class ConfigReader
-	// Klasse für das Einlesen von TextFiles
+	// Klasse für das Einlesen der Config-File
 {
 
 	private static StreamReader _reader;
@@ -29,10 +29,12 @@ public static class ConfigReader
 	{
 		try
 		{ 
+			// Es wird erst versucht, die File im Verzeichnis der .exe Datei einzulesen.
 			return File.ReadAllText(fileName);
 		}
 		catch (Exception e)
 		{
+			// Wenn das fehlschlägt, z.B. weil die Datei nicht vorhanden ist, wird im voraussichtlichen Projekt-Root-Verzeichnis geschaut
 			Console.WriteLine(fileName + " not found in directory of .exe file. Trying to read it from project root...");
 			return File.ReadAllText(PathToProjectRoot + fileName);
 		}

@@ -1,5 +1,6 @@
 ﻿namespace Shared;
 
+// Es gibt verschiedene EventLogTypes, um Logs zu kategorisieren
 public enum EventLogType
 {
     USER_INTERACTION,

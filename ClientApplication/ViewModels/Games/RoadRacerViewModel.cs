@@ -11,19 +11,23 @@ namespace ClientApplication.ViewModels.Games;
 public sealed class RoadRacerViewModel : AbstractGameViewModel<RoadRacerGameState>
 {
     public const int GameDurationSeconds = 60;
+    // Maximum: Hier wird das Game gestoppt, wenn man die Meter-Anzahl erreicht
     private const int RequiredMetersToWinInstantly = 1000;
+    // Wenn man darunter ist und das Spiel zu ende ist, hat man verloren
     private int _requiredMetersToNotLose;
+    // Aktuelle Meter
     private double _currentMeters = 0;
     private int _currentMetersFloored = 0;
     private int _timeLeft = GameDurationSeconds;
+    // Timer für den Countdown
     private DispatcherTimer? _timer = null;
 
     private CircleOnPathDetection _circleOnPathDetection = new();
 
-    // change how fast meters count
+    // Hier kann man einstellen, wie schnell die Meter hochzählen
     private const int PixelToMeterFactor = 6;
 
-    // use this constant to change speed of game
+    // Hier kann man einstellen, wie schnell sich der Pfad bewegt
     public readonly int PixelsPer50Millis = 6;
 
     public RoadRacerViewModel(INavigationService navigationService) : base(navigationService, GameType.RoadRacer)
@@ -116,6 +120,7 @@ public sealed class RoadRacerViewModel : AbstractGameViewModel<RoadRacerGameStat
         _timeLeft--;
         TimeLeft = _timeLeft;
         Logging.LogGameEvent($"RoadRacer time left: {_timeLeft}, currentMeters: {_currentMeters}");
+        // Jede Sekunde wird überprüft, ob die Meter erreicht wurden oder der Timer abgelaufen ist
         CheckIfAlreadyWinOrLose();
     }
 

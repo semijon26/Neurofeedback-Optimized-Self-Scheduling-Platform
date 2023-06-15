@@ -6,6 +6,9 @@ using WebSocketSharp;
 
 namespace ClientApplication.Utils;
 
+/// <summary>
+/// Diese Klasse bewahrt den TaskGraphen auf, der vom Server empfangen wird
+/// </summary>
 public class TaskGraphProvider : INotifyPropertyChanged
 {
     private WebSocket _webSocket;
