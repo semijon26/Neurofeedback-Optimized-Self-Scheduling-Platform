@@ -34,6 +34,8 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
     private double ballX;
     private double ballY;
 
+    private readonly int _generateBrickCount = 20;
+
     public BricketBreakerViewModel(INavigationService navigationService) : base(navigationService, GameType.BricketBraker)
     {
         Bricks = new ObservableCollection<Brick>();
@@ -72,6 +74,7 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
 
     public override void StopGame()
     {
+        //Reset all values for the next game
         IsGameRunning = false;
         BricksBroken = 0;
         TimeLeft = 60;
@@ -82,6 +85,7 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
 
     public override BricketBreakerGameState GetGameState()
     {
+        //Provide the current game state for another client
        return new BricketBreakerGameState();
     }
 
@@ -148,26 +152,49 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
 
     public ObservableCollection<Brick> Bricks
     {
-        get => _bricks;
+        get { return _bricks; }
         set
         {
-            if (_bricks != value)
-            {
-                _bricks = value;
-                OnPropertyChanged(nameof(Bricks));
-            }
+            _bricks = value;
+            OnPropertyChanged(nameof(Bricks));
         }
     }
 
     private void AddBricks()
     {
         // Add bricks to the collection with desired positions
-        Bricks.Add(new Brick() { X = 10, Y = 20 });
-        Bricks.Add(new Brick() { X = 150, Y = 20 });
-        Bricks.Add(new Brick() { X = 290, Y = 20 });
-        Bricks.Add(new Brick() { X = 430, Y = 20 });
-        Bricks.Add(new Brick() { X = 570, Y = 20 });
+        Bricks.Add(new Brick() { X = 0, Y = 0});
+        Bricks.Add(new Brick() { X = 128, Y = 0});
+        Bricks.Add(new Brick() { X = 192, Y = 0 });
+        Bricks.Add(new Brick() { X = 256, Y = 0 });
+        Bricks.Add(new Brick() { X = 320, Y = 0 });
+        Bricks.Add(new Brick() { X = 384, Y = 0 });
+        Bricks.Add(new Brick() { X = 448, Y = 0 });
+        Bricks.Add(new Brick() { X = 512, Y = 0 });
+        Bricks.Add(new Brick() { X = 576, Y = 0 });
+        Bricks.Add(new Brick() { X = 630, Y = 0 });
+
+        //var brickPosition = new Random();
+        //List<Random> brickPositions = new();
+
+        //for (int i = 0; i < _generateBrickCount; i++)
+        //{
+        //    brickPositions.Add(brickPosition);
+        //}
+
+        //foreach (var position in brickPositions)
+        //{
+        //    Bricks.Add(new Brick());
+        //}
+        // Add bricks to the collection with desired positions
     }
+
+    //private Random RandomPositionForBricks()
+    //{
+    //    var randomNumber = new Random();
+    //    randomNumber.Next(0, 29);
+    //    return randomNumber;
+    //}
 
     private void MoveBall()
     {
@@ -182,13 +209,14 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
                 // Move the ball vertically
                 BallY += ballDirectionY * BallSpeed;//GetBallSpeed();
 
+                // Check if the ball collides with any of the four walls, bar or bricks
                 CollisionDetection();
 
                 // Ensure the ball stays within the frame
                 BallX = Math.Max(0, Math.Min(640 - 20, BallX)); // Assuming game width is 640 and ball width is 20
                 BallY = Math.Max(0, Math.Min(340 - 20, BallY)); // Assuming game height is 340 and ball height is 20
 
-                await Task.Delay(16); // Adjust the delay as per your requirement
+                await Task.Delay(16);
             }
         });
     }
@@ -197,79 +225,54 @@ public sealed class BricketBreakerViewModel : AbstractGameViewModel<BricketBreak
     {
         // Get the dimensions of the ball and the rectangle/bar
         double ballLeft = BallX;
-        double ballRight = BallX + 20; // Assuming ball width is 20
+        double ballRight = BallX + 20;
         double ballTop = BallY;
-        double ballBottom = BallY + 20; // Assuming ball height is 20
+        double ballBottom = BallY + 20;
 
         double barLeft = RectangleX;
-        double barRight = RectangleX + 200; // Assuming bar width is 200
-        double barTop = 276; // Assuming bar top position
-        double barBottom = barTop + 20; // Assuming bar height is 20
+        double barRight = RectangleX + 200;
+        double barTop = 276;
+        double barBottom = barTop + 20;
 
         // Check collision with the bar
         if (ballBottom >= barTop && ballTop <= barBottom && ballRight >= barLeft && ballLeft <= barRight)
         {
-            // Ball collided with the bar
             ballDirectionY = -ballDirectionY;
         }
 
-        // Check collision with the walls
-        if (ballLeft <= 0 || ballRight >= 640) // Assuming game width is 640
+        // Check collision with left/right walls
+        if (ballLeft <= 0 || ballRight >= 640)
         {
-            // Ball collided with the left or right wall
             ballDirectionX = -ballDirectionX;
         }
 
+        // Check collision with top wall
         if (ballTop <= 0)
         {
-            // Ball collided with the top wall
             ballDirectionY = -ballDirectionY;
         }
 
+        // Check if the ball has missed the bar
         if (ballBottom >= 308)
         {
             // Ball misses the bar
             RemoveActiveTask();
             timer.Stop();
-            MessageBox.Show("You loose!");
+            MessageBox.Show("You lose!");
         }
 
-        //var (brickHit, isBrickHit) = CheckBrickCollision();
-        //if (isBrickHit)
-        //{
-        //    //foreach (var hitBrick in brickHit)
-        //    Bricks.Remove(brickHit);
-        //}
-
+        // Check collision with bricks
+        foreach (var brick in Bricks)
+        {
+            // Check if the ball collides with the brick
+            if (ballX >= brick.X && ballX <= brick.X + 63 && ballY >= brick.Y && ballY <= brick.Y + 39)
+            {
+                ballDirectionY = -ballDirectionY;
+                brick.IsVisible = false;
+                break;
+            }
+        }
     }
-
-    //private (Brick?, bool) CheckBrickCollision()
-    //{
-    //    //List<Brick> hitBricks = new();
-
-    //    double ballLeft = ballX;
-    //    double ballRight = ballX + 10;
-    //    double ballTop = ballY;
-    //    double ballBottom = ballY + 10;
-
-    //    foreach (var brick in Bricks)
-    //    {
-    //        double brickLeft = brick.X;
-    //        double brickRight = brick.X + 128;
-    //        double brickTop = brick.Y;
-    //        double brickBottom = brick.Y + 30;
-
-    //        if (ballRight >= brickLeft && ballLeft <= brickRight && ballTop <= brickBottom)
-    //        {
-    //            // Collision detected
-    //            //hitBricks.Add(brick);
-    //            return (brick, true);
-    //        }
-    //    }
-
-    //    // No collision detected
-    //    return (null, false);
-    //}
 
     private void Timer_Tick(object sender, EventArgs e)
     {

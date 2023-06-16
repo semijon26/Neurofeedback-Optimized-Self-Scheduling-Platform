@@ -20,12 +20,16 @@ public partial class TextGameView : UserControl
         var textBox = sender as TextBox;
         var viewModel = DataContext as TextGameViewModel;
 
+        // Update the input text in the view model
         viewModel.InputText = textBox.Text;
 
+        // Clear the text box if the word is fully written
         if (viewModel.IsWordFullyWritten)
         {
             textBox.Text = string.Empty;
         }
+
+        // Clear the text box if the game is not running
         if (!viewModel.IsGameRunning)
         {
             textBox.Text = string.Empty;
@@ -89,19 +93,9 @@ public partial class TextGameView : UserControl
         return false;
     }
 
-
-    private bool IsAllowedCharacter(char character)
-    {
-        // Define a list of allowed characters
-        string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        allowedCharacters += " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
-
-        return allowedCharacters.Contains(character);
-    }
-
     private bool IsPunctuationKey(Key key)
     {
-        // Define the punctuation keys
+        // Define the allowed punctuation keys
         List<Key> punctuationKeys = new List<Key>
         {
             Key.OemTilde,

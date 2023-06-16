@@ -18,7 +18,7 @@
     <Grid>
         <Image Source="{Binding GameIcon}" Width="35" Height="35" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
 
-        <Canvas Margin="0,0,0,32">
+        <Canvas Name="gameCanvas" Margin="0,0,0,32">
             <Rectangle Fill="Black" Width="200" Height="20" Canvas.Left="{Binding RectangleX}" Canvas.Top="276" HorizontalAlignment="Center" VerticalAlignment="Top" />
 
             <Ellipse Fill="Red" Width="20" Height="20" Canvas.Left="{Binding BallX}" Canvas.Top="{Binding BallY}" HorizontalAlignment="Left" VerticalAlignment="Center" />
@@ -26,15 +26,16 @@
             <ItemsControl ItemsSource="{Binding Bricks}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="4" Columns="5" />
+                        <UniformGrid Rows="3" Columns="10" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Rectangle Fill="Blue" Stroke="Black" Width="128" Height="30" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" />
+                        <Rectangle Fill="Blue" Stroke="Black" Width="64" Height="40" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
         </Canvas>
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Height="32" Margin="0,308,0,0">
