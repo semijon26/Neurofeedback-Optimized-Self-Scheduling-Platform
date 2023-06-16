@@ -192,7 +192,7 @@
                                                                         White
                                                                     </Rectangle.Stroke>
                                                                     <Rectangle.Fill>
-                                                                        <ImageBrush ImageSource="{Binding GameType, Converter={StaticResource VariableToImagePathConverter}}" Stretch="Fill"></ImageBrush>
+                                                                        <ImageBrush ImageSource="{Binding GameType, Converter={StaticResource VariableToImagePathConverter}}" Stretch="Fill" Opacity="{Binding Worker, Converter={StaticResource TransparencyConverter}}"></ImageBrush>
                                                                     </Rectangle.Fill>
                                                                 </Rectangle>
                                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
