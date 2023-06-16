@@ -7,6 +7,10 @@ using ClientApplication.Models;
 using ClientApplication.Utils;
 using Shared;
 
+/// <summary>
+///  ViewModel für die Anzeige des Macro- und Hauptgraphen
+/// </summary>
+
 namespace ClientApplication.ViewModels
 {
     public class TasktreeOverviewViewModel : ViewModelBase
@@ -25,6 +29,7 @@ namespace ClientApplication.ViewModels
             ChangeCommand = new ChangeCommand(this);
         }
         
+        // Methode, die ausgeführt wird, wenn der Taskgraph aktualisiert wird.
         private void SetOrUpdateTaskGraph(TaskGraph taskGraph)
         {
             Dictionary<int, List<TaskGroup>> layers = GraphUtils.GetGraphLayers(taskGraph);
@@ -37,6 +42,7 @@ namespace ClientApplication.ViewModels
             CalculateDrawingPoints();
         }
         
+        // EventListener für TaskGraph-Aktualisierungen
         private void OnTaskGraphChanged(object sender, PropertyChangedEventArgs e)
         {
             var tg = TaskGraphProvider.GetInstance().TaskGraph;
@@ -212,22 +218,24 @@ namespace ClientApplication.ViewModels
             ObjectMessage = obj;
         }
 
+        // Führt Methoden zur Berechnung der Datenpunkte aus 
         private void CalculateDrawingPoints()
         {
             TaskPointsDictionary = PointCalculator.CalculateDrawingPoints(_layers, SecondColumnWidth, 40, GroupHeight);
             MacroTaskPointDictionary = PointCalculator.CalculateDrawingPoints(_layers, FirstColumnWidth, 12, MacroGroupHeight);
             CalculateDrawingLines();
         }
-
+        
+        // Führt Berechnungen für die jeweiligen Connections aus.
         private void CalculateDrawingLines()
         {
             LineList = PointCalculator.CalculateDrawingLines(TaskPointsDictionary, 70);
             MacroLineList = PointCalculator.CalculateDrawingLines(MacroTaskPointDictionary, 10);
         }
         
+        // Höhe des Macrographen berechnen
         private double GetMaxGraphHeight()
         {
-            // Höhe des Macrographen berechnen
             double maxGraphHeight = 0;
             foreach (var taskPointPair in MacroTaskPointDictionary)
             {

@@ -4,7 +4,9 @@ using WebSocketSharp;
 using WebSocketSharp.Server;
 
 namespace ServerApplication.WebsocketBehaviors;
-
+/// <summary>
+/// WebSocket, der für das Schreiben der übertragenen Logs verantwortlich ist.
+/// </summary>
 public class LoggingWebSocketBehavior : WebSocketBehavior
 {
     protected override void OnMessage(MessageEventArgs e)

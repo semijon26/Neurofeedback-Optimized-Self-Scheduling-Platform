@@ -3,7 +3,9 @@ using ClientApplication.Models;
 using Shared;
 
 namespace ClientApplication.Utils;
-
+/// <summary>
+///  Klasse stellt Methoden für Task-Management zur Verfügung.
+/// </summary>
 public static class TaskManager
 {
     public static int? GetTaskIdByGameType(GameType gameType)

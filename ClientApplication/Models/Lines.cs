@@ -1,7 +1,9 @@
 ﻿using Shared;
 
 namespace ClientApplication.Utils;
-
+/// <summary>
+///  Speichert die Koordinaten der Verbindungen zwischen den verschiedenen Knoten.
+/// </summary>
 public class Line
 {
     public double X1 { get; set; }
@@ -12,6 +14,8 @@ public class Line
     public TaskGroup DestGroup { get; set; }
     public bool Visibility => CheckVisibility();
 
+    // Überprüfen, ob der DestinationNode ausführbar ist.
+    // Damit kann der Linie in der UI die richtige Farbe gegeben werden.
     public bool CheckVisibility()
     {
         if (TaskGraphProvider.GetInstance().TaskGraph.GetAvailableTaskGroups().Contains(DestGroup))

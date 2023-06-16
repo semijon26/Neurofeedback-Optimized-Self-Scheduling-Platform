@@ -2,7 +2,9 @@
 using System.Linq;
 
 namespace ClientApplication.TestConfigs;
-
+/// <summary>
+///  Diese Klasse steuert die Ausführung der Anwendung im Debug- bzw. Normalmodus
+/// </summary>
 public static class DebugMode
 {
     #if DEBUG

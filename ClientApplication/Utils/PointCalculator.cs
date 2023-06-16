@@ -5,10 +5,14 @@ using ClientApplication.Models;
 using Shared;
 
 namespace ClientApplication.Utils;
-
+/// <summary>
+///  Stellt die wichtigsten Berechnungsfunktionen für die TaskPoint Berechnung in den jeweiligen Anzeigen zur Verfügung.
+///  Damit werden Punkte berechnet, an denen die jeweilige Task in der View angeordnet ist.
+/// </summary>
 public static class PointCalculator
 {
-
+    // Berechnet Koordinaten für den Bereich des Graphen, der aktiv gespielt werden kann.
+    // ! Wurde in der Vorgängerversion verwendet. Bleibt im Code beständig, falls dieses Feature erneut integriert werden soll !
     public static List<double> CalculateActiveArea(Dictionary<TaskGroup, TaskPoint> TaskPointDictionary)
     {
         Dictionary<TaskGroup, TaskPoint> filteredDictionary = TaskPointDictionary
@@ -20,6 +24,7 @@ public static class PointCalculator
         return new List<double> { lowestPoint.Y, highestPoint.Y + 10 };
     }
 
+    // Berechnet die Koordinaten für die jeweiligen Taskgruppen (nodes)
     public static Dictionary<TaskGroup, TaskPoint> CalculateDrawingPoints(Dictionary<int, List<TaskGroup>> Layers, double canvasWidth, double groupWidth, double groupHeight)
     {
         Dictionary<TaskGroup, TaskPoint> current = new Dictionary<TaskGroup, TaskPoint>();
@@ -58,6 +63,7 @@ public static class PointCalculator
         return current;
     }
     
+    // Berechnet die Koordinaten für die Linien, die zwischen den Knoten gezeichnet werden.
     public static List<Line> CalculateDrawingLines(Dictionary<TaskGroup, TaskPoint> TaskPointsDictionary, double groupHeight)
     {
         double height = groupHeight;
@@ -91,7 +97,7 @@ public static class PointCalculator
     }
     
     
-    // ID muss unique sein --> keine Dopplung, sonst fehlerhafte Zuweisung
+    // Ausgeben der bestimmten TaskGroup anhand der übergebenen ID.
     private static TaskGroup getTaskGroup(int Id, Dictionary<TaskGroup, TaskPoint> TaskPointsDictionary)
     {
         foreach (var task in TaskPointsDictionary.Keys)

@@ -4,8 +4,9 @@ using Shared;
 using WebSocketSharp;
 
 namespace ServerApplication.modules;
-
-// Die Haupt-Logging Klasse des Servers: Nimmt auch Client-Logs an und schreibt sie in den Event-Log
+ /// <summary>
+ /// Die Haupt-Logging Klasse des Servers: Nimmt auch Client-Logs an und schreibt sie in den Event-Log
+ /// </summary>
 public static class Logging
 {
     static string logDate = $"{DateTime.Now:yyyyMMdd_HHmmss}";

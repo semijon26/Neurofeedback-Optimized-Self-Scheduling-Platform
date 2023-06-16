@@ -4,7 +4,6 @@ using Shared;
 using WebSocketSharp;
 using WebSocketSharp.Net.WebSockets;
 using WebSocketSharp.Server;
-
 namespace ServerApplication.modules
 {
     public static class SocketServerService

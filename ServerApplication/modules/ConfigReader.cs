@@ -4,8 +4,11 @@ using Shared;
 
 namespace ServerApplication.modules;
 
+/// <summary>
+/// Klasse für das Einlesen der Config-File.
+/// </summary>
+/// 
 public static class ConfigReader
-	// Klasse für das Einlesen der Config-File
 {
 
 	private static StreamReader _reader;

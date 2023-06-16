@@ -4,7 +4,9 @@ using WebSocketSharp;
 using WebSocketSharp.Server;
 
 namespace ServerApplication.WebsocketBehaviors;
-
+/// <summary>
+/// Socket, der die Übertragung der jeweiligen GameStates steuert.
+/// </summary>
 public class GameStateWebsocketBehavior : WebSocketBehavior
 {
     protected override void OnOpen()

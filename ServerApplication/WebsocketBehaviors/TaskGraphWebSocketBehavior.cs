@@ -6,7 +6,9 @@ using WebSocketSharp;
 using WebSocketSharp.Server;
 
 namespace ServerApplication.WebsocketBehaviors;
-
+/// <summary>
+/// Socket, der alle Nachrichte, die den Taskgraphen betreffen, regelt.
+/// </summary>
 public class TaskGraphWebSocketBehavior : WebSocketBehavior
 {
     private readonly TaskGraphProvider _provider;

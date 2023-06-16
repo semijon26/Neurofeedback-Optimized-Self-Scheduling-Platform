@@ -25,6 +25,7 @@ namespace ClientApplication.Views
             scrollRect.Width = firstColumnWidth;
         }
         
+        // Listener für ScrollBar-Veränderungen, die in der Macroview angezeigt werden müssen.
         private void scrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             // Eigenschaften der Scrollbar-Übertragung implementieren

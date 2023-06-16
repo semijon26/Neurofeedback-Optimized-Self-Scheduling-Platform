@@ -4,7 +4,9 @@ using WebSocketSharp;
 using WebSocketSharp.Server;
 
 namespace ServerApplication.WebsocketBehaviors;
-
+/// <summary>
+/// Socket, der die Verbindungen der verschiedenen Benutzer überwacht/steuert.
+/// </summary>
 public class ClientWebsocketBehavior : WebSocketBehavior
 {
     protected override void OnOpen()
