@@ -8,6 +8,8 @@ namespace ClientApplication.Commands;
 public class TakeOtherUsersTaskCommand : CommandBase
 {
     
+    // Ausführbare Methode des Commands, die die Schritte für das Abnehmen
+    // einer Task ausführt
     public override void Execute(object parameter)
     {
         var taskId = Convert.ToInt32(parameter);

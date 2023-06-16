@@ -1,5 +1,8 @@
 ﻿namespace Shared;
 
+/// <summary>
+/// Diese Klasse repräsentiert eine Task. Sie wurde nur WorkTask genannt, weil es sonst Name-conflicts gibt
+/// </summary>
 [Serializable]
 public class WorkTask
 {

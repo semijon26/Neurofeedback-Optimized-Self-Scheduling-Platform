@@ -1,4 +1,5 @@
-﻿using ClientApplication.Models;
+﻿using System;
+using ClientApplication.Models;
 using ClientApplication.Utils;
 using ClientApplication.ViewModels;
 
@@ -27,7 +28,7 @@ namespace ClientApplication.Commands
                 _viewModel.IsConnectedMessage = "Connected";
                 _viewModel.NavigationService.NavigateTo("MainView");
             };
-            if (_viewModel is { ServerIp: not null, UserName: not null }) SocketClientService.Connect(_viewModel.ServerIp, _viewModel.ServerPort, _viewModel.UserName);
+            if (_viewModel is { ServerIp: not null, UserName: not null }) SocketClientService.Connect(_viewModel.ServerIp, _viewModel.ServerPort, _viewModel.UserName).WaitAsync(TimeSpan.FromMilliseconds(1000));
         }
     }
 }

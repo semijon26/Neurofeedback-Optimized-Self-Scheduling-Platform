@@ -13,16 +13,19 @@ public class RelayCommand : CommandBase
 
     public RelayCommand(TasktreeOverviewViewModel viewModel)
     {
+        // übergebenes ViewModel zuweisen
         _viewModel = viewModel;
     }
 
     public override void Execute(object parameter)
     {
         var taskId = Convert.ToInt32(parameter);
-
-        var task = _viewModel.TaskLayers;
+        // Graphschichten laden
+        var layers = _viewModel.TaskLayers;
         
-        foreach (var group in task)
+        // jeweilige Task anhand der ID im Graphen suchen
+        // um damit weiter zu arbeiten
+        foreach (var group in layers)
         {
             foreach (var taskGroup in group.Value)
             {
@@ -30,25 +33,28 @@ public class RelayCommand : CommandBase
                 {
                     if (availTask.Id == taskId)
                     {
+                        // wenn Task gefunden: 
                         var currentInstance = GetCurrentInstance();
+                        // Überprüfen, ob Spieler schon 4 Aufgaben hat
                         if (currentInstance.ActiveGames.Count is >= 0 and < 4)
                         {
+                            // checken, ob Task bereits aktiv ist
                             if (TaskManager.IsGameCurrentlyActive(availTask.Id, availTask.GameType))
                             {
                                 MessageBox.Show("Game already aktiv!");
                                 continue;
                             }
-
+                            // checken, ob Task bereits beendet ist
                             if (availTask.IsDone)
                             {
                                 MessageBox.Show("Game already done!");
                                 continue;
                             }
-
-                            currentInstance.AddNewActiveGame(availTask.Id, availTask.GameType);
-                            //availTask.ChangeWoker(currentInstance);
-                            TaskGraphProvider.GetInstance().SendUpdatedTaskGraphToServer(new DataPayload{SetDone = false, ChangeWorker = false, IntValue = availTask.Id, Woker = currentInstance});
-                            Logging.LogGameEvent($"{currentInstance.Label} added {availTask.GameType} to active games");
+                            
+                            // Task als aktiv für den aktuellen Client festlegen
+                            currentInstance.AddNewActiveGame(availTask.Id, availTask.GameType, null);
+                            TaskGraphProvider.GetInstance().SendUpdatedTaskGraphToServer(new DataPayload{SetDone = false, ChangeWorker = false, IntValue = availTask.Id, WorkerWithPulledTask = currentInstance, WorkerRemovesPulledTask = null});
+                            Logging.LogGameEvent($"{availTask.GameType} is active now");
                             ClientManagementSocket.SendClientObjectWhenConnectionEstablished();
                         }
                         else

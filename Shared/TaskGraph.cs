@@ -1,5 +1,9 @@
 ﻿namespace Shared;
 
+
+/// <summary>
+/// Der TaskGraph ist im Kern ein azyklischer, gerichteter Graph, der mittels Adjazenzliste dargestellt wird
+/// </summary>
 [Serializable]
 public class TaskGraph
 {

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using ClientApplication.Models;
-using ClientApplication.Models.GameState;
 using ClientApplication.Utils;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels.Games;
 

@@ -2,25 +2,32 @@
 using System.Windows;
 using System.Windows.Threading;
 using ClientApplication.Models;
-using ClientApplication.Models.GameState;
 using ClientApplication.Utils;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels.Games;
 
 public sealed class RoadRacerViewModel : AbstractGameViewModel<RoadRacerGameState>
 {
-    public int GameDurationSeconds = 60;
-    private int _requiredMetersToWinInstantly = 1000;
+    public const int GameDurationSeconds = 60;
+    // Maximum: Hier wird das Game gestoppt, wenn man die Meter-Anzahl erreicht
+    private const int RequiredMetersToWinInstantly = 1000;
+    // Wenn man darunter ist und das Spiel zu ende ist, hat man verloren
     private int _requiredMetersToNotLose;
+    // Aktuelle Meter
     private double _currentMeters = 0;
     private int _currentMetersFloored = 0;
-    private int _timeLeft;
+    private int _timeLeft = GameDurationSeconds;
+    // Timer für den Countdown
     private DispatcherTimer? _timer = null;
+
     private CircleOnPathDetection _circleOnPathDetection = new();
-    // change how fast meters count
+
+    // Hier kann man einstellen, wie schnell die Meter hochzählen
     private const int PixelToMeterFactor = 6;
-    // use this constant to change speed of game
+
+    // Hier kann man einstellen, wie schnell sich der Pfad bewegt
     public readonly int PixelsPer50Millis = 6;
 
     public RoadRacerViewModel(INavigationService navigationService) : base(navigationService, GameType.RoadRacer)
@@ -61,12 +68,24 @@ public sealed class RoadRacerViewModel : AbstractGameViewModel<RoadRacerGameStat
     {
         if (taskDifficulty == TaskDifficulty.Easy)
         {
-            _requiredMetersToNotLose = (int)(_requiredMetersToWinInstantly * 0.5);
+            _requiredMetersToNotLose = (int)(RequiredMetersToWinInstantly * 0.5);
         }
         else
         {
-            _requiredMetersToNotLose = (int)(_requiredMetersToWinInstantly * 0.7);
+            _requiredMetersToNotLose = (int)(RequiredMetersToWinInstantly * 0.7);
         }
+
+        if (state != null)
+        {
+            CurrentMeters = state.CurrentMeters;
+            CurrentMetersFloored = state.CurrentMetersFloored;
+            TimeLeft = state.TimeLeft;
+        }
+        else
+        {
+            TimeLeft = GameDurationSeconds;
+        }
+
         Logging.LogGameEvent("RoadRacer started");
         _timer = new DispatcherTimer
         {
@@ -74,13 +93,16 @@ public sealed class RoadRacerViewModel : AbstractGameViewModel<RoadRacerGameStat
         };
         _timer.Tick += Timer_Tick;
         _timer?.Start();
-        TimeLeft = GameDurationSeconds;
         IsGameRunning = true;
     }
 
     public override RoadRacerGameState GetGameState()
     {
-        return new RoadRacerGameState();
+        return new RoadRacerGameState(
+            currentMeters: CurrentMeters,
+            currentMetersFloored: CurrentMetersFloored,
+            timeLeft: TimeLeft
+        );
     }
 
     public override void StopGame()
@@ -98,6 +120,7 @@ public sealed class RoadRacerViewModel : AbstractGameViewModel<RoadRacerGameStat
         _timeLeft--;
         TimeLeft = _timeLeft;
         Logging.LogGameEvent($"RoadRacer time left: {_timeLeft}, currentMeters: {_currentMeters}");
+        // Jede Sekunde wird überprüft, ob die Meter erreicht wurden oder der Timer abgelaufen ist
         CheckIfAlreadyWinOrLose();
     }
 
@@ -112,7 +135,7 @@ public sealed class RoadRacerViewModel : AbstractGameViewModel<RoadRacerGameStat
         {
             win = true;
         }
-        else if (CurrentMeters >= _requiredMetersToWinInstantly)
+        else if (CurrentMeters >= RequiredMetersToWinInstantly)
         {
             win = true;
         }

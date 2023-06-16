@@ -14,6 +14,9 @@ using ClientApplication.ViewModels.Games;
 
 namespace ClientApplication.Views.Games;
 
+/// <summary>
+/// Code-Behind der RoadRacerView: Hier ist die Logik für die XAML Datei
+/// </summary>
 public partial class RoadRacerView : UserControl
 {
     private readonly RoadRacerViewModel _viewModel;
@@ -42,6 +45,7 @@ public partial class RoadRacerView : UserControl
         {
             if (args.PropertyName == nameof(_viewModel.IsGameRunning))
             {
+                // Auslesen, ob das Game gestartet wurde und die UI noch nicht initialisiert wurde, um dies gegebenenfalls zu tun
                 if (_viewModel.IsGameRunning && !_isGameUiInit)
                 {
                     InitGameUi();
@@ -59,6 +63,7 @@ public partial class RoadRacerView : UserControl
         }
     }
 
+    // Wenn Spiel gestoppt wird, muss alles wieder zurückgesetzt werden
     private void ClearGameUi()
     {
         _moveCircleUpCancellationTokenSource?.Cancel();
@@ -75,7 +80,7 @@ public partial class RoadRacerView : UserControl
         var parentWindow = Window.GetWindow(this);
         if (parentWindow != null)
         {
-            // PreviewKeyDown on parent window ensures that the event will always arrive here
+            // PreviewKeyDown on parent window ensures that the event will always arrive here, even when the view is not focused
             parentWindow.PreviewKeyDown += ParentWindow_KeyDown;
             parentWindow.PreviewKeyUp += ParentWindow_KeyUp;
         }
@@ -105,6 +110,7 @@ public partial class RoadRacerView : UserControl
             var pixelsToMoveThisTick = sinceLastTickElapsedMillis / 50 * _viewModel.PixelsPer50Millis;
             _currentPathPointCollectionOffset += pixelsToMoveThisTick;
 
+            // Mit jeder Iteration wird ein Stück des Paths in der Breite des Canvas mit Offset der aktuellen Position genommen 
             var pathPointYValuesForThisTick = _allPathPoints
                 .Skip((int)_currentPathPointCollectionOffset)
                 .Take((int)_canvasWidth).ToList();
@@ -124,6 +130,7 @@ public partial class RoadRacerView : UserControl
         }
     }
 
+    // Es muss geprüft werden, ob der Kreis noch auf dem Pfad ist
     private void UpdateIsCircleOnPath(PointCollection pathPoints)
     {
         var circleTop = Canvas.GetTop(Circle);
@@ -151,11 +158,12 @@ public partial class RoadRacerView : UserControl
         _viewModel.UpdateCurrentMeters(snapshot);
     }
 
+    // Hier wird der gesamte Pfad generiert
     private List<double> GetCompleteRandomPathCurve()
     {
         var random = new Random();
         var requiredPointsCount = (int)_canvasWidth;
-        requiredPointsCount += _viewModel.GameDurationSeconds * _viewModel.PixelsPer50Millis * 100;
+        requiredPointsCount += RoadRacerViewModel.GameDurationSeconds * _viewModel.PixelsPer50Millis * 100;
         var requiredNumbersToInterpolateCount = requiredPointsCount / 160;
         var numbers = new List<int>();
         for (var i = 0; i < requiredNumbersToInterpolateCount; i++)
@@ -169,11 +177,13 @@ public partial class RoadRacerView : UserControl
         return InterpolationUtils.Interpolate(numbers, requiredPointsCount);
     }
 
+    // Wird beim Drücken einer Taste aufgerufen
     private void ParentWindow_KeyDown(object sender, KeyEventArgs e)
     {
         Logging.LogInformation("Key down event accepted");
         if (e.Key == Key.Up && _moveCircleUpTask == null)
         {
+            // Es wird ein Loop mit einem Cancellation Token gestartet, der mit jeder Iteration die Kugel ein Stück bewegt
             _moveCircleUpCancellationTokenSource = new CancellationTokenSource();
             var ct = _moveCircleUpCancellationTokenSource.Token;
             _moveCircleUpTask = Task.Factory.StartNew(() => { MoveCircleLoop(ct, true); }, ct);
@@ -213,10 +223,12 @@ public partial class RoadRacerView : UserControl
         }
     }
 
+    // Wird beim Loslassen einer Taste aufgerufen
     private void ParentWindow_KeyUp(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Up)
         {
+            // Nun wird der Loop-Task per CancellationToken beendet, um die Kugel zu stoppen
             _moveCircleUpCancellationTokenSource?.Cancel();
             _moveCircleUpTask = null;
         }

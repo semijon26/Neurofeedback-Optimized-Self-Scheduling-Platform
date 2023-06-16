@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 using Shared;
 using WebSocketSharp;
 
+/// <summary>
+///  SocketHelper, der für die Verbindung des Clienten zu den jeweiligen Server-Sockets verantwortlich ist.
+/// </summary>
+
 namespace ClientApplication.Utils
 {
     public static class SocketClientService
@@ -27,9 +31,11 @@ namespace ClientApplication.Utils
                     UserManagement.InitUserWebSocket(ip, port);
                     ClientManagementSocket.InitClientSocket(ip, port);
                     TaskGraphProvider.GetInstance().InitTaskGraphProvider(ip, port);
+                    GameStateSocket.InitGameStateSocket(ip, port);
                 });
         }
 
+        // Haupt-Websockets Initialisieren, und Name übergeben
         private static void InitMainWebSocket(string ip, int port, string name)
         {
             try

@@ -1,9 +1,11 @@
 ﻿namespace ClientApplication.Models;
-
+/// <summary>
+///  Speichert die berechneten Koordinaten des anzuzeigenden Graphen, inkl. dessen Breite
+/// </summary>
 public class TaskPoint
 {
-    public int X { get; set; }
-    public int Y { get; set; }
+    public double X { get; set; }
+    public double Y { get; set; }
     
-    public int Width { get; set; }
+    public double Width { get; set; }
 }

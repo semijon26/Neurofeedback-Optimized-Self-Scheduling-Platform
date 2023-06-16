@@ -2,6 +2,9 @@
 
 namespace ServerApplication.Model;
 
+/// <summary>
+/// Diese Klasse liest die JSON Repräsentation des Taskgraphen in der taskgraph.json File aus
+/// </summary>
 [Serializable]
 public class JsonTaskGraph
 {
@@ -14,6 +17,7 @@ public class JsonTaskGraph
         ConnectionsFromTo = connectionsFromTo;
     }
 
+    // Der TaskGraph in Form dieser JSON Klasse wird in die Klasse umgewandelt, die in der Anwendung genutzt wird
     public TaskGraph ConvertToTaskGraph()
     {
         var taskGraph = new TaskGraph();

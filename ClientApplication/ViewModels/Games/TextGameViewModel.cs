@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Threading;
-using ClientApplication.Models.GameState;
 using ClientApplication.Utils;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels.Games;
 
@@ -29,7 +29,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
     private string _targetText;
 
     private int fullWordsWritten = 0;
-    private int difficulty = 15;
+    private int _difficulty;
 
     private bool _isCorrect;
     private int timeLeft;
@@ -47,10 +47,22 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
     {
         if (taskDifficulty == TaskDifficulty.Hard)
         {
-            
+            _difficulty = 30;
         }
+        else
+        {
+            _difficulty = 15;
+        }
+
+        if (state != null)
+        {
+            TimeLeft = state.TimeLeft;
+            ErrorCount = state.ErrorCount;
+            TargetText = state.TargetText;
+            FullWordsWritten = state.FullWordsWritten;
+        }
+
         //var currentClientPlaying = GetClientInstanceLogging();
-        Logging.LogInformation("------StartTextGame executed");
         Logging.LogGameEvent("TextGame started");
         // Create a new DispatcherTimer with a 10-second interval
         timer = new DispatcherTimer
@@ -72,7 +84,12 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
     public override TextGameGameState GetGameState()
     {
-        return new TextGameGameState();
+        return new TextGameGameState(
+            timeLeft: TimeLeft,
+            errorCount: ErrorCount,
+            targetText: TargetText,
+            fullWordsWritten: FullWordsWritten
+            ); 
     }
 
     public override void StopGame()
@@ -90,7 +107,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         set
         {
             timeLeft = value;
-            Logging.LogGameEvent($"Text game time left: {timeLeft}");
+            Logging.LogGameEvent($"TextGame time left: {timeLeft}");
             OnPropertyChanged(nameof(TimeLeft));
         }
     }
@@ -103,7 +120,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
             if (_inputText != value)
             {
                 _inputText = value;
-                Logging.LogUserInteraction($"User input text: [{InputText}]");
+                Logging.LogUserInteraction($"TextGame user input text: [{InputText}]");
                 OnPropertyChanged(nameof(InputText));
                 CheckText();
                 GetFullWordsWritten(InputText);
@@ -192,7 +209,6 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
     {
         if (InputText == null || InputText.Length == 0)
         {
-            Logging.LogGameEvent("Input text is empty");
             IsCorrect = false;
             inputTextLength = 0;
             return;
@@ -250,8 +266,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         if (TimeLeft != 0 && fullText)
         {
             timer.Stop();
-            Logging.LogGameEvent("Text game won");
-            Logging.LogGameEvent($"Final error count: {ErrorCount}");
+            Logging.LogGameEvent($"Text game won - Error Count: {ErrorCount}");
             RemoveActiveTask();
             MessageBox.Show("Congratulations, you win!");
         }
@@ -263,19 +278,17 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
             timer.Stop();
 
             // Check if the text is fully written
-            if (IsTextFullyWritten() || fullWordsWritten >= difficulty)
+            if (IsTextFullyWritten() || fullWordsWritten >= _difficulty)
             {
                 // The game is won
-                Logging.LogGameEvent("Text game won");
-                Logging.LogGameEvent($"Final error count: {ErrorCount}");
+                Logging.LogGameEvent($"Text game won - Error Count: {ErrorCount}");
                 RemoveActiveTask();
                 MessageBox.Show("Congratulations, you win!");
             }
             else
             {
                 // The game is lost
-                Logging.LogGameEvent("Text game lost");
-                Logging.LogGameEvent($"Final error count: {ErrorCount}");
+                Logging.LogGameEvent($"Text game lost - Error Count: {ErrorCount}");
                 RemoveActiveTask();
                 MessageBox.Show("Sorry, you lose.");
             }

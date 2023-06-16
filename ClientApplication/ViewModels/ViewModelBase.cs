@@ -1,6 +1,10 @@
 ﻿using System.ComponentModel;
 using ClientApplication.Utils;
 
+/// <summary>
+///  BasisKlasse der Viewmodels, die Events zur Veränderungsdetektion implementiert.
+/// </summary>
+
 namespace ClientApplication.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged

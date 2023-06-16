@@ -6,6 +6,9 @@ using WebSocketSharp;
 
 namespace ClientApplication.Utils;
 
+/// <summary>
+/// Diese Klasse bewahrt den TaskGraphen auf, der vom Server empfangen wird
+/// </summary>
 public class TaskGraphProvider : INotifyPropertyChanged
 {
     private WebSocket _webSocket;
@@ -54,14 +57,14 @@ public class TaskGraphProvider : INotifyPropertyChanged
 
     private void OnMessage(object? sender, MessageEventArgs e)
     {
+        Logging.LogInformation("------- Task Graph received --------");
         var taskGraph = SocketMessageHelper.DeserializeFromByteArray<TaskGraph>(e.RawData);
         TaskGraph = taskGraph;
     }
 
     public void SendUpdatedTaskGraphToServer(DataPayload task)
     {
-        string json = JsonConvert.SerializeObject(task);
-        _webSocket.Send(json);
+        _webSocket.Send(SocketMessageHelper.SerializeToByteArray(task));
     }
     
     private byte[] GetSerializedTaskGraph()

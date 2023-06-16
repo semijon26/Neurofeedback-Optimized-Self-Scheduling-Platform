@@ -4,7 +4,11 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace ClientApplication.Utils;
-
+/// <summary>
+///  Dient zur Anpassung von Scrollview in der TaskOVerview.
+///  Wird benötigt, sobald der Graph initial nach Eintreffen der Nachricht geladen wird.
+///  Passt die Größe der ScrollView dynamisch an.
+/// </summary>
 public static class CanvasExtensions
 {
     public static readonly DependencyProperty AutoSizeProperty =

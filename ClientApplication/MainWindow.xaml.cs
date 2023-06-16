@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Input;
 using ClientApplication.Utils;
 using ClientApplication.Views;
 
@@ -18,6 +19,12 @@ namespace ClientApplication
             navigationService.RegisterView("MainView", typeof(MainView));
 
             Logging.LogInformation("MainWindow initialized");
+            this.PreviewKeyDown += KeyDownEventMethod;
+        }
+
+        private void KeyDownEventMethod(object sender, KeyEventArgs e)
+        {
+            Logging.LogKeyEvent(e.Key);
         }
     }
 }

@@ -6,6 +6,7 @@ namespace ClientApplication.Utils;
 
 public static class InterpolationUtils
 {
+    // Interpoliert eine Liste von Zahlen (z.B. 4, 100, 52, 50, 50, 9) zu einer Kurve mit so vielen Zahlen wie count vorgibt
     public static List<double> Interpolate(List<int> numbers, int count)
     {
         double[] xs = new double[numbers.Count];

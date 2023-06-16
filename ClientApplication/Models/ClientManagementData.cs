@@ -3,6 +3,9 @@ using Shared;
 
 namespace ClientApplication.Models;
 
+/// <summary>
+///  Diese Klasse speichert alle Clients und kann das eigene ClientObject zurückgeben
+/// </summary>
 public class ClientManagementData
 {
     private static ClientManagementData? _instance;

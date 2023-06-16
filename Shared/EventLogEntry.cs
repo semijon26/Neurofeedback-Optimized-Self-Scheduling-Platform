@@ -1,5 +1,9 @@
 ﻿namespace Shared;
 
+
+/// <summary>
+/// Diese Klasse dient zur Übertragung von Logs von Client zu Server
+/// </summary>
 [Serializable]
 public class EventLogEntry
 {

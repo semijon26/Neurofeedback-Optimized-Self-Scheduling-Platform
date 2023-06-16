@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Threading;
 using ClientApplication.Models;
-using ClientApplication.Models.GameState;
 using ClientApplication.Utils;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels.Games;
 
@@ -25,7 +25,7 @@ public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
     private DispatcherTimer? _gameTimer;
     private DispatcherTimer? _showNumberTimer;
     private int _timeLeft;
-    private readonly List<int> _predictableNumbers = new();
+    private List<int> _predictableNumbers = new();
     public int TimeLeft
     {
         get => _timeLeft;
@@ -69,15 +69,24 @@ public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
             _lives = 3;
             _requiredNumbersToWin = 7;
         }
+        TimeLeft = GameDurationSeconds;
+        if (gameState != null)
+        {
+            SetGameState(gameState);
+        }
 
         Application.Current.Dispatcher.Invoke(() =>
         {
+            Hearts.Clear();
             for (int i = 0; i < _lives; i++)
             {
-                Hearts.Add(new Heart { IsVisible = true });
+                Hearts.Add(new Heart() { IsVisible = true });
             }
         });
-        ShowNextNumber();
+        if (_showNextFieldCounter == 0)
+        {
+            ShowNextNumber();
+        }else ShowNextNumberTimerTick(null, EventArgs.Empty);
         Logging.LogGameEvent("BackTrack started");
         _gameTimer = new DispatcherTimer
         {
@@ -91,7 +100,6 @@ public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
         _showNumberTimer.Tick += ShowNextNumberTimerTick;
         _showNumberTimer?.Start();
         _gameTimer?.Start();
-        TimeLeft = GameDurationSeconds;
         IsGameRunning = true;
     }
 
@@ -110,7 +118,7 @@ public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
 
     public override BackTrackGameState GetGameState()
     {
-        return new BackTrackGameState();
+        return new BackTrackGameState(_correctlyRecognizedNumbers, _lives, _requiredNumbersToWin, _showNextFieldCounter, _timeLeft, _predictableNumbers);
     }
 
     private void GameTimerTick(object? sender, EventArgs e)
@@ -205,6 +213,16 @@ public class BackTrackViewModel: AbstractGameViewModel<BackTrackGameState>
         }
     }
 
+    private void SetGameState(BackTrackGameState gameState)
+    {
+        _timeLeft = gameState.TimeLeft;
+        TimeLeft = _timeLeft;
+        _lives = gameState.Lives;
+        _correctlyRecognizedNumbers = gameState.CorrectlyRecognizedNumbers;
+        _requiredNumbersToWin = gameState.RequiredNumbersToWin;
+        _showNextFieldCounter = gameState.ShowNextFieldCounter;
+        _predictableNumbers = gameState.PredictableNumbers;
+    }
     public void InvokeNumberInsertedEventHandler(int number)
     {
         NumberInsertedEventHandler?.Invoke(null, number);

@@ -7,6 +7,7 @@ using ClientApplication.Utils;
 using ClientApplication.ViewModels.Games;
 using ClientApplication.Views.Games;
 using Shared;
+using Shared.GameState;
 
 namespace ClientApplication.ViewModels
 {
@@ -33,19 +34,25 @@ namespace ClientApplication.ViewModels
             var memoMasterViewModel = (MemoMasterViewModel)GameDictionary[GameType.MemoMaster].DataContext;
             var backTrackViewModel = (BackTrackViewModel)GameDictionary[GameType.BackTrack].DataContext;
 
+            var clientObject = ClientObject.GetInstance();
 
             ClientManagementSocket.OnStartGamesMessageReceived += (_, _) =>
             {
-                foreach (var activeGame in ClientObject.GetInstance().ActiveGames)
+                foreach (var activeGame in clientObject.ActiveGames)
                 {
                     var taskDifficulty = GetTaskDifficulty(activeGame.Key) ?? TaskDifficulty.Easy;
+                    var gameStateHolder = activeGame.Value.GameStateHolder;
+
                     switch (activeGame.Value.GameType)
                     {
                         case GameType.TextGame:
                             if (!textGameViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.TextGame);
-                                Application.Current.Dispatcher.Invoke(() => textGameViewModel.StartGame(taskDifficulty, null));
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    textGameViewModel.StartGame(taskDifficulty, gameStateHolder.TextGameGameState);
+                                });
                                 textGameViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -54,7 +61,11 @@ namespace ClientApplication.ViewModels
                             if (!bricketBreakerViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.BricketBraker);
-                                Application.Current.Dispatcher.Invoke(() => bricketBreakerViewModel.StartGame(taskDifficulty,null));
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    bricketBreakerViewModel.StartGame(taskDifficulty,
+                                        gameStateHolder.BricketBreakerGameState);
+                                });
                                 bricketBreakerViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -63,7 +74,11 @@ namespace ClientApplication.ViewModels
                             if (!roadRacerViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.RoadRacer);
-                                Application.Current.Dispatcher.Invoke(() => roadRacerViewModel.StartGame(taskDifficulty, null));
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    roadRacerViewModel.StartGame(taskDifficulty,
+                                        gameStateHolder.RoadRacerGameState);
+                                });
                                 roadRacerViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -72,7 +87,11 @@ namespace ClientApplication.ViewModels
                             if (!memoMasterViewModel.IsGameRunning)
                             {
                                 AddTaskToUiEvent?.Invoke(null, GameType.MemoMaster);
-                                Application.Current.Dispatcher.Invoke(() => memoMasterViewModel.StartGame(taskDifficulty, null));
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    memoMasterViewModel.StartGame(taskDifficulty,
+                                        gameStateHolder.MemoMasterGameState);
+                                });
                                 memoMasterViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
 
@@ -83,14 +102,18 @@ namespace ClientApplication.ViewModels
                                 AddTaskToUiEvent?.Invoke(null, GameType.BackTrack);
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
-                                    backTrackViewModel.StartGame(taskDifficulty, null);
+                                    backTrackViewModel.StartGame(taskDifficulty,
+                                        gameStateHolder.BackTrackGameState);
                                 });
+
                                 backTrackViewModel.RemoveTaskFromUiEvent += RemoveTaskFromUiEvent;
                             }
+
                             break;
                     }
-                }
 
+                    ResetAllGameStateToNull(activeGame.Value.GameStateHolder);
+                }
             };
 
             ClientManagementSocket.MessageReceived += (_, _) =>
@@ -98,7 +121,10 @@ namespace ClientApplication.ViewModels
                 Logging.LogInformation("Message Received Event ausgeführt");
                 var clientGames = ClientObject.GetInstance().ActiveGames.Values.Select(game => game.GameType).ToList();
                 List<GameType> types = new List<GameType>
-                    { GameType.BricketBraker, GameType.RoadRacer, GameType.MemoMaster, GameType.TextGame, GameType.BackTrack};
+                {
+                    GameType.BricketBraker, GameType.RoadRacer, GameType.MemoMaster, GameType.TextGame,
+                    GameType.BackTrack
+                };
 
                 Logging.LogWarning("clientGames:");
                 foreach (var gameType in clientGames)
@@ -140,6 +166,7 @@ namespace ClientApplication.ViewModels
                             RemoveTaskFromUiEvent?.Invoke(null, activeGame);
                             roadRacerViewModel.RemoveTaskFromUiEvent -= RemoveTaskFromUiEvent;
                         }
+
                         if (activeGame == GameType.BackTrack)
                         {
                             Logging.LogInformation("Stopping ------------------------------------- BackTrack");
@@ -154,11 +181,54 @@ namespace ClientApplication.ViewModels
                     }
                 }
             };
+
+            GameStateSocket.GameStateMessageReceived += (_, clientWhoPulledTask) =>
+            {
+                if (clientWhoPulledTask.PulledTaskId != null &&
+                    clientObject.ActiveGames.ContainsKey((int)clientWhoPulledTask.PulledTaskId))
+                {
+                    var pulledGame = clientObject.ActiveGames[(int)clientWhoPulledTask.PulledTaskId];
+                    switch (pulledGame.GameType)
+                    {
+                        case GameType.BackTrack:
+                            pulledGame.GameStateHolder.BackTrackGameState = backTrackViewModel.GetGameState();
+                            break;
+                        case GameType.BricketBraker:
+                            pulledGame.GameStateHolder.BricketBreakerGameState = bricketBreakerViewModel.GetGameState();
+                            break;
+                        case GameType.MemoMaster:
+                            pulledGame.GameStateHolder.MemoMasterGameState = memoMasterViewModel.GetGameState();
+                            break;
+                        case GameType.RoadRacer:
+                            pulledGame.GameStateHolder.RoadRacerGameState = roadRacerViewModel.GetGameState();
+                            break;
+                        case GameType.TextGame:
+                            pulledGame.GameStateHolder.TextGameGameState = textGameViewModel.GetGameState();
+                            break;
+                    }
+
+                    TaskGraphProvider.GetInstance().SendUpdatedTaskGraphToServer(new DataPayload
+                    {
+                        SetDone = false, ChangeWorker = true, IntValue = (int)clientWhoPulledTask.PulledTaskId!,
+                        WorkerWithPulledTask = clientWhoPulledTask, WorkerRemovesPulledTask = clientObject
+                    });
+                    clientWhoPulledTask.PulledTaskId = null;
+                }
+            };
         }
 
         private TaskDifficulty? GetTaskDifficulty(int taskId)
         {
             return TaskGraphProvider.GetInstance().TaskGraph?.GetTaskById(taskId)?.Difficulty;
+        }
+
+        private void ResetAllGameStateToNull(GameStateHolder gameStateHolder)
+        {
+            gameStateHolder.BackTrackGameState = null;
+            gameStateHolder.TextGameGameState = null;
+            gameStateHolder.BackTrackGameState = null;
+            gameStateHolder.MemoMasterGameState = null;
+            gameStateHolder.RoadRacerGameState = null;
         }
     }
 }

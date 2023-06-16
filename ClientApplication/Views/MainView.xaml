@@ -9,7 +9,7 @@
       mc:Ignorable="d"
       Title="MainPage" Height="900" Width="1500"
       Background="white">
-    <Grid ShowGridLines="True">
+    <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -19,8 +19,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <views:UserOverview Grid.Column="0" Grid.Row="1" Margin="5"/>
-        <views:MacroTaskView Grid.Row="0" Grid.Column="0"></views:MacroTaskView>
-        <views:TasktreeOverview Grid.Row="0" Grid.Column="1" Margin="10"/>
+        <views:TasktreeOverview Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="10"/>
         <views:GamesOverview Grid.Row="1" Grid.Column="1" Margin="10"/>
     </Grid>
 </Page>

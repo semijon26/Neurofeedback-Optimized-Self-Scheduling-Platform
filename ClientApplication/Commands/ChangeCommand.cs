@@ -9,20 +9,26 @@ namespace ClientApplication.Commands;
 
 public class ChangeCommand : CommandBase
 {
+    // variable for specific ViewModel
     private readonly TasktreeOverviewViewModel _viewModel;
-
+    
     public ChangeCommand(TasktreeOverviewViewModel viewModel)
     {
+        // Übergebenes ViewModel zuweisen
         _viewModel = viewModel;
     }
 
+    
+    // Funktion, die ausgeführt wird, wenn der Command ausgeführt wird
     public override void Execute(object parameter)
     {
         var taskId = Convert.ToInt32(parameter);
-
-        var task = _viewModel.TaskLayers;
+        // Graphschichten laden
+        var layers = _viewModel.TaskLayers;
         
-        foreach (var group in task)
+        // jeweilige Task, die die übergebene ID hat, suchen
+        // und für das weitere Vorgehen auswählen
+        foreach (var group in layers)
         {
             foreach (var taskGroup in group.Value)
             {

@@ -3,6 +3,7 @@ using System.Windows.Input;
 
 namespace ClientApplication.Commands
 {
+    // Basis für die Commands, die ausführbar sein müssen
     public abstract class CommandBase : ICommand
     {
         public event EventHandler CanExecuteChanged;

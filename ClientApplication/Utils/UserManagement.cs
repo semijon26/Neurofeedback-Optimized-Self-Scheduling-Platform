@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using WebSocketSharp;
 
 namespace ClientApplication.Utils;
-
+/// <summary>
+///  Klasse für das Management der verbundenen Clients.
+/// </summary>
 public class UserManagement
 {
     private static WebSocket? _webSocket;
