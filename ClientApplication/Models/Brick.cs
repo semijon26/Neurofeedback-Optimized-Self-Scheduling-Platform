@@ -24,8 +24,6 @@ namespace ClientApplication.Models
             }
         }
 
-        // Other properties and fields...
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
