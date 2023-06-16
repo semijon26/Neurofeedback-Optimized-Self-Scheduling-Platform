@@ -84,6 +84,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
     public override TextGameGameState GetGameState()
     {
+        // Get the current state of the game
         return new TextGameGameState(
             timeLeft: TimeLeft,
             errorCount: ErrorCount,
@@ -94,6 +95,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
     public override void StopGame()
     {
+        // Reset game values for the next game
         IsGameRunning = false;
         InputText = "";
         ErrorCount = 0;
@@ -112,7 +114,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         }
     }
 
-    public string InputText
+    public string InputText // Text which the user has written
     {
         get { return _inputText; }
         set
@@ -128,7 +130,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         }
     }
 
-    public string TargetText
+    public string TargetText // Text which the user has to write
     {
         get { return _targetText; }
         set
@@ -142,7 +144,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         }
     }
 
-    public bool IsCorrect
+    public bool IsCorrect // Is the user input correct
     {
         get { return _isCorrect; }
         set
@@ -168,7 +170,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         }
     }
 
-    public int FullWordsWritten
+    public int FullWordsWritten // Number of full words written by the user
     {
         get { return fullWordsWritten; }
         set
@@ -181,7 +183,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         }
     }
 
-    public string InputWord
+    public string InputWord // Word which the user has written
     {
         get { return _inputWord; }
         set
@@ -195,18 +197,19 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         }
     }
 
-    public string TargetWord
+    public string TargetWord // Word which the user has to write
     {
         get { return _targetWord; }
     }
 
-    public bool IsWordFullyWritten
+    public bool IsWordFullyWritten // Is the word fully written by the user
     {
         get { return _isWordFullyWritten; }
     }
 
-    private void CheckText()
+    private void CheckText() // Check if the user input is correct
     {
+        // If nothing is written in the input field
         if (InputText == null || InputText.Length == 0)
         {
             IsCorrect = false;
@@ -225,6 +228,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
             if (InputText[i] != TargetText[i])
             {
+                // Check if the user did a backspace to delete an error character
                 if (length < inputTextLength)
                 {
                     IsCorrect = false;
@@ -241,6 +245,8 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
                 IsCorrect = false;
                 inputTextLength++;
+
+                // Add error if the user input is not a backspace
                 ErrorCount++;
                 IsErrorCountBelowThree();
                 Logging.LogUserInteraction($"Wrong character input. New error count: {ErrorCount}");
@@ -297,6 +303,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
     private bool IsTextFullyWritten()
     {
+        // Check if the user has written the whole text
         if (InputText == TargetText)
         {
             Logging.LogGameEvent($"Input Text: [{InputText}] == Target Text: [{TargetText}]");
@@ -308,6 +315,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
     private void IsErrorCountBelowThree()
     {
+        // Check if the error count is below 3 otherwise the game is lost and gets removed
         if (_errorCount > 3)
         {
             timer.Stop();
@@ -318,6 +326,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
     private string GetRandomText()
     {
+        // Gets a random text from the text list
         Random random = new();
         var randomText = texts[random.Next(0, texts.Count)];
         return randomText;
@@ -325,25 +334,36 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
 
     private int GetFullWordsWritten(string inputText)
     {
+        // Check if the user has written a full word
         _isWordFullyWritten = false;
 
+        // Check if the input field is empty
         if (string.IsNullOrEmpty(inputText))
         {
             return 0;
         }
         
+        // Split the text into single words
         List<string> targetWords = new(TargetText.Split(new[] { ' ' }));
+
+        // Get the first word of the list of words
         string targetWord = targetWords[0];
 
+        // Check if the input text is equal to the target word
         if (inputText == targetWord + " ")
         {
+            // Increment the number of full words written
             FullWordsWritten++;
 
             _isWordFullyWritten = true;
 
+            // Remove the written word from the list of words from the target text
             targetWords.Remove(targetWord);
+
+            // Join the list of words back to a full string
             var newTargetText = String.Join(" ", targetWords);
 
+            // Set the new target text without the written word
             TargetText = newTargetText;
 
             FullWordsWritten = fullWordsWritten;
@@ -351,6 +371,7 @@ public sealed class TextGameViewModel : AbstractGameViewModel<TextGameGameState>
         }
         else
         {
+            // If word is not fully written, set the flag to false
             _isWordFullyWritten = false;
         }
 
