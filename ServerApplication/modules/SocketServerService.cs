@@ -24,6 +24,7 @@ namespace ServerApplication.modules
             locker = new object();
             WebSocketServer = new WebSocketServer($"ws://localhost:{port}");
             WebSocketServer.AddWebSocketService<MyWebSocket>("/");
+            WebSocketServer.AddWebSocketService<ConfigWebSocketBehavior>("/config");
             WebSocketServer.AddWebSocketService<LoggingWebSocketBehavior>("/logging");
             WebSocketServer.AddWebSocketService<UserWebSocketBehavior>("/users");
             WebSocketServer.AddWebSocketService<ClientWebsocketBehavior>("/clients");

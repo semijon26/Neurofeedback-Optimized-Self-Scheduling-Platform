@@ -4,5 +4,6 @@
     "horst",
     "heinz"
   ],
-  "ServerIP":  "192.168.2.1"
+  "ServerIP":  "192.168.2.1",
+  "WorkloadViewChangeMode": 0
 }

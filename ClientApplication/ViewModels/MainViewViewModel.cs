@@ -18,6 +18,19 @@ public class MainViewViewModel: ViewModelBase
             OnPropertyChanged(nameof(TestString));
         }
     }
+
+    private bool _isUserOverViewAndTaskGraphsVisible = true;
+
+    public bool IsUserOverViewAndTaskGraphsVisible
+    {
+        get => _isUserOverViewAndTaskGraphsVisible;
+        set
+        {
+            _isUserOverViewAndTaskGraphsVisible = value;
+            OnPropertyChanged(nameof(IsUserOverViewAndTaskGraphsVisible));
+        }
+    }
+    
     public MainViewViewModel(INavigationService navigationService) : base(navigationService)
     {
         ConnectedToServerData.GetInstance().IsConnected = true;
@@ -28,6 +41,19 @@ public class MainViewViewModel: ViewModelBase
                 $"WebSocket client not connected to {SocketClientService.GetWsUri()}. Error {e}");
             ConnectedToServerData.GetInstance().IsConnected = false;
             navigationService.NavigateTo("ConnectToServerView");
+        };
+
+        WorkloadController.GetInstance().PropertyChanged += (sender, args) =>
+        {
+            if (WorkloadController.GetInstance().WorkloadIntensity == WorkloadIntensity.HIGH)
+            {
+                IsUserOverViewAndTaskGraphsVisible = false;
+            }
+            else
+            {
+                IsUserOverViewAndTaskGraphsVisible = true;
+            }
+            
         };
     }
 }

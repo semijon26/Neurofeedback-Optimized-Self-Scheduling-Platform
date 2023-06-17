@@ -32,6 +32,7 @@ namespace ClientApplication.Utils
                     ClientManagementSocket.InitClientSocket(ip, port);
                     TaskGraphProvider.GetInstance().InitTaskGraphProvider(ip, port);
                     GameStateSocket.InitGameStateSocket(ip, port);
+                    ConfigProvider.Init(ip, port);
                 });
         }
 
